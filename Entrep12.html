@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnify! Budget Planner</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #16a34a;
+            --accent-color: #dc2626;
+            --background: linear-gradient(135deg, #c7734c, #036491);
+            --text-color: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .description {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .chart-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: #f3f4f6;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chart-button.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            height: 400px;
+        }
+
+        .update-button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .update-button:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+        }
+
+        .suggestions {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .summary-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .summary-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Magnify! Budget Planner</h1>
+            <p class="description">Track your income and expenses to achieve your financial goals</p>
+        </div>
+
+        <div class="grid">
+            <div>
+                <div class="input-group">
+                    <label for="monthlyIncome">Monthly Income (₱)</label>
+                    <input type="number" id="monthlyIncome" placeholder="Enter your monthly income" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="savingsGoal">Monthly Savings Goal (₱)</label>
+                    <input type="number" id="savingsGoal" placeholder="Enter your savings goal">
+                </div>
+            </div>
+
+            <div>
+                <div class="input-group">
+                    <label for="housingExpense">Housing (₱)</label>
+                    <input type="number" id="housingExpense" placeholder="Rent, mortgage, utilities">
+                </div>
+
+                <div class="input-group">
+                    <label for="foodExpense">Food (₱)</label>
+                    <input type="number" id="foodExpense" placeholder="Groceries, dining">
+                </div>
+
+                <div class="input-group">
+                    <label for="transportExpense">Transport (₱)</label>
+                    <input type="number" id="transportExpense" placeholder="Fuel, maintenance, fares">
+                </div>
+
+                <div class="input-group">
+                    <label for="entertainmentExpense">Entertainment (₱)</label>
+                    <input type="number" id="entertainmentExpense" placeholder="Movies, hobbies, activities">
+                </div>
+
+                <div class="input-group">
+                    <label for="otherExpense">Other (₱)</label>
+                    <input type="number" id="otherExpense" placeholder="Miscellaneous expenses">
+                </div>
+            </div>
+        </div>
+
+        <div class="summary">
+            <div class="summary-card">
+                <h3>Total Income</h3>
+                <p id="totalIncome">₱0.00</p>
+            </div>
+            <div class="summary-card">
+                <h3>Total Expenses</h3>
+                <p id="totalExpenses">₱0.00</p>
+            </div>
+            <div class="summary-card">
+                <h3>Remaining</h3>
+                <p id="remaining">₱0.00</p>
+            </div>
+        </div>
+
+        <div class="chart-controls">
+            <button class="chart-button active" data-type="bar">Bar Chart</button>
+            <button class="chart-button" data-type="line">Line Chart</button>
+            <button class="chart-button" data-type="pie">Pie Chart</button>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="budgetChart"></canvas>
+        </div>
+
+        <button class="update-button" id="updateChartBtn">Update Budget</button>
+
+        <div id="suggestions" class="suggestions"></div>
+    </div>
+
+    <script>
+        let currentChartType = 'bar';
+        let budgetChart = null;
+
+        function formatPeso(value) {
+            return new Intl.NumberFormat('en-PH', {
+                style: 'currency',
+                currency: 'PHP'
+            }).format(value);
+        }
+
+        function createChart(type) {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            
+            if (budgetChart) {
+                budgetChart.destroy();
+            }
+
+            const chartConfig = {
+                bar: {
+                    type: 'bar',
+                    data: {
+                        labels: ['Income', 'Expenses', 'Savings Goal'],
+                        datasets: [{
+                            label: 'Budget Overview',
+                            data: [0, 0, 0],
+                            backgroundColor: ['#16a34a', '#dc2626', '#2563eb']
+                        }]
+                    }
+                },
+                line: {
+                    type: 'line',
+                    data: {
+                        labels: ['Income', 'Expenses', 'Savings Goal'],
+                        datasets: [{
+                            label: 'Budget Overview',
+                            data: [0, 0, 0],
+                            borderColor: '#2563eb',
+                            tension: 0.1
+                        }]
+                    }
+                },
+                pie: {
+                    type: 'pie',
+                    data: {
+                        labels: ['Housing', 'Food', 'Transport', 'Entertainment', 'Other'],
+                        datasets: [{
+                            data: [0, 0, 0, 0, 0],
+                            backgroundColor: [
+                                '#2563eb',
+                                '#16a34a',
+                                '#dc2626',
+                                '#eab308',
+                                '#8b5cf6'
+                            ]
+                        }]
+                    }
+                }
+            };
+
+            budgetChart = new Chart(ctx, {
+                ...chartConfig[type],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart() {
+            const income = parseFloat(document.getElementById('monthlyIncome').value) || 0;
+            const housing = parseFloat(document.getElementById('housingExpense').value) || 0;
+            const food = parseFloat(document.getElementById('foodExpense').value) || 0;
+            const transport = parseFloat(document.getElementById('transportExpense').value) || 0;
+            const entertainment = parseFloat(document.getElementById('entertainmentExpense').value) || 0;
+            const other = parseFloat(document.getElementById('otherExpense').value) || 0;
+            const savingsGoal = parseFloat(document.getElementById('savingsGoal').value) || 0;
+
+            const totalExpenses = housing + food + transport + entertainment + other;
+
+            // Update summary
+            document.getElementById('totalIncome').textContent = formatPeso(income);
+            document.getElementById('totalExpenses').textContent = formatPeso(totalExpenses);
+            document.getElementById('remaining').textContent = formatPeso(income - totalExpenses);
+
+            if (currentChartType === 'pie') {
+                budgetChart.data.datasets[0].data = [housing, food, transport, entertainment, other];
+            } else {
+                budgetChart.data.datasets[0].data = [income, totalExpenses, savingsGoal];
+            }
+            
+            budgetChart.update();
+
+            // Update suggestions
+            const suggestions = document.getElementById('suggestions');
+            if (income < totalExpenses) {
+                suggestions.innerHTML = `
+                    <h3>Budget Alert</h3>
+                    <p>Your expenses (${formatPeso(totalExpenses)}) exceed your income (${formatPeso(income)}). Consider these tips:</p>
+                    <ul>
+                        <li>Review your monthly expenses and identify non-essential items</li>
+                        <li>Create a detailed spending plan</li>
+                        <li>Look for additional income opportunities</li>
+                    </ul>
+                `;
+            } else if (income - totalExpenses < savingsGoal) {
+                suggestions.innerHTML = `
+                    <h3>Savings Goal Alert</h3>
+                    <p>You're ${formatPeso(savingsGoal - (income - totalExpenses))} short of your savings goal. Try these strategies:</p>
+                    <ul>
+                        <li>Look for expenses you can reduce</li>
+                        <li>Set up automatic savings transfers</li>
+                        <li>Find ways to increase your income</li>
+                    </ul>
+                `;
+            } else {
+                suggestions.innerHTML = `
+                    <h3>Great Job!</h3>
+                    <p>You're on track with your budget! You can save ${formatPeso(income - totalExpenses)} this month.</p>
+                    <ul>
+                        <li>Consider increasing your savings goal</li>
+                        <li>Look into investment opportunities</li>
+                        <li>Build an emergency fund if you haven't already</li>
+                    </ul>
+                `;
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            createChart('bar');
+            
+            document.querySelectorAll('.chart-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    document.querySelectorAll('.chart-button').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentChartType = e.target.dataset.type;
+                    createChart(currentChartType);
+                    updateChart();
+                });
+            });
+
+            document.getElementById('updateChartBtn').addEventListener('click', updateChart);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Bank to Deposit - Magnify!</title>
+    <style>
+        :root {
+            --primary-color: #00796b;
+            --secondary-color: #4db6ac;
+            --background-color: #e0f2f1;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --card-hover-bg: #e1f5fe;
+            --button-bg: #00897b;
+            --button-hover-bg: #00695c;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .bank-option {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bank-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            background: var(--card-hover-bg);
+        }
+
+        .bank-logo {
+            width: 150px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .bank-option:hover .bank-logo {
+            transform: scale(1.1);
+        }
+
+        .bank-button {
+            padding: 12px 24px;
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .bank-button:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #confirmation-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: none;
+            text-align: center;
+        }
+
+        #confirmation-modal h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        #confirmation-modal button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        #confirm-btn {
+            background-color: var(--button-bg);
+            color: white;
+        }
+
+        #confirm-btn:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        #cancel-btn {
+            background-color: #f0f0f0;
+            color: var(--text-color);
+        }
+
+        #cancel-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .description {
+                font-size: 1rem;
+            }
+
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select Bank to Deposit</h1>
+        <p class="description">Please choose a bank below to proceed with your deposit. Your transactions are secure and processed instantly. These are all embedded and integrated with your preferred banks.</p>
+        <div class="options-container" id="bank-options">
+            <!-- Bank options will be dynamically inserted here -->
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 Magnify! All rights reserved.</p>
+        </div>
+    </div>
+
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="confirmation-modal">
+        <h2>Confirm Bank Selection</h2>
+        <p>You are about to be redirected to <span id="selected-bank-name"></span>. Do you want to proceed?</p>
+        <button id="confirm-btn">Proceed</button>
+        <button id="cancel-btn">Cancel</button>
+    </div>
+
+    <script>
+        const banks = [
+            { id: 'pnb', name: 'PNB', logo: '/download-removebg-preview.png', url: 'https://www.pnb.com.ph' },
+            { id: 'bpi', name: 'BPI', logo: '/images-removebg-preview.png', url: 'https://www.bpi.com.ph' },
+            { id: 'gcash', name: 'GCash', logo: '/GCash-Logo-removebg-preview.png', url: 'https://www.gcash.com' },
+            { id: 'metrobank', name: 'Metrobank', logo: '/59bc94ce59565-removebg-preview.png', url: 'https://www.metrobank.com.ph' },
+            { id: 'aspac', name: 'ASPAC Bank', logo: '/Logo-removebg-preview.png', url: 'https://aspacbank.com/' },
+            { id: 'unionbank', name: 'Union Bank', logo: '/download-removebg-preview (1).png', url: 'https://www.unionbankph.com' }
+        ];
+
+        const bankOptionsContainer = document.getElementById('bank-options');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const confirmationModal = document.getElementById('confirmation-modal');
+        const selectedBankName = document.getElementById('selected-bank-name');
+        const confirmBtn = document.getElementById('confirm-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+
+        let selectedBank = null;
+
+        function createBankOption(bank) {
+            const bankOption = document.createElement('div');
+            bankOption.className = 'bank-option';
+            bankOption.innerHTML = `
+                <img src="${bank.logo}" alt="${bank.name} Logo" class="bank-logo">
+                <button class="bank-button" data-bank-id="${bank.id}">Choose ${bank.name}</button>
+            `;
+            return bankOption;
+        }
+
+        function showLoading() {
+            loadingOverlay.style.visibility = 'visible';
+            loadingOverlay.style.opacity = '1';
+        }
+
+        function hideLoading() {
+            loadingOverlay.style.visibility = 'hidden';
+            loadingOverlay.style.opacity = '0';
+        }
+
+        function showConfirmationModal(bank) {
+            selectedBank = bank;
+            selectedBankName.textContent = bank.name;
+            confirmationModal.style.display = 'block';
+        }
+
+        function hideConfirmationModal() {
+            confirmationModal.style.display = 'none';
+        }
+
+        function handleBankSelection(bankId) {
+            const bank = banks.find(b => b.id === bankId);
+            if (bank) {
+                showLoading();
+                setTimeout(() => {
+                    hideLoading();
+                    showConfirmationModal(bank);
+                }, 1500); // Simulating API call delay
+            }
+        }
+
+        banks.forEach(bank => {
+            const bankOption = createBankOption(bank);
+            bankOptionsContainer.appendChild(bankOption);
+        });
+
+        bankOptionsContainer.addEventListener('click', (event) => {
+            const button = event.target.closest('.bank-button');
+            if (button) {
+                const bankId = button.getAttribute('data-bank-id');
+                handleBankSelection(bankId);
+            }
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            if (selectedBank) {
+                window.location.href = selectedBank.url;
+            }
+        });
+
+        cancelBtn.addEventListener('click', hideConfirmationModal);
+
+        // Accessibility enhancements
+        document.querySelectorAll('.bank-button').forEach(button => {
+            button.setAttribute('aria-label', `Choose ${button.textContent.trim()}`);
+        });
+    </script>
+</body>
+</html>

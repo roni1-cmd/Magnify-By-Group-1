@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnify! - Financial Management Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --gradient-start: #1a237e;
+            --gradient-end: #ff7043;
+            --accent: #2196f3;
+            --accent-hover: #1565c0;
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--text);
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .background-words {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            opacity: 0.1;
+            z-index: 1;
+            transform: rotate(-15deg);
+            pointer-events: none;
+        }
+
+        .background-word {
+            font-size: clamp(1rem, 5vw, 4rem);
+            font-weight: bold;
+            white-space: nowrap;
+            animation: wordFloat 3s ease-in-out infinite;
+            animation-delay: calc(var(--delay) * 1s);
+        }
+
+        @keyframes wordFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 2;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            width: min(90%, 400px);
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% {
+                transform: translateY(0) rotateX(0) rotateY(0);
+            }
+            25% {
+                transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+            }
+            75% {
+                transform: translateY(10px) rotateX(-2deg) rotateY(2deg);
+            }
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.5));
+            -webkit-background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .motto {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .google-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .google-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .google-button:hover::before {
+            transform: translateX(100%);
+        }
+
+        .google-button:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .google-button:active {
+            transform: translateY(0);
+        }
+
+        .google-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        .create-account {
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .create-account a {
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .create-account a:hover {
+            border-bottom-style: solid;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            text-align: center;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+            z-index: 2;
+        }
+
+        .team-members {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .member {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .member:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #fff;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 2rem;
+            }
+
+            .team-members {
+                font-size: 0.8rem;
+            }
+
+            .member {
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="background-words" id="backgroundWords"></div>
+
+    <main class="login-container">
+        <h1 class="logo">MAGNIFY!</h1>
+        <p class="motto">
+            Your gateway to financial management
+            <br>
+            <small style="font-size: 0.8rem; opacity: 0.7;">by Group 1</small>
+        </p>
+        
+        <button class="google-button" onclick="handleSignIn()">
+            <img src="/png-transparent-google-logo-google-logo-g-suite-chrome-text-logo-chrome-removebg-preview.png" 
+                 alt="Google" 
+                 class="google-icon">
+            Sign in with Google
+        </button>
+        
+        <p class="create-account">
+            Don't have an account? <a href="#" target="_blank">Create one</a>
+        </p>
+    </main>
+
+    <footer class="footer">
+        <div class="team-members">
+            <div class="member">Shelina Mae Dela Cruz</div>
+            <div class="member">Ron Asnahon</div>
+            <div class="member">Sean Ferneil Ricaza</div>
+            <div class="member">Carl John Arpay</div>
+            <div class="member">Vince Gerard Gonzaga</div>
+            <div class="member">Joeron Zeniff Paloma</div>
+            <div class="member">James Virtucio</div>
+            <div class="member">Van Erich Nisnisan</div>
+        </div>
+        <p class="copyright">© Magnify! By Group 1 LLC | 2024 All rights reserved</p>
+    </footer>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div>
+
+    <script>
+        // Background words animation
+        const words = [
+            "Budgeting", "Investing", "Savings", "Expenses", "Financial Freedom",
+            "Debt Management", "Freelance", "Business", "Money", "Funds",
+            "Banking", "Assets", "Capital", "ROI", "PRC", "Equity",
+            "Royalty", "Liabilities", "Income", "Revenue", "Cash Flow",
+            "Entrepreneurship", "Marketing", "Corporate", "Treasury"
+        ];
+
+        const backgroundWords = document.getElementById('backgroundWords');
+        words.forEach((word, index) => {
+            const wordElement = document.createElement('div');
+            wordElement.className = 'background-word';
+            wordElement.textContent = word;
+            wordElement.style.setProperty('--delay', (index * 0.1) % 2);
+            backgroundWords.appendChild(wordElement);
+        });
+
+        // Floating particles animation
+        const particles = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 20}s`;
+            particle.style.opacity = Math.random();
+            particle.style.width = particle.style.height = `${Math.random() * 4 + 2}px`;
+            particles.appendChild(particle);
+        }
+
+        // Handle sign in with loading animation
+        function handleSignIn() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('active');
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                window.location.href = '/Entrep6.html';
+            }, 1500);
+        }
+
+        // Interactive background effect
+        document.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const xOffset = (clientX / window.innerWidth - 0.5) * 5;
+            const yOffset = (clientY / window.innerHeight - 0.5) * 5;
+            
+            document.querySelector('.login-container').style.transform = 
+                `perspective(1000px) rotateX(${-yOffset}deg) rotateY(${xOffset}deg)`;
+        });
+
+        // Reset transform on mouse leave
+        document.addEventListener('mouseleave', () => {
+            document.querySelector('.login-container').style.transform = 
+                'perspective(1000px) ';
+        });
+
+        // Add touch support for mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!touchStartX || !touchStartY) return;
+
+            const xOffset = (e.touches[0].clientX - touchStartX) / window.innerWidth * 10;
+            const yOffset = (e.touches[0].clientY - touchStartY) / window.innerHeight * 10;
+
+            document.querySelector('.login-container').style.transform = 
+                `perspective(1000px) rotateX(${-yOffset}deg) rotateY(${xOffset}deg)`;
+        });
+
+        document.addEventListener('touchend', () => {
+            touchStartX = touchStartY = 0;
+            document.querySelector('.login-container').style.transform =
+                'perspective(1000px)';
+        });
+    </script>
+</body>
+</html>

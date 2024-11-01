@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnify! - Chatbot ERICH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00796b;
+            --primary-light: #48a999;
+            --primary-dark: #004c40;
+            --secondary: #ffb74d;
+            --secondary-dark: #c88719;
+            --background: #e0f7fa;
+            --chat-bg: #f1f8e9;
+            --user-message: #f44336;
+            --bot-message: #ffd700;
+            --text: #333333;
+            --text-light: #666666;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chatbot-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 2rem auto;
+            width: 95%;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chatbot-header {
+            background: var(--primary);
+            padding: 1.5rem;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .chatbot-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--white);
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .header-text h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-text .description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .chat-area {
+            flex: 1;
+            background: var(--chat-bg);
+            padding: 2rem;
+            overflow-y: auto;
+            max-height: 60vh;
+            scroll-behavior: smooth;
+        }
+
+        .message-container {
+            display: flex;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: messageIn 0.5s ease forwards;
+        }
+
+        @keyframes messageIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-message {
+            max-width: 70%;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        .user-message {
+            background: var(--user-message);
+            color: var(--white);
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            background: linear-gradient(145deg, var(--bot-message), #ffeb3b);
+            color: var(--text);
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            border-left: 4px solid var(--secondary-dark);
+        }
+
+        .bot-message strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .bot-message ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .bot-message li {
+            margin: 8px 0;
+        }
+
+        .bot-message a {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 2px;
+            transition: var(--transition);
+        }
+
+        .bot-message a:hover {
+            background-color: rgba(0, 121, 107, 0.1);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: typingBounce 0.5s infinite alternate;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            to {
+                transform: translateY(-4px);
+            }
+        }
+
+        .options-container {
+            background: var(--secondary);
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            max-height: 30vh;
+            overflow-y: auto;
+        }
+
+        .option-button {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .option-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .option-button:active {
+            transform: translateY(0);
+        }
+
+        .option-button i {
+            font-size: 1.2rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .chatbot-container {
+                margin: 0;
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-message {
+                max-width: 85%;
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .option-button:focus-visible {
+            outline: 3px solid var(--primary-light);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-container" role="main">
+        <header class="chatbot-header">
+            <img src="/depositphotos_230709182-stock-illustration-chatbot-message-chalk-icon-black-removebg-preview.png" 
+                 alt="ERICH Chatbot Avatar">
+            <div class="header-text">
+                <h2>E.R.I.C.H. - Your Personal Virtual Assistant</h2>
+                <p class="description">Powered by Magnify!</p>
+            </div>
+        </header>
+
+        <div class="chat-area" id="chatArea" role="log" aria-live="polite">
+            <!-- Initial welcome message -->
+            <div class="message-container">
+                <div class="chat-message bot-message">
+                    Hello! 👋 I'm E.R.I.C.H., your personal financial assistant from Magnify! How can I help you today? Feel free to select from the options below.
+                </div>
+            </div>
+        </div>
+
+        <div class="options-container" role="group" aria-label="Chat options">
+            <button class="option-button" onclick="selectOption('What is Magnify?')">
+                <i class="fas fa-info-circle"></i>What is Magnify?
+            </button>
+            <button class="option-button" onclick="selectOption('What are the features?')">
+                <i class="fas fa-list-ul"></i>What are the features?
+            </button>
+            <button class="option-button" onclick="selectOption('What is E.R.I.C.H. and what do you do?')">
+                <i class="fas fa-robot"></i>About E.R.I.C.H.
+            </button>
+            <button class="option-button" onclick="selectOption('How can I improve my credit score?')">
+                <i class="fas fa-chart-line"></i>Credit Score Tips
+            </button>
+            <button class="option-button" onclick="selectOption('What are the differences between stocks, bonds, and mutual funds?')">
+                <i class="fas fa-money-bill-wave"></i>Investment Types
+            </button>
+            <button class="option-button" onclick="selectOption('How much should I save for retirement?')">
+                <i class="fas fa-piggy-bank"></i>Retirement Savings
+            </button>
+            <button class="option-button" onclick="selectOption('What is compound interest, and how does it work?')">
+                <i class="fas fa-percentage"></i>Compound Interest
+            </button>
+            <button class="option-button" onclick="navigateTo('Entrep7.html')">
+                <i class="fas fa-calendar-alt"></i>Audit Calendar
+            </button>
+            <button class="option-button" onclick="navigateTo('Entrep9.html')">
+                <i class="fas fa-exchange-alt"></i>Currency Converter
+            </button>
+            <button class="option-button" onclick="navigateTo('Entrep12.html')">
+                <i class="fas fa-calculator"></i>Budget Planner
+            </button>
+            <button class="option-button" onclick="navigateTo('Entrep11.html')">
+                <i class="fas fa-book"></i>Resources
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const responses = {
+            'What is Magnify?': {
+                text: `<strong>Here's what you need to know about Magnify! 🚀</strong><br><br>
+                       Magnify is a powerful financial management app designed to help students, business owners, and individuals of all ages improve their spending habits. It saves you valuable time by seamlessly monitoring your income and expenses daily, monthly, or yearly. With its comprehensive features for business, marketing, and personal use, Magnify helps you visualize your money flow clearly and confidently.`,
+                delay: 2000
+            },
+            'What are the features?': {
+                text: `<strong>Let me walk you through our amazing features! ✨</strong><br>
+                       1. <strong>Track List:</strong> Keep tabs on every penny<br>
+                       2. <strong>Calculators:</strong> Smart tools for budgeting and planning<br>
+                       3. <strong>Analytics:</strong> Visual insights into your financial health<br>
+                       4. <strong>Audit Tools:</strong> Regular financial health checks<br>
+                       5. <strong>Calendar:</strong> Never miss important financial dates<br>
+                       6. <strong>Currency Converter:</strong> Real-time exchange rates<br>
+                       7. <strong>Budget Planner:</strong> Your personal financial roadmap<br>
+                       8. <strong>Income & Expense Tracker:</strong> Monitor your money flow<br>
+                       9. <strong>Financial Resources:</strong> Learn and grow<br>
+                       10. <strong>Online Store:</strong> Access financial tools<br>
+                       11. <strong>Secure Depository:</strong> Safe asset management<br><br>
+                       Which feature would you like to learn more about? 🤔`,
+                delay: 3000
+            },
+            'What is E.R.I.C.H. and what do you do?': {
+                text: `<strong>Hello! 👋 I'm E.R.I.C.H. - Your Expert Resource and Information Chat Helper!</strong><br><br>
+                       I'm your dedicated personal virtual assistant from Magnify, and I'm here to help you with:<br><br>
+                       1. 🎯 Navigation: I can guide you to any feature you need<br>
+                       2. 💰 Income Tracking: I help track all your income sources - salary, side gigs, and passive income<br>
+                       3. 📊 Expense Management: I categorize your spending into fixed and variable costs<br>
+                       4. 🎯 Goal Setting: I help establish and track your financial goals<br>
+                       5. 📈 Progress Monitoring: I ensure you're staying on budget<br>
+                       6. 💡 Financial Education: I provide tips and insights for better money management<br><br>
+                       What would you like help with today?`,
+                delay: 2500
+            },
+            'How can I improve my credit score?': {
+                text: `<strong>Great question! Here's your comprehensive guide to improving your credit score 📈</strong><br><br>
+                       1. <strong>Payment History (35% of your score)</strong><br>
+                       • Pay all bills on time, every time<br>
+                       • Set up automatic payments<br>
+                       • Contact creditors immediately if you'll be late<br><br>
+                       
+                       2. <strong>Credit Utilization (30% of your score)</strong><br>
+                       • Keep card balances below 30% of limits<br>
+                       • Consider requesting credit limit increases<br>
+                       • Pay balances multiple times per month<br><br>
+                       
+                       3. <strong>Credit History Length (15% of your score)</strong><br>
+                       • Keep old accounts open<br>
+                       • Avoid closing your oldest cards<br>
+                       • Be patient - time is your friend<br><br>
+                       
+                       4.   <strong>Credit Mix (10% of your score)</strong><br>
+                       • Maintain a diverse credit portfolio<br>
+                       • Consider both revolving and installment credit<br><br>
+                       
+                       5. <strong>New Credit (10% of your score)</strong><br>
+                       • Limit new credit applications<br>
+                       • Research before applying<br>
+                       • Space out new credit requests<br><br>
+                       
+                       Would you like me to explain any of these points in more detail?`,
+                delay: 3500
+            },
+            'What are the differences between stocks, bonds, and mutual funds?': {
+                text: `<strong>Let me break down these investment types for you! 💹</strong><br><br>
+                       1. <strong>Stocks 📈</strong><br>
+                       • Represent ownership in a company<br>
+                       • Potential for high returns through price appreciation and dividends<br>
+                       • Higher risk, more volatile<br>
+                       • Great for long-term growth<br><br>
+                       
+                       2. <strong>Bonds 📋</strong><br>
+                       • Essentially loans to companies or governments<br>
+                       • Regular interest payments (coupons)<br>
+                       • Generally lower risk than stocks<br>
+                       • Good for stable, predictable income<br><br>
+                       
+                       3. <strong>Mutual Funds 🏦</strong><br>
+                       • Pooled investments managed by professionals<br>
+                       • Can contain stocks, bonds, or both<br>
+                       • Built-in diversification<br>
+                       • Good for beginners<br>
+                       • Come with management fees<br><br>
+                       
+                       Would you like to learn more about any of these investment types?`,
+                delay: 3000
+            },
+            'How much should I save for retirement?': {
+                text: `<strong>Let's plan for your retirement! 🎯</strong><br><br>
+                       Here are the key guidelines to help you save effectively:<br><br>
+                       
+                       1. <strong>General Savings Rules 💰</strong><br>
+                       • Save 15-20% of your gross income<br>
+                       • Include employer contributions in this percentage<br><br>
+                       
+                       2. <strong>Age-Based Milestones 📊</strong><br>
+                       • By 30: 1x your annual salary<br>
+                       • By 40: 3x your annual salary<br>
+                       • By 50: 6x your annual salary<br>
+                       • By 60: 8x your annual salary<br>
+                       • By retirement: 10-12x your annual salary<br><br>
+                       
+                       3. <strong>Factors to Consider 🤔</strong><br>
+                       • Your desired retirement lifestyle<br>
+                       • Expected retirement age<br>
+                       • Healthcare costs<br>
+                       • Inflation<br>
+                       • Life expectancy<br><br>
+                       
+                       Would you like help calculating your personal retirement savings goal?`,
+                delay: 3000
+            },
+            'What is compound interest, and how does it work?': {
+                text: `<strong>Let me explain the magic of compound interest! ✨</strong><br><br>
+                       1. <strong>Basic Concept 📚</strong><br>
+                       • Interest earned on both:<br>
+                       &nbsp;&nbsp;- Your initial investment (principal)<br>
+                       &nbsp;&nbsp;- Previously accumulated interest<br><br>
+                       
+                       2. <strong>How It Works 🔄</strong><br>
+                       • Year 1: Interest on principal only<br>
+                       • Year 2: Interest on principal + Year 1 interest<br>
+                       • Year 3: Interest on principal + Year 1 & 2 interest<br>
+                       • And so on...<br><br>
+                       
+                       3. <strong>Compounding Frequency 📅</strong><br>
+                       • Daily compounding<br>
+                       • Monthly compounding<br>
+                       • Quarterly compounding<br>
+                       • Annual compounding<br><br>
+                       
+                       4. <strong>The Power of Time ⏳</strong><br>
+                       • Earlier you start, more time to compound<br>
+                       • Small regular investments can grow significantly<br>
+                       • Time is your biggest ally in wealth building<br><br>
+                       
+                       Would you like to see a practical example with numbers?`,
+                delay: 3000
+            },
+            'Take me to Audit Calendar': {
+                text: `I'll redirect you to the Audit Calendar right away. This tool will help you keep track of your financial audits and important dates. Click <a href="Entrep7.html" target="_blank">here</a> to go to the Audit Calendar, or I can navigate you there directly. Would you like me to do that?`,
+                delay: 1500
+            },
+            'Take me to Currency Converter': {
+                text: `Of course! The Currency Converter is a handy tool for your international transactions. I'll take you there now. Click <a href="Entrep9.html" target="_blank">here</a> to open the Currency Converter, or let me know if you'd like me to navigate you there directly.`,
+                delay: 1500
+            },
+            'Take me to Budget planner': {
+                text: `Great choice! The Budget Planner is an essential tool for managing your finances effectively. You can access it by clicking <a href="Entrep12.html" target="_blank">here</a>, or I can navigate you there directly. What would you prefer?`,
+                delay: 1500
+            },
+            'Take me to the Resources': {
+                text: `Our Resources section is filled with valuable financial guidance to enhance your knowledge. You can find it <a href="Entrep11.html" target="_blank">here</a>, or I can take you there directly. Just let me know what you'd like me to do.`,
+                delay: 1500
+            }
+        };
+
+        function addMessage(message, isUser = false) {
+            const chatArea = document.getElementById('chatArea');
+            const messageContainer = document.createElement('div');
+            messageContainer.classList.add('message-container');
+            
+            const chatMessage = document.createElement('div');
+            chatMessage.classList.add('chat-message', isUser ? 'user-message' : 'bot-message');
+            chatMessage.innerHTML = message;
+            
+            messageContainer.appendChild(chatMessage);
+            chatArea.appendChild(messageContainer);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const chatArea = document.getElementById('chatArea');
+            const typingContainer = document.createElement('div');
+            typingContainer.classList.add('message-container', 'typing-indicator');
+            typingContainer.innerHTML = `
+                <div class="chat-message bot-message">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            chatArea.appendChild(typingContainer);
+            return typingContainer;
+        }
+
+        function selectOption(option) {
+            addMessage(option, true);
+            
+            const typingIndicator = addTypingIndicator();
+            
+            const response = responses[option] || {
+                text: "I'm processing your request. Give me a moment to find the best information for you.",
+                delay: 2000
+            };
+
+            setTimeout(() => {
+                typingIndicator.remove();
+                addMessage(response.text);
+            }, response.delay);
+        }
+
+        function navigateTo(url) {
+            addMessage(`I'll take you to that page right away! 🚀`, false);
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1000);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-nav');
+            }
+        });
+
+        document.addEventListener('mousedown', () => {
+            document.body.classList.remove('keyboard-nav');
+        });
+    </script>
+</body>
+</html>

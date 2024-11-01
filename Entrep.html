@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnify! By Group 1</title>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #183166;
+            --primary-light: #2a4c8f;
+            --primary-dark: #112347;
+            --accent: #299687;
+            --accent-2: #b48225;
+            --background: #f0f2f5;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+            --success: #48bb78;
+            --danger: #dc3545;
+            --warning: #f6ad55;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            min-height: 100vh;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .navbar {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 0 0 1rem 1rem;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .navbar-brand img {
+            width: 150px;
+            height: auto;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .navbar h1 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button i {
+            font-size: 1.2rem;
+        }
+
+        .tab-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(24, 49, 102, 0.1);
+        }
+
+        .button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .button.danger {
+            background: var(--danger);
+        }
+
+        .button.danger:hover {
+            background: #c82333;
+        }
+
+        #transactionList {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        #transactionList li {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        #transactionList li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-modal {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            margin-top: 1rem;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .bills-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .bills-link {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .bills-link:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .navbar h1 {
+                font-size: 1.2rem;
+                margin-top: 0.5rem;
+            }
+
+            .tabs {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tooltip */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        [data-tooltip]:hover:before {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <img src="/logo.png.png" alt="Magnify Logo">
+            <h1>Hello! Welcome to Magnify!</h1>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-button" onclick="openTab('transactionTab')" data-tooltip="Manage your transactions">
+                <i class="fas fa-list-ul"></i> Track List
+            </button>
+            <button class="tab-button" onclick="openTab('calculatorTab')" data-tooltip="Financial calculators">
+                <i class="fas fa-calculator"></i> Calculators
+            </button>
+            <button class="tab-button" onclick="openTab('analyticsTab')" data-tooltip="View your financial analytics">
+                <i class="fas fa-chart-line"></i> Analytics
+            </button>
+            <button class="tab-button" onclick="window.location.href='Entrep7.html'" data-tooltip="View calendar">
+                <i class="fas fa-calendar"></i> Calendar
+            </button>
+            <button class="tab-button" onclick="window.location.href='Entrep8.html'" data-tooltip="Manage your profile">
+                <i class="fas fa-user"></i> Profile
+            </button>
+            <button class="tab-button" onclick="window.location.href='Entrep9.html'" data-tooltip="Convert currencies">
+                <i class="fas fa-exchange-alt"></i> Currency Converter
+            </button>
+            <button class="tab-button" onclick="window.location.href='Entrep12.html'" data-tooltip="Plan your budget">
+                <i class="fas fa-piggy-bank"></i> Budget Planner
+            </button>
+            <button class="tab-button" onclick="window.location.href='entrep11.html'" data-tooltip="Learn about finances">
+                <i class="fas fa-book"></i> Financial Resources
+            </button>
+        </div>
+
+        <div id="transactionTab" class="tab-content">
+            <h2><i class="fas fa-plus-circle"></i> Add Transaction</h2>
+            <div class="input-group">
+                <select id="type" onchange="toggleDescriptionOptions()" class="form-select">
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <select id="description" required class="form-select"></select>
+            </div>
+            <div class="input-group">
+                <input type="number" id="amount" placeholder="Amount" required class="form-input">
+            </div>
+            <button id="addTransaction" class="button">
+                <i class="fas fa-plus"></i> Add Transaction
+            </button>
+
+            <h2 class="mt-6"><i class="fas fa-list"></i> Transaction List</h2>
+            <ul id="transactionList"></ul>
+
+            <h2 class="mt-6"><i class="fas fa-wallet"></i> Total Balance: ₱<span id="balance">0</span></h2>
+
+            <h2 class="mt-6"><i class="fas fa-lightbulb"></i> Suggestions</h2>
+            <ul id="actionSuggestions"></ul>
+        </div>
+
+        <div id="calculatorTab" class="tab-content">
+            <h2><i class="fas fa-calculator"></i> Calculators</h2>
+            
+            <div class="calculator-section">
+                <h3><i class="fas fa-home"></i> Mortgage Calculator</h3>
+                <button id="openMortgageCalculator" class="button">
+                    <i class="fas fa-calculator"></i> 
+                    Open Mortgage Calculator
+                </button>
+                <div id="mortgageCalculatorModal" class="calculator-modal">
+                    <div class="input-group">
+                        <input type="number" id="mortgageAmount" placeholder="Mortgage Amount">
+                        <input type="number" id="interestRate" placeholder="Interest Rate (%)">
+                        <input type="number" id="loanTerm" placeholder="Loan Term (Years)">
+                    </div>
+                    <button id="calculateMortgage" class="button">Calculate</button>
+                    <h3 id="mortgageResult" class="mt-4"></h3>
+                    <button id="closeMortgageCalculator" class="button danger">Close</button>
+                </div>
+            </div>
+
+            <div class="calculator-section mt-6">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Tax Calculator</h3>
+                <button id="openTaxCalculator" class="button">
+                    <i class="fas fa-calculator"></i>
+                    Open Tax Calculator
+                </button>
+                <div id="taxCalculatorModal" class="calculator-modal">
+                    <div class="input-group">
+                        <input type="number" id="income" placeholder="Income">
+                        <input type="number" id="taxRate" placeholder="Tax Rate (%)">
+                    </div>
+                    <button id="calculateTax" class="button">Calculate</button>
+                    <h3 id="taxResult" class="mt-4"></h3>
+                    <button id="closeTaxCalculator" class="button danger">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="analyticsTab" class="tab-content">
+            <h2><i class="fas fa-chart-pie"></i> Analytics</h2>
+            <div class="input-group">
+                <label for="graphType"><i class="fas fa-chart-bar"></i> Graph Type</label>
+                <select id="graphType" onchange="updateChart()" class="form-select">
+                    <option value="bar">Bar Chart</option>
+                    <option value="pie">Pie Chart</option>
+                    <option value="line">Line Chart</option>
+                </select>
+            </div>
+            <div class="chart-container">
+                <canvas id="financialChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bills-section">
+            <h2><i class="fas fa-file-invoice"></i> Manage your bills:</h2>
+            <a href="Entrep4.html" class="bills-link">
+                <i class="fas fa-credit-card"></i> Pay Your Bills Here
+            </a>
+        </div>
+
+        <button id="resetButton" onclick="resetAll()" class="button danger">
+            <i class="fas fa-trash-alt"></i> Reset Data
+        </button>
+    </div>
+
+    <footer>
+        <p>© Magnify! By Group 1 LLC | 2024 All rights reserved</p>
+    </footer>
+
+    <script src="Entrep.js"></script>
+</body>
+</html>

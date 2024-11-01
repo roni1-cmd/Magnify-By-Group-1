@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnify! - Pay Your Bills</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #186d94;
+            --primary-light: #2389b9;
+            --primary-dark: #145576;
+            --accent: #c7bb4c;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f1c40f;
+            --background: #f8fafc;
+            --text: #2d3748;
+            --text-light: #718096;
+            --card: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            left: -150px;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: -100px;
+            right: -100px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(100px, 50px) rotate(90deg);
+            }
+            50% {
+                transform: translate(50px, 100px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-50px, 50px) rotate(270deg);
+            }
+        }
+
+        .page-header {
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            background: var(--card);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            transition: color 0.3s ease;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--background);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(24, 109, 148, 0.1);
+        }
+
+        .form-control:focus + i {
+            color: var(--primary);
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-method {
+            background: var(--background);
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .payment-method:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .payment-method.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .payment-method i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .additional-details {
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .confirm-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .confirm-button:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(24, 109, 148, 0.1);
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loader {
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+
+        .loader-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 5px solid transparent;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-circle:nth-child(2) {
+            border-top-color: var(--accent);
+            animation-delay: 0.2s;
+            scale: 0.8;
+        }
+
+        .loader-circle:nth-child(3) {
+            border-top-color: white;
+            animation-delay: 0.4s;
+            scale: 0.6;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .receipt-details {
+            margin-bottom: 2rem;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .receipt-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .receipt-value {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--success);
+            color: white;
+            border-radius: 9999px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .return-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .return-button:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 640px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <header class="page-header">
+        <h1>Magnify! Payment Portal</h1>
+        <p>Fast, secure, and convenient bill payments</p>
+    </header>
+
+    <main class="container">
+        <div class="form-header">
+            <h2>Pay Your Essentials Using Magnify Remit-It!</h2>
+            <p>Complete your payment in just a few steps</p>
+        </div>
+
+        <form id="paymentForm" onsubmit="handlePayment(event)">
+            <div class="form-group">
+                <label for="billType">Bill Type</label>
+                <div class="input-wrapper">
+                    <input type="text" id="billType" class="form-control" placeholder="e.g., Electricity" required>
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="billDetails">Bill Code</label>
+                <div class="input-wrapper">
+                    <input type="text" id="billDetails" class="form-control" placeholder="Enter your bill code" required>
+                    <i class="fas fa-barcode"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Select Payment Mode</label>
+                <div class="payment-methods">
+                    <div class="payment-method" data-method="PNB">
+                        <i class="fas fa-university"></i>
+                        <div>PNB</div>
+                    </div>
+                    <div class="payment-method" data-method="BPI">
+                        <i class="fas fa-university"></i>
+                        <div>BPI</div>
+                    </div>
+                    <div class="payment-method" data-method="BillEase">
+                        <i class="fas fa-credit-card"></i>
+                        <div>BillEase</div>
+                    </div>
+                    <div class="payment-method" data-method="GCash">
+                        <i class="fas fa-wallet"></i>
+                        <div>GCash</div>
+                    </div>
+                    <div  class="payment-method" data-method="GooglePay">
+                        <i class="fab fa-google-pay"></i>
+                        <div>Google Pay</div>
+                    </div>
+                    <div class="payment-method" data-method="ApplePay">
+                        <i class="fab fa-apple-pay"></i>
+                        <div>Apple Pay</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="additionalDetails" class="additional-details">
+                <div id="cardDetailsSection">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardholderName">Cardholder Name</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="cardholderName" class="form-control" placeholder="John Doe">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="expDate">Expiration Date</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="expDate" class="form-control" placeholder="MM/YY">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="securityCode">Security Code (CCV)</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="securityCode" class="form-control" placeholder="123">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="gcashSection">
+                    <div class="form-group">
+                        <label for="gcashNumber">GCash Number</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="gcashNumber" class="form-control" placeholder="09XX XXX XXXX">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="googlePaySection">
+                    <div class="form-group">
+                        <label for="googlePayDetails">Google Pay Details</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="googlePayDetails" class="form-control" placeholder="Enter your Google Pay details">
+                            <i class="fab fa-google"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="applePaySection">
+                    <div class="form-group">
+                        <label for="applePayDetails">Apple Pay Details</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="applePayDetails" class="form-control" placeholder="Enter your Apple Pay details">
+                            <i class="fab fa-apple"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="confirm-button">
+                <i class="fas fa-lock"></i>
+                Confirm Payment
+            </button>
+        </form>
+    </main>
+
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="receiptModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-header">
+                <h2>Payment Receipt</h2>
+                <div class="status-badge">
+                    <i class="fas fa-check-circle"></i>
+                    Payment Successful
+                </div>
+            </div>
+
+            <div class="receipt-details">
+                <div class="receipt-row">
+                    <span class="receipt-label">Bill Type</span>
+                    <span class="receipt-value" id="receiptBillType"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Bill Code</span>
+                    <span class="receipt-value" id="receiptBillDetails"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Payment Method</span>
+                    <span class="receipt-value" id="receiptPaymentMode"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Transaction ID</span>
+                    <span class="receipt-value" id="transactionId"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Date & Time</span>
+                    <span class="receipt-value" id="transactionDate"></span>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-bottom: 1rem;">
+                Thank you for using Magnify Remit-It!
+            </p>
+
+            <button class="return-button" id="returnHomeButton">
+                <i class="fas fa-home"></i>
+                Return to Homepage
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© Magnify! By Group 1 LLC | 2024 All rights reserved</p>
+    </footer>
+
+    <script>
+        // Payment method selection
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const additionalDetails = document.getElementById('additionalDetails');
+        const cardDetailsSection = document.getElementById('cardDetailsSection');
+        const gcashSection = document.getElementById('gcashSection');
+        const googlePaySection = document.getElementById('googlePaySection');
+        const applePaySection = document.getElementById('applePaySection');
+
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', () => {
+                // Remove selected class from all methods
+                paymentMethods.forEach(m => m.classList.remove('selected'));
+                // Add selected class to clicked method
+                method.classList.add('selected');
+
+                const paymentMode = method.dataset.method;
+
+                // Hide all sections
+                cardDetailsSection.style.display = 'none';
+                gcashSection.style.display = 'none';
+                googlePaySection.style.display = 'none';
+                applePaySection.style.display = 'none';
+
+                // Show relevant section
+                additionalDetails.style.display = 'block';
+                if (['PNB', 'BPI', 'BillEase'].includes(paymentMode)) {
+                    cardDetailsSection.style.display = 'block';
+                } else if (paymentMode === 'GCash') {
+                    gcashSection.style.display = 'block';
+                } else if (paymentMode === 'GooglePay') {
+                    googlePaySection.style.display = 'block';
+                } else if (paymentMode === 'ApplePay') {
+                    applePaySection.style.display = 'block';
+                }
+            });
+        });
+
+        // Handle payment submission
+        function handlePayment(event) {
+            event.preventDefault();
+
+            const loadingScreen = document.getElementById('loadingScreen');
+            const receiptModal = document.getElementById('receiptModal');
+            
+            // Show loading screen
+            loadingScreen.style.display = 'flex';
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                
+                // Update receipt details
+                const billType = document.getElementById('billType').value;
+                const billDetails = document.getElementById('billDetails').value;
+                const selectedMethod = document.querySelector('.payment-method.selected');
+                const paymentMode = selectedMethod ? selectedMethod.dataset.method : '';
+
+                document.getElementById('receiptBillType').textContent = billType;
+                document.getElementById('receiptBillDetails').textContent = billDetails;
+                document.getElementById('receiptPaymentMode').textContent = paymentMode;
+                document.getElementById('transactionId').textContent = 'TXN' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                document.getElementById('transactionDate').textContent = new Date().toLocaleString();
+
+                // Show receipt modal
+                receiptModal.style.display = 'flex';
+            }, 3000);
+        }
+
+        // Modal close button
+        document.getElementById('modalClose').onclick = function() {
+            document.getElementById('receiptModal').style.display = 'none';
+        };
+
+        // Return home button
+        document.getElementById('returnHomeButton').onclick = function() {
+            window.location.href = 'Entrep.html';
+        };
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('receiptModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

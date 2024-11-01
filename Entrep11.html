@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnify! Financial Resources and Guidance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #007bff;
+            --primary-dark: #0056b3;
+            --success: #28a745;
+            --success-dark: #218838;
+            --background: #f8f9fa;
+            --text: #333;
+            --text-light: #666;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .resource-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .resource-section h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .resource-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .resource-card {
+            background: var(--background);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: var(--transition);
+        }
+
+        .resource-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .resource-card-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .resource-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .resource-card:hover .resource-icon {
+            transform: rotate(360deg);
+        }
+
+        .resource-info {
+            flex: 1;
+        }
+
+        .resource-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 3rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--card-shadow);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards 0.3s;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--success);
+            color: white;
+            text-decoration: none;
+            border-radius: 2rem;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background: var(--success-dark);
+            transform: translateY(-2px);
+        }
+
+        .chatbot-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: none;
+            z-index: 1000;
+        }
+
+        .chatbot-button:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+
+        .chatbot-button i {
+            font-size: 1.5rem;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resource-card {
+                padding: 1rem;
+            }
+        }
+
+        /* Loading animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--primary);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1>Magnify! Financial Resources and Guidance</h1>
+            <p>Explore helpful resources for improving your financial literacy, learning how to budget, and managing your spending effectively.</p>
+        </header>
+
+        <div class="resources-grid">
+            <section class="resource-section">
+                <h2>Budgeting and Financial Literacy</h2>
+                <div class="resource-card" data-url="https://www.umkc.edu/financial-wellness/resources/budgeting.html">
+                    <div class="resource-card-content">
+                        <div class="resource-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="resource-info">
+                            <div class="resource-title">UMKC Financial Wellness</div>
+                            <div class="resource-description">Comprehensive budgeting resources and tools</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="resource-card" data-url="https://bettermoneyhabits.bankofamerica.com/en/saving-budgeting/creating-a-budget">
+                    <div class="resource-card-content">
+                        <div class="resource-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div class="resource-info">
+                            <div class="resource-title">Better Money Habits</div>
+                            <div class="resource-description">Learn the basics of creating a budget</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="resource-section">
+                <h2>Personal Finance Training</h2>
+                <div class="resource-card" data-url="https://www.coursera.org/courses?query=personal%20finance">
+                    <div class="resource-card-content">
+                        <div class="resource-icon">
+                            <i class="fas fa-laptop"></i>
+                        </div>
+                        <div class="resource-info">
+                            <div class="resource-title">Coursera Courses</div>
+                            <div class="resource-description">Online personal finance courses</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="resource-card" data-url="https://www.udemy.com/topic/personal-finance/">
+                    <div class="resource-card-content">
+                        <div class="resource-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="resource-info">
+                            <div class="resource-title">Udemy Courses</div>
+                            <div class="resource-description">Learn finance and budgeting skills</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="resource-section">
+                <h2>Philippine Budgeting Resources</h2>
+                <div class="resource-card" data-url="https://dfi.wa.gov/financial-education/information/budgeting">
+                    <div class="resource-card-content">
+                        <div class="resource-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="resource-info">
+                            <div class="resource-title">DFI - Budgeting Information</div>
+                            <div class="resource-description">Comprehensive budgeting information</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="resource-card" data-url="https://www.dbm.gov.ph/wp-content/uploads/2012/03/PGB-B2.pdf">
+                    <div class="resource-card-content">
+                        <div class="resource-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="resource-info">
+                            <div class="resource-title">DBM - Budgeting Guidelines PDF</div>
+                            <div class="resource-description">Official budgeting guidelines document</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="resource-card" data-url="https://rgao.upm.edu.ph/award-set-up-2/how-to-prepare-lib-cash-program/">
+                    <div class="resource-card-content">
+                        <div class="resource-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="resource-info">
+                            <div class="resource-title">UP Manila - Cash Program Preparation</div>
+                            <div class="resource-description">Guide on preparing cash programs</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to Start Your Financial Journey?</h2>
+            <p>Access our interactive budget planner and take control of your finances today!</p>
+            <button class="cta-button" onclick="navigateTo('Entrep12.html')">
+                Access Budget Planner
+            </button>
+        </div>
+    </div>
+
+    <button class="chatbot-button" onclick="navigateTo('Entrep13.html')" aria-label="Open chat support">
+        <i class="fas fa-comment-dots"></i>
+    </button>
+
+    <script>
+        // Show loading animation
+        function showLoading() {
+            document.querySelector('.loading-overlay').classList.add('active');
+        }
+
+        // Hide loading animation
+        function hideLoading() {
+            document.querySelector('.loading-overlay').classList.remove('active');
+        }
+
+        // Navigation with loading animation
+        function navigateTo(url) {
+            showLoading();
+            setTimeout(() => {
+                window.location.href = url;
+            }, 500);
+        }
+
+        // Add click handlers to resource cards
+        document.querySelectorAll('.resource-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const url = card.dataset.url;
+                if (url) {
+                    showLoading();
+                    window.open(url, '_blank');
+                    setTimeout(hideLoading, 500);
+                }
+            });
+        });
+
+        // Hide loading overlay on page load
+        window.addEventListener('load', () => {
+            hideLoading();
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-nav');
+            }
+        });
+
+        document.addEventListener('mousedown', () => {
+            document.body.classList.remove('keyboard-nav');
+        });
+    </script>
+</body>
+</html>

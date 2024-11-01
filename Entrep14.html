@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnify! Monthly Expense and Income Visualizer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #eab308;
+            --background: linear-gradient(135deg, #c7bb4c, #186d94);
+            --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--primary), var(--success));
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .input-group input,
+        .input-group select {
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .chart-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: #f3f4f6;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .chart-container {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            height: 400px;
+        }
+
+        .transaction-panel {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            height: fit-content;
+        }
+
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .transaction-header h2 {
+            font-size: 1.5rem;
+            color: #1f2937;
+        }
+
+        .transaction-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .transaction-item {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.2s;
+        }
+
+        .transaction-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .transaction-month {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .transaction-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+        }
+
+        .transaction-amount {
+            font-weight: 500;
+        }
+
+        .amount-income {
+            color: var(--success);
+        }
+
+        .amount-expense {
+            color: var(--danger);
+        }
+
+        .action-button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .action-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+        }
+
+        .summary-card.income {
+            border-color: var(--success);
+        }
+
+        .summary-card.expense {
+            border-color: var(--danger);
+        }
+
+        .summary-card.savings {
+            border-color: var(--warning);
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .delete-button {
+            padding: 0.25rem;
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .transaction-item:hover .delete-button {
+            opacity: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 2rem;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="header">
+                <h1>Magnify! Visualizer</h1>
+                <p>Visualize your income and keep track with the use of our graphical structuring.</p>
+            </div>
+
+            <div class="summary-cards">
+                <div class="summary-card income">
+                    <div>Total Income</div>
+                    <div id="totalIncome" class="summary-value">₱0.00</div>
+                </div>
+                <div class="summary-card expense">
+                    <div>Total Expenses</div>
+                    <div id="totalExpenses" class="summary-value">₱0.00</div>
+                </div>
+                <div class="summary-card savings">
+                    <div>Net Savings</div>
+                    <div id="netSavings" class="summary-value">₱0.00</div>
+                </div>
+            </div>
+
+            <form id="dataForm" class="form-grid">
+                <div class="input-group">
+                    <label for="month">Month</label>
+                    <select id="month" required>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="income">Income (₱)</label>
+                    <input type="number" id="income" placeholder="Enter your income" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="expenses">Expenses (₱)</label>
+                    <input type="number" id="expenses" placeholder="Enter your expenses" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="graphType">Visualization Type</label>
+                    <select id="graphType">
+                        <option value="bar">Bar Chart</option>
+                        <option value="line">Line Chart</option>
+                        <option value="pie">Pie Chart</option>
+                    </select>
+                </div>
+            </form>
+
+            <button type="button" id="addDataBtn" class="action-button">
+                <i class="fas fa-plus"></i>
+                Track My Finance
+            </button>
+
+            <div class="chart-controls">
+                <button class="chart-button active" data-type="bar">
+                    <i class="fas fa-chart-bar"></i>
+                    Bar
+                </button>
+                <button class="chart-button" data-type="line">
+                    <i class="fas fa-chart-line"></i>
+                    Line
+                </button>
+                <button class="chart-button" data-type="pie">
+                    <i class="fas fa-chart-pie"></i>
+                    Pie
+                </button>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="dataChart"></canvas>
+            </div>
+        </div>
+
+        <div class="transaction-panel">
+            <div class="transaction-header">
+                <h2>Annual Transactions</h2>
+                <button class="chart-button" onclick="clearTransactions()">
+                    <i class="fas fa-trash"></i>
+                    Clear All
+                </button>
+            </div>
+            <div id="logContainer" class="transaction-list"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© Magnify! By Group 1 LLC | 2024 All rights reserved</p>
+    </footer>
+
+    <script>
+        const ctx = document.getElementById('dataChart').getContext('2d');
+        let chartInstance;
+        let incomeData = [];
+        let expenseData = [];
+        let labels = [];
+        let transactions = [];
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-PH', {
+                style: 'currency',
+                currency: 'PHP'
+            }).format(value);
+        }
+
+        function updateSummary() {
+            const totalIncome = incomeData.reduce((a, b) => a + b, 0);
+            const totalExpenses = expenseData.reduce((a, b) => a + b, 0);
+            const netSavings = totalIncome - totalExpenses;
+
+            document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
+            document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
+            document.getElementById('netSavings').textContent = formatCurrency(netSavings);
+        }
+
+        document.getElementById('addDataBtn').addEventListener('click', function() {
+            const month = document.getElementById('month').value;
+            const income = parseFloat(document.getElementById('income').value);
+            const expenses = parseFloat(document.getElementById('expenses').value);
+
+            if (!month || isNaN(income) || isNaN(expenses)) {
+                alert('Please fill in all fields with valid numbers');
+                return;
+            }
+
+            if (labels.includes(month)) {
+                alert('Data for this month already exists');
+                return;
+            }
+
+            incomeData.push(income);
+            expenseData.push(expenses);
+            labels.push(month);
+            transactions.push({ month, income, expenses });
+
+            updateChart(document.getElementById('graphType').value);
+            updateTransactionLog();
+            updateSummary();
+
+            // Reset form
+            document.getElementById('income').value = '';
+            document.getElementById('expenses').value = '';
+        });
+
+        function createChart(type) {
+            const config = {
+                type: type,
+                data: {
+                    labels: type === 'pie' ? ['Total Income', 'Total Expenses'] : labels,
+                    datasets: type === 'pie' ? [{
+                        data: [
+                            incomeData.reduce((a, b) => a + b, 0),
+                            expenseData.reduce((a, b) => a + b, 0)
+                        ],
+                        backgroundColor: [
+                            'rgba(22, 163, 74, 0.6)',
+                            'rgba(220, 38, 38, 0.6)'
+                        ]
+                    }] : [
+                        {
+                            label: 'Income',
+                            data: incomeData,
+                            backgroundColor: 'rgba(22, 163, 74, 0.6)',
+                            borderColor: 'rgba(22, 163, 74, 1)',
+                            
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Expenses',
+                            data: expenseData,
+                            backgroundColor: 'rgba(220, 38, 38, 0.6)',
+                            borderColor: 'rgba(220, 38, 38, 1)',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: type !== 'pie' ? {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => formatCurrency(value)
+                            }
+                        }
+                    } : undefined
+                }
+            };
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, config);
+        }
+
+        function updateChart(type) {
+            createChart(type);
+            document.querySelectorAll('.chart-button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.type === type);
+            });
+        }
+
+        function updateTransactionLog() {
+            const logContainer = document.getElementById('logContainer');
+            logContainer.innerHTML = '';
+
+            transactions.forEach((transaction, index) => {
+                const transactionDiv = document.createElement('div');
+                transactionDiv.className = 'transaction-item';
+                transactionDiv.innerHTML = `
+                    <div class="transaction-month">${transaction.month}</div>
+                    <div class="transaction-details">
+                        <span class="transaction-amount amount-income">${formatCurrency(transaction.income)}</span>
+                        <span class="transaction-amount amount-expense">${formatCurrency(transaction.expenses)}</span>
+                        <button class="delete-button" onclick="deleteTransaction(${index})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                logContainer.appendChild(transactionDiv);
+            });
+        }
+
+        function deleteTransaction(index) {
+            if (confirm('Are you sure you want to delete this transaction?')) {
+                transactions.splice(index, 1);
+                incomeData.splice(index, 1);
+                expenseData.splice(index, 1);
+                labels.splice(index, 1);
+                updateTransactionLog();
+                updateChart(document.getElementById('graphType').value);
+                updateSummary();
+            }
+        }
+
+        function clearTransactions() {
+            if (confirm('Are you sure you want to clear all transactions?')) {
+                transactions = [];
+                incomeData = [];
+                expenseData = [];
+                labels = [];
+                updateTransactionLog();
+                updateChart(document.getElementById('graphType').value);
+                updateSummary();
+            }
+        }
+
+        document.querySelectorAll('.chart-button').forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.dataset.type) {
+                    updateChart(button.dataset.type);
+                }
+            });
+        });
+
+        // Initialize the chart
+        createChart('bar');
+    </script>
+</body>
+</html>
