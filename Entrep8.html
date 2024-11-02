@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Magnify!</title>
-    <link rel="logo.png" href="logo-300x300.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
@@ -139,7 +138,7 @@
         /* Enhanced Header */
         .header {
             text-align: center;
-            padding: 1rem; /* Updated padding */
+            padding: 1rem;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -292,8 +291,8 @@
             border: 2px solid var(--primary-color);
         }
 
-        /* Enhanced Chatbot */
-        .chatbot-tab {
+        /* Enhanced Membership Tab */
+        .membership-tab {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
@@ -311,11 +310,11 @@
             z-index: 3;
         }
 
-        .chatbot-tab:hover {
+        .membership-tab:hover {
             transform: scale(1.1) rotate(15deg);
         }
 
-        .chatbot-message {
+        .membership-message {
             position: absolute;
             bottom: 80px;
             right: 35px;
@@ -412,12 +411,14 @@
         <button class="button secondary-button" id="logoutButton">Log Out</button>
     </div>
 
-    <div class="chatbot-tab" id="chatbotTab">
-        <i class="fas fa-comment-dots"></i>
+    <div class="membership-tab" id="membershipTab">
+        <i class="fas fa-crown"></i>
     </div>
 
-    <div class="chatbot-message" id="chatbotMessage">
-        Seek Help With E.R.I.C.H.
+    <div class="membership-message" id="membershipMessage">
+        <h3>Membership Status</h3>
+        <p>Upgrade to Premium for exclusive features!</p>
+        <button class="button primary-button" id="upgradeButton">Upgrade Now</button>
     </div>
 
     <div id="successToast" class="toast success">Operation successful!</div>
@@ -438,7 +439,7 @@
         document.getElementById('logoutButton').addEventListener('click', function() {
             showToast('success', 'Logging out...');
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = 'Entrep5.html';
             }, 1500);
         });
 
@@ -451,6 +452,7 @@
                     return;
                 }
                 document.getElementById('username').innerText = newName;
+                
                 document.getElementById('newName').value = '';
                 showToast('success', 'Name changed successfully!');
             } else {
@@ -471,24 +473,36 @@
             }, 1000);
         });
 
-        // Enhanced chatbot interaction
-        const chatbotTab = document.getElementById('chatbotTab');
-        const chatbotMessage = document.getElementById('chatbotMessage');
+        // Enhanced membership tab interaction
+        const membershipTab = document.getElementById('membershipTab');
+        const membershipMessage = document.getElementById('membershipMessage');
         let messageTimeout;
 
-        chatbotTab.addEventListener('mouseenter', function() {
-            chatbotMessage.style.display = 'block';
+        membershipTab.addEventListener('mouseenter', function() {
+            membershipMessage.style.display = 'block';
             clearTimeout(messageTimeout);
         });
 
-        chatbotTab.addEventListener('mouseleave', function() {
+        membershipTab.addEventListener('mouseleave', function() {
             messageTimeout = setTimeout(() => {
-                chatbotMessage.style.display = 'none';
+                membershipMessage.style.display = 'none';
             }, 1000);
         });
 
-        chatbotTab.addEventListener('click', function() {
-            window.location.href = 'Entrep15.html';
+        membershipTab.addEventListener('click', function() {
+            showToast('success', 'Redirecting to membership page...');
+            // Simulating navigation to membership page
+            setTimeout(() => {
+                console.log('Navigating to membership page...');
+            }, 1500);
+        });
+
+        // Upgrade button logic
+        document.getElementById('upgradeButton').addEventListener('click', function() {
+            showToast('success', 'Redirecting to upgrade page...');
+            setTimeout(() => {
+                window.location.href = 'Entrep15.html';
+            }, 1500);
         });
 
         // Add smooth scroll behavior
