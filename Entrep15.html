@@ -6,17 +6,12 @@
     <title>Magnify! - Membership Plans</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        @keyframes quickSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         :root {
-            --primary: #0c5e9d; /* Turquoise */
-            --primary-light: #097066;
-            --primary-dark: #0a7474;
-            --secondary: #FFD700; /* Yellow */
-            --accent: #FFD700; /* Dandelion */
+            --primary: #0066ff;
+            --primary-light: #3385ff;
+            --primary-dark: #0047b3;
+            --secondary: #FFD700;
+            --accent: #ff6b6b;
             --background: #F0F8FF;
             --text: #333333;
             --text-light: #666666;
@@ -35,7 +30,7 @@
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             line-height: 1.6;
             color: var(--text);
-            background: var(--background);
+            background: linear-gradient(135deg, #6e8efb, #ff6b6b);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -52,21 +47,60 @@
         header {
             text-align: center;
             margin-bottom: 3rem;
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             padding: 2rem;
             border-radius: 15px;
             color: var(--white);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 50%, transparent 55%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background-color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         h1 {
             font-size: 3rem;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .subtitle {
             font-size: 1.2rem;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
         .plans-container {
@@ -77,7 +111,7 @@
         }
 
         .plan {
-            background: var(--white);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             box-shadow: var(--shadow);
             padding: 2rem;
@@ -86,17 +120,35 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .plan:hover {
             transform: translateY(-10px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .plan::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .plan:hover::before {
+            transform: translateX(100%);
         }
 
         .plan h2 {
             font-size: 1.8rem;
             color: var(--primary);
             margin-bottom: 1rem;
+            position: relative;
         }
 
         .plan-icon {
@@ -107,8 +159,43 @@
             display: inline-block;
         }
 
-        .plan:hover .plan-icon {
-            animation: quickSpin 0.5s ease-out;
+        /* Compass Animation */
+        .plan:hover .fa-compass {
+            animation: compass 5s linear infinite;
+            transform-origin: center;
+        }
+
+        @keyframes compass {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Eye Animation */
+        .plan .fa-eye {
+            transition: transform 0.3s ease;
+        }
+
+        .plan:hover .fa-eye {
+            animation: blink 3s infinite;
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        /* Rocket Animation */
+        .plan .fa-rocket {
+            transition: transform 0.3s ease;
+        }
+
+        .plan:hover .fa-rocket {
+            animation: fly 2s ease-in-out infinite;
+        }
+
+        @keyframes fly {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
         .plan-price {
@@ -116,6 +203,18 @@
             font-weight: bold;
             color: var(--primary-dark);
             margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .plan-price::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
 
         .plan-features {
@@ -125,15 +224,24 @@
         }
 
         .plan-features li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             color: var(--text-light);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .plan-features li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
         }
 
         .plan-button {
-            background: var(--secondary);
-            color: var(--text);
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            color: var(--white);
             border: none;
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 2rem;
             border-radius: 25px;
             font-size: 1rem;
             font-weight: bold;
@@ -143,30 +251,55 @@
             overflow: hidden;
         }
 
-        .plan-button::after {
+        .plan-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.3);
+        }
+
+        .plan-button::before {
             content: '';
             position: absolute;
-            top: 50%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .plan-button:hover::before {
+            transform: translateX(100%);
+        }
+
+        .feature-tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .feature-tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: var(--white);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
             left: 50%;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            transition: transform 0.5s ease;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .plan-button:hover::after {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .plan-button:hover {
-            background: var(--accent);
-        }
-
-        .plan-button:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+        .feature-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .modal {
@@ -178,18 +311,27 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
             align-items: center;
             justify-content: center;
         }
 
         .modal-content {
-            background-color: var(--white);
+            background: linear-gradient(135deg, var(--white), #f8f9fa);
             padding: 2rem;
             border-radius: 15px;
             max-width: 500px;
             width: 90%;
             text-align: center;
             position: relative;
+            transform: scale(0.7);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
         }
 
         .close {
@@ -200,6 +342,12 @@
             font-weight: bold;
             color: var(--text-light);
             cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
         }
 
         .payment-options {
@@ -219,44 +367,23 @@
             justify-content: center;
             cursor: pointer;
             transition: var(--transition);
+            background: var(--white);
         }
 
         .payment-option:hover {
             transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: var(--primary);
         }
 
         .payment-option img {
             max-width: 60px;
             max-height: 60px;
+            transition: var(--transition);
         }
 
-        .feature-tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: help;
-        }
-
-        .feature-tooltip .tooltip-text {
-            visibility: hidden;
-            width: 200px;
-            background-color: var(--primary-dark);
-            color: var(--white);
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .feature-tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
+        .payment-option:hover img {
+            transform: scale(1.1);
         }
 
         @media (max-width: 768px) {
@@ -269,14 +396,29 @@
                 width: 100%;
                 max-width: 350px;
             }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Magnify! Membership Plans</h1>
-            <p class="subtitle">Choose the plan that fits your financial goals</p>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-search-dollar"></i>
+                </div>
+                <div>
+                    <h1>Magnify! Membership Plans</h1>
+                    <p class="subtitle">Choose the plan that fits your financial goals</p>
+                </div>
+            </div>
         </header>
 
         <div class="plans-container">
@@ -343,7 +485,7 @@
         <div class="modal-content">
             <span class="close" onclick="closePaymentModal()">&times;</span>
             <h2>Select Payment Method</h2>
-            <p id="planInfo"></p>
+            <p  id="planInfo"></p>
             <div class="payment-options">
                 <div class="payment-option" onclick="selectPayment('gcash')">
                     <img src="GCash-Logo-removebg-preview.png" alt="GCash">
@@ -364,17 +506,18 @@
             const planInfo = document.getElementById('planInfo');
             planInfo.textContent = `You've selected the ${planName} Tier for PHP ${price}`;
             modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
         }
 
         function closePaymentModal() {
             const modal = document.getElementById('paymentModal');
-            modal.style.display = 'none';
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
         }
 
         function selectPayment(method) {
-            alert(`You've selected to pay with ${method.toUpperCase()}. Redirecting to payment gateway...`);
+            alert(`You've selected to pay with ${method.toUpperCase()}. Magnifying your payment gateway...`);
             closePaymentModal();
-            // Here you would typically redirect to the actual payment gateway
         }
 
         // Close modal when clicking outside of it
