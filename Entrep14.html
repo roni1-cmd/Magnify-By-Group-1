@@ -8,8 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Enhanced color scheme with CSS variables */
-        :root {
+      :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
             --success: #16a34a;
@@ -605,8 +604,7 @@
     <footer class="footer">
         <p>© Magnify! By Group 1 LLC | 2024 All rights reserved</p>
     </footer>
-
-    <script>
+<script>
         const ctx = document.getElementById('dataChart').getContext('2d');
         let chartInstance;
         let incomeData = [];
@@ -666,8 +664,13 @@
 
             const animate = () => {
                 current += increment;
-                if ((increment > 0 && current >= value) || (increment < 0 && current <= value)) {
-                    element.textContent = formatCurrency(value);
+                const shouldStop = 
+                    (increment > 0 && current >= value) || 
+                    (increment < 0 && current <= value);
+
+                if (shouldStop) {
+                    current = value; // Ensure we end up with the exact final value
+                    element.textContent = formatCurrency(current);
                 } else {
                     element.textContent = formatCurrency(current);
                     requestAnimationFrame(animate);
