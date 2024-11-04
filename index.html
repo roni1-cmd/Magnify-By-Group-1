@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify! - Financial Management Portal</title>
-    <link rel="logo.png" href="logo-300x300.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Magnify! - Your Gateway to Financial Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --gradient-start: #1a237e;
-            --gradient-end: #ff7043;
-            --accent: #2196f3;
-            --accent-hover: #1565c0;
+            --gradient-start: #4158D0;
+            --gradient-middle: #C850C0;
+            --gradient-end: #FFCC70;
+            --accent: #50C878;
             --text: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            --card-bg: rgba(255, 255, 255, 0.1);
         }
 
         * {
@@ -26,409 +23,810 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
             color: var(--text);
-            display: grid;
-            place-items: center;
-            overflow: hidden;
-            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        .particles {
+        .nav {
             position: fixed;
             top: 0;
             left: 0;
+            right: 0;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(65, 88, 208, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        .google-btn {
+            background: #fff;
+            color: #757575;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .google-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .hero {
+            min-height: 100vh;
+            padding: 6rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .hero-content.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .cta-primary, .cta-secondary {
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-primary {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .cta-secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--text);
+        }
+
+        .cta-primary:hover, .cta-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            transform: rotate(-15deg) scale(1.2);
+        }
+
+        .image-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .financial-icon {
             width: 100%;
             height: 100%;
-            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .financial-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-10px);
+        }
+
+        .financial-icon i {
+            transition: all 0.3s ease;
+        }
+
+        .financial-icon.chart-line:hover i {
+            animation: chartLineGrow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes chartLineGrow {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.3); }
+        }
+
+        .financial-icon.coins:hover i {
+            animation: coinSpin 1.5s ease-in-out infinite;
+        }
+
+        @keyframes coinSpin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .financial-icon.wallet:hover i {
+            animation: walletBounce 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes walletBounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        .financial-icon.hand-holding-usd:hover i {
+            animation: cashFlow 2s linear infinite;
+        }
+
+        @keyframes cashFlow {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .financial-icon.chart-pie {
+            perspective: 1000px;
+        }
+
+        .financial-icon.chart-pie:hover i {
+            animation: pieRotate 2s ease-in-out infinite;
+        }
+
+        @keyframes pieRotate {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .financial-icon.piggy-bank:hover i {
+            animation: piggyShake 0.5s ease-in-out infinite;
+        }
+
+        @keyframes piggyShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px) rotate(-5deg); }
+            75% { transform: translateX(5px) rotate(5deg); }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
             pointer-events: none;
         }
 
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.5);
+            width: 6px;
+            height: 6px;
+            background: #fff;
             border-radius: 50%;
-            animation: float 20s linear infinite;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) scale(1);
-                opacity: 0;
-            }
-        }
-
-        .background-words {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            opacity: 0.1;
-            z-index: 1;
-            transform: rotate(-15deg);
-            pointer-events: none;
-        }
-
-        .background-word {
-            font-size: clamp(1rem, 5vw, 4rem);
-            font-weight: bold;
-            white-space: nowrap;
-            animation: wordFloat 3s ease-in-out infinite;
-            animation-delay: calc(var(--delay) * 1s);
-        }
-
-        @keyframes wordFloat {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        .login-container {
-            position: relative;
-            z-index: 2;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 3rem;
-            width: min(90%, 400px);
-            text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            animation: cardFloat 6s ease-in-out infinite;
-        }
-
-        @keyframes cardFloat {
-            0%, 100% {
-                transform: translateY(0) rotateX(0) rotateY(0);
-            }
-            25% {
-                transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
-            }
-            75% {
-                transform: translateY(10px) rotateX(-2deg) rotateY(2deg);
-            }
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.5));
-            -webkit-background-clip: text;
-            color: transparent;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-        }
-
-        .motto {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            line-height: 1.5;
-        }
-
-        .google-button {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .google-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
-
-        .google-button:hover::before {
-            transform: translateX(100%);
-        }
-
-        .google-button:hover {
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .google-button:active {
-            transform: translateY(0);
-        }
-
-        .google-icon {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-        }
-
-        .create-account {
-            margin-top: 1.5rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .create-account a {
-            color: var(--text);
-            text-decoration: none;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .create-account a:hover {
-            border-bottom-style: solid;
+            opacity: 0;
         }
 
         .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 1.5rem;
+            background: rgba(65, 88, 208, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
             text-align: center;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
-            z-index: 2;
+            margin-top: auto;
         }
 
-        .team-members {
+        .footer-names {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 1rem;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
         }
 
-        .member {
+        .footer-name {
+            opacity: 0.7;
+            transition: all 0.3s ease;
             padding: 0.5rem 1rem;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            transition: all 0.3s ease;
+            border-radius: 15px;
+            cursor: pointer;
         }
 
-        .member:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .footer-name:hover {
+            opacity: 1;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .copyright {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .loading-overlay {
+        .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
+            opacity: 1;
             transition: opacity 0.5s ease;
         }
 
-        .loading-overlay.active {
-            opacity: 1;
-            pointer-events: all;
+        .loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .loader {
-            width: 48px;
-            height: 48px;
-            border: 5px solid #fff;
-            border-bottom-color: transparent;
-            border-radius: 50%;
-            animation: rotation 1s linear infinite;
+            width: 120px;
+            height: 120px;
+            position: relative;
         }
 
-        @keyframes rotation {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+        .loader-circle {
+            position: absolute;
+            inset: 0;
+            border: 4px solid transparent;
+            border-radius: 50%;
+            animation: rotate var(--duration) var(--timing) infinite;
+        }
+
+        .loader-circle:nth-child(1) {
+            border-top-color: #fff;
+            --duration: 1.5s;
+            --timing: ease-in-out;
+        }
+
+        .loader-circle:nth-child(2) {
+            border-right-color: var(--accent);
+            --duration: 2s;
+            --timing: ease-in;
+        }
+
+        .loader-circle:nth-child(3) {
+            border-bottom-color: #fff;
+            --duration: 2.5s;
+            --timing: ease-out;
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        .loading-progress {
+            width: 300px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            width: 0;
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.5s ease;
+        }
+
+        .loading-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .learn-more-loading {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .learn-more-loading.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .learn-more-content {
+            text-align: center;
+            color: #fff;
+        }
+
+        .learn-more-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .learn-more-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            animation: iconPulse 1.5s ease-in-out infinite;
+        }
+
+        .learn-more-icon:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .learn-more-icon:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-10px); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         @media (max-width: 768px) {
-            .login-container {
-                padding: 2rem;
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 5rem;
             }
 
-            .team-members {
-                font-size: 0.8rem;
+            .nav-links {
+                display: none;
             }
 
-            .member {
-                padding: 0.4rem 0.8rem;
+            .image-grid {
+                transform: rotate(-15deg) scale(0.9);
+                margin-top: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="particles" id="particles"></div>
-    
-    <div class="background-words" id="backgroundWords"></div>
-
-    <main class="login-container">
-        <h1 class="logo">MAGNIFY!</h1>
-        <p class="motto">
-            Your gateway to financial management
-            <br>
-            <small style="font-size: 0.8rem; opacity: 0.7;">by Group 1</small>
-        </p>
-        
-        <button class="google-button" onclick="handleSignIn()">
-            <img src="png-transparent-google-logo-google-logo-g-suite-chrome-text-logo-chrome-removebg-preview.png" 
-                 alt="Google" 
-                 class="google-icon">
-            Sign in with Google
-        </button>
-        
-        <p class="create-account">
-            <p class="create-account">Don't have one? <a href="https://accounts.google.com/signup" target="_blank">Create your own</a></p>        </p>
-        </p>
-    </main>
-
-    <footer class="footer">
-        <div class="team-members">
-            <div class="member">Shelina Mae Dela Cruz</div>
-            <div class="member">Ron Asnahon</div>
-            <div class="member">Sean Ferneil Ricaza</div>
-            <div class="member">Carl John Arpay</div>
-            <div class="member">Vince Gerard Gonzaga</div>
-            <div class="member">Joeron Zeniff Paloma</div>
-            <div class="member">James Virtucio</div>
-            <div class="member">Van Erich Nisnisan</div>
+    <div class="loading-screen">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
         </div>
-        <p class="copyright">© Magnify! By Group 1 LLC | 2024 All rights reserved</p>
-    </footer>
-
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loader"></div>
+        <div class="loading-text">Magnifying Your Financial Future...</div>
+        <div class="loading-progress">
+            <div class="loading-bar"></div>
+        </div>
+        <div class="loading-particles"></div>
     </div>
 
+    <div class="learn-more-loading">
+        <div  class="learn-more-content">
+            <h2>Preparing Your Financial Journey</h2>
+            <div class="learn-more-icons">
+                <i class="learn-more-icon fas fa-chart-line"></i>
+                <i class="learn-more-icon fas fa-coins"></i>
+                <i class="learn-more-icon fas fa-piggy-bank"></i>
+            </div>
+            <p>Loading valuable insights for you...</p>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <div class="logo-container">
+            <img src="logo.png" alt="Magnify!" class="logo-img">
+            <span class="logo-text">Magnify!</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-link">Mark</a>
+            <a href="#" class="nav-link">Organize</a>
+            <a href="#" class="nav-link">Assemble</a>
+            <a href="#" class="nav-link">Magnify It</a>
+        </div>
+        <a href="#" class="google-btn" id="googleLoginBtn">
+            <img src="png-transparent-google-logo-google-logo-g-suite-chrome-text-logo-chrome-removebg-preview.png"alt="Google Logo">
+            Continue with Google
+        </a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title"></h1>
+            <p class="hero-subtitle">Experience next-generation financial tools designed for your success</p>
+            <div class="cta-buttons">
+                <a href="#" class="cta-primary">Get Started</a>
+                <a href="#" class="cta-secondary" id="learnMoreBtn">Learn More</a>
+            </div>
+        </div>
+        <div class="image-grid" id="imageGrid">
+            <div class="image-item">
+                <div class="financial-icon chart-line">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="particles"></div>
+                </div>
+            </div>
+            <div class="image-item">
+                <div class="financial-icon coins">
+                    <i class="fas fa-coins"></i>
+                    <div class="particles"></div>
+                </div>
+            </div>
+            <div class="image-item">
+                <div class="financial-icon wallet">
+                    <i class="fas fa-wallet"></i>
+                    <div class="particles"></div>
+                </div>
+            </div>
+            <div class="image-item">
+                <div class="financial-icon hand-holding-usd">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <div class="particles"></div>
+                </div>
+            </div>
+            <div class="image-item">
+                <div class="financial-icon chart-pie">
+                    <i class="fas fa-chart-pie"></i>
+                    <div class="particles"></div>
+                </div>
+            </div>
+            <div class="image-item">
+                <div class="financial-icon piggy-bank">
+                    <i class="fas fa-piggy-bank"></i>
+                    <div class="particles"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-names">
+            <div class="footer-name">Shelina Mae Dela Cruz</div>
+            <div class="footer-name">Ron Asnahon</div>
+            <div class="footer-name">Sean Ferneil Ricaza</div>
+            <div class="footer-name">Carl John Arpay</div>
+            <div class="footer-name">Vince Gerard Gonzaga</div>
+            <div class="footer-name">Joeron Zeniff Paloma</div>
+            <div class="footer-name">James Virtucio</div>
+            <div class="footer-name">Van Erich Nisnisan</div>
+        </div>
+    </footer>
+
     <script>
-        // Background words animation
-        const words = [
-            "Budgeting", "Investing", "Savings", "Expenses", "Financial Freedom",
-            "Debt Management", "Freelance", "Business", "Money", "Funds",
-            "Banking", "Assets", "Capital", "ROI", "PRC", "Equity",
-            "Royalty", "Liabilities", "Income", "Revenue", "Cash Flow",
-            "Entrepreneurship", "Marketing", "Corporate", "Treasury"
+        // DOM Elements
+        const imageItems = document.querySelectorAll('.image-item');
+        const heroContent = document.querySelector('.hero-content');
+        const footerNames = document.querySelectorAll('.footer-name');
+        const loadingScreen = document.querySelector('.loading-screen');
+        const loadingBar = document.querySelector('.loading-bar');
+        const loadingText = document.querySelector('.loading-text');
+        const heroTitle = document.querySelector('.hero-title');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const learnMoreBtn = document.getElementById('learnMoreBtn');
+        const learnMoreLoading = document.querySelector('.learn-more-loading');
+
+        // Loading phrases
+        const loadingPhrases = [
+            "Magnifying Your Financial Future...",
+            "Focusing on Your Success...",
+            "Sharpening Your Financial Vision...",
+            "Enhancing Your Financial Clarity...",
+            "Ready to Magnify!"
         ];
 
-        const backgroundWords = document.getElementById('backgroundWords');
-        words.forEach((word, index) => {
-            const wordElement = document.createElement('div');
-            wordElement.className = 'background-word';
-            wordElement.textContent = word;
-            wordElement.style.setProperty('--delay', (index * 0.1) % 2);
-            backgroundWords.appendChild(wordElement);
-        });
-
-        // Floating particles animation
-        const particles = document.getElementById('particles');
-        for (let i = 0; i < 50; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = `${Math.random() * 100}%`;
-            particle.style.animationDelay = `${Math.random() * 20}s`;
-            particle.style.opacity = Math.random();
-            particle.style.width = particle.style.height = `${Math.random() * 4 + 2}px`;
-            particles.appendChild(particle);
+        // Utility function to preload images
+        function preloadImages() {
+            const imagePromises = Array.from(imageItems).map(item => {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.src = item.querySelector('img')?.src || '';
+                    img.onload = resolve;
+                    img.onerror = reject;
+                });
+            });
+            return Promise.all(imagePromises);
         }
 
-        // Handle sign in with loading animation
-        function handleSignIn() {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            loadingOverlay.classList.add('active');
+        // Typing animation
+        function typeWriter(element, text, speed = 50, delay = 0) {
+            return new Promise(resolve => {
+                let i = 0;
+                element.textContent = '';
+
+                setTimeout(() => {
+                    function type() {
+                        if (i < text.length) {
+                            element.textContent = text.substring(0, i + 1);
+                            i++;
+                            setTimeout(type, speed + (Math.random() * 50));
+                        } else {
+                            resolve();
+                        }
+                    }
+                    type();
+                }, delay);
+            });
+        }
+
+        // Setup parallax effect
+        function setupParallax() {
+            document.addEventListener('mousemove', (e) => {
+                const mouseX = e.clientX / window.innerWidth - 0.5;
+                const mouseY = e.clientY / window.innerHeight - 0.5;
+
+                imageItems.forEach((item, index) => {
+                    const depth = 1 + index * 0.1;
+                    const translateX = mouseX * 50 * depth;
+                    const translateY = mouseY * 50 * depth;
+                    item.style.transform = `translate(${translateX}px, ${translateY}px)`;
+                });
+            });
+        }
+
+        // Setup floating animation
+        function setupFloatingAnimation() {
+            imageItems.forEach((item, index) => {
+                item.style.animation = `float 3s ease-in-out ${index * 0.5}s infinite alternate`;
+            });
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.querySelector('.loading-particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 2}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Loading simulation
+        function simulateLoading() {
+            let progress = 0;
+            const loadingInterval = setInterval(() => {
+                progress += 2;
+                loadingBar.style.width = `${progress}%`;
+                loadingText.textContent = `${loadingPhrases[Math.floor(progress / 20)]} (${progress}%)`;
+
+                if (progress >= 100) {
+                    clearInterval(loadingInterval);
+                    setTimeout(() => {
+                        loadingScreen.classList.add('fade-out');
+                        initializePageContent();
+                    }, 500);
+                }
+            }, 50);
+        }
+
+        // Initialize page content
+        async function initializePageContent() {
+            // Setup image hover effects
+            imageItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    item.style.zIndex = '10';
+                    createIconParticles(item.querySelector('.financial-icon'));
+                });
+                item.addEventListener('mouseleave', () => item.style.zIndex = '');
+            });
+
+            // Initialize hero content
+            heroContent.classList.add('active');
+            await typeWriter(heroTitle, "Your Gateway to Financial Management");
+
+            // Setup animations
+            setupParallax();
+            setupFloatingAnimation();
+
+            // Setup footer interactions
+            footerNames.forEach(name => {
+                name.addEventListener('mouseenter', () => {
+                    name.style.transform = 'translateY(-5px)';
+                    name.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+                });
+                name.addEventListener('mouseleave', () => {
+                    name.style.transform = 'translateY(0)';
+                    name.style.boxShadow = 'none';
+                });
+            });
+        }
+
+        // Create particles for icon animation
+        function createIconParticles(icon) {
+            const particlesContainer = icon.querySelector('.particles');
+            particlesContainer.innerHTML = '';
+
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                const startX = Math.random() * 100;
+                const startY = Math.random() * 100;
+                const duration = Math.random() * 1 + 0.5;
+                
+                particle.style.left = `${startX}%`;
+                particle.style.top = `${startY}%`;
+                
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.style.transition = `all ${duration}s ease-out`;
+                    particle.style.transform = `translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px)`;
+                    particle.style.opacity = '1';
+                    
+                    setTimeout(() => {
+                        particle.style.opacity = '0';
+                    }, duration * 500);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, duration * 1000);
+                }, 0);
+            }
+        }
+
+        // Google login handler
+        function handleGoogleLogin(event) {
+            event.preventDefault();
+            loadingScreen.classList.remove('fade-out');
+            loadingBar.style.width = '0%';
+            loadingText.textContent = 'Connecting to Google...';
+
+            let progress = 0;
+            const loadingInterval = setInterval(() => {
+                progress += 5;
+                loadingBar.style.width = `${progress}%`;
+                loadingText.textContent = `Connecting to Magnify... ${progress}%`;
+
+                if (progress >= 100) {
+                    clearInterval(loadingInterval);
+                    setTimeout(() => {
+                        // Redirect to Google login page (replace with actual URL)
+                        window.location.href = 'Entrep6.html';
+                    }, 500);
+                }
+            }, 100);
+        }
+
+        // Learn More handler
+        function handleLearnMore(event) {
+            event.preventDefault();
+            learnMoreLoading.classList.add('active');
             
-            // Simulate loading delay
             setTimeout(() => {
-                window.location.href = 'Entrep6.html';
-            }, 1500);
+                learnMoreLoading.classList.remove('active');
+                // Replace with actual "Learn More" page URL
+                window.location.href = 'Entrep16.html';
+            }, 2000);
         }
 
-        // Interactive background effect
-        document.addEventListener('mousemove', (e) => {
-            const { clientX, clientY } = e;
-            const xOffset = (clientX / window.innerWidth - 0.5) * 5;
-            const yOffset = (clientY / window.innerHeight - 0.5) * 5;
-            
-            document.querySelector('.login-container').style.transform = 
-                `perspective(1000px) rotateX(${-yOffset}deg) rotateY(${xOffset}deg)`;
-        });
+        // Event listeners
+        googleLoginBtn.addEventListener('click', handleGoogleLogin);
+        learnMoreBtn.addEventListener('click', handleLearnMore);
 
-        // Reset transform on mouse leave
-        document.addEventListener('mouseleave', () => {
-            document.querySelector('.login-container').style.transform = 
-                'perspective(1000px) ';
-        });
-
-        // Add touch support for mobile
-        let touchStartX = 0;
-        let touchStartY = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-        });
-
-        document.addEventListener('touchmove', (e) => {
-            if (!touchStartX || !touchStartY) return;
-
-            const xOffset = (e.touches[0].clientX - touchStartX) / window.innerWidth * 10;
-            const yOffset = (e.touches[0].clientY - touchStartY) / window.innerHeight * 10;
-
-            document.querySelector('.login-container').style.transform = 
-                `perspective(1000px) rotateX(${-yOffset}deg) rotateY(${xOffset}deg)`;
-        });
-
-        document.addEventListener('touchend', () => {
-            touchStartX = touchStartY = 0;
-            document.querySelector('.login-container').style.transform =
-                'perspective(1000px)';
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            preloadImages()
+                .then(simulateLoading)
+                .catch(error => {
+                    console.error('Error preloading images:', error);
+                    loadingScreen.classList.add('fade-out');
+                    initializePageContent();
+                });
         });
     </script>
 </body>
