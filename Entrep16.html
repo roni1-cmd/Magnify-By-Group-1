@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnify: Revolutionizing Your Financial Future</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gradient-start: #4158D0;
+            --gradient-middle: #C850C0;
+            --gradient-end: #FFCC70;
+            --text-color: #333;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(-45deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end), #23D5AB);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex-grow: 1;
+        }
+
+        .title-container {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: white;
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s forwards 0.5s;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.5em;
+            font-weight: 300;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 1s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .creators {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 1.5s;
+        }
+
+        .creators:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 2s;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+        }
+
+        .feature-card:nth-child(odd) {
+            animation: slideInLeft 0.5s forwards;
+        }
+
+        .feature-card:nth-child(even) {
+            animation: slideInRight 0.5s forwards;
+        }
+
+        @keyframes slideInLeft {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-middle));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: var(--gradient-start);
+            font-weight: 600;
+            font-size: 1.5em;
+        }
+
+        .feature-description {
+            height: 0;
+            opacity: 0;
+            transition: height 0.3s ease, opacity 0.3s ease;
+            overflow: hidden;
+        }
+
+        .feature-card.active .feature-description {
+            height: auto;
+            opacity: 1;
+            margin-top: 15px;
+        }
+
+        .feature-card::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card.active::after {
+            transform: rotate(180deg);
+        }
+
+        .back-to-home {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-middle));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-to-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-to-home::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.5s;
+        }
+
+        .back-to-home:hover::before {
+            left: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 3em;
+            }
+            .subtitle {
+                font-size: 1.2em;
+            }
+        }
+
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: particleFade 1s ease-out forwards;
+        }
+
+        @keyframes particleFade {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-container">
+            <h1>Magnify: Revolutionizing Your Financial Future</h1>
+            <p class="subtitle">Empowering You with Cutting-Edge Financial Tools</p>
+        </div>
+        
+        <div class="creators">
+            <p>Created by Grade 12 ICT Students (CP12A1): Ron Asnahon, Carl John Arpay, Shelina Mae Dela Cruz, Sean Ricaza, Joeron Zeniff Paloma, Van Erich Nisnisan, Vince Gerard Gonzaga and James Virtucio as part of their Entrepreneurship Business Plan</p>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-tachometer-alt feature-icon"></i>
+                <h2>Smart Dashboard</h2>
+                <p>Comprehensive view of your financial landscape</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>Real-time Balance Display</li>
+                        <li>Dynamic Expense and Income Summary</li>
+                        <li>Intelligent Bill Reminders</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-exchange-alt feature-icon"></i>
+                <h2>Intelligent Transaction Tracker</h2>
+                <p>Advanced logging and categorization of financial activities</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>One-Click Transaction Entry</li>
+                        <li>AI-Powered Category Suggestions</li>
+                        <li>Customizable Tags and Filters</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-chart-pie feature-icon"></i>
+                <h2>Dynamic Budget Planner</h2>
+                <p>Adaptive budgeting tool for optimal income allocation</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>Flexible Monthly Budget Creation</li>
+                        <li>Interactive Visual Breakdowns</li>
+                        <li>Predictive Budget Insights</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-chart-line feature-icon"></i>
+                <h2>Advanced Analytics Hub</h2>
+                <p>In-depth financial analysis and reporting</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>Multi-dimensional Data Visualization</li>
+                        <li>Customizable Report Generation</li>
+                        <li>Trend Analysis and Forecasting</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-calculator feature-icon"></i>
+                <h2>Financial Calculators Suite</h2>
+                <p>Comprehensive tools for financial planning and estimation</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>Advanced Mortgage Calculator</li>
+                        <li>Tax Estimation Tools</li>
+                        <li>Investment Return Projector</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-money-bill-wave feature-icon"></i>
+                <h2>Secure Bills Payment Hub</h2>
+                <p>Centralized platform for efficient bill management</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>Multi-Provider Payment Integration</li>
+                        <li>Automated Payment Scheduling</li>
+                        <li>Real-time Payment Confirmations</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-user-circle feature-icon"></i>
+                <h2>Personalized Financial Profile</h2>
+                <p>Tailored user experience with smart financial insights</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>AI-Driven Financial Health Score</li>
+                        <li>Customizable Dashboard Widgets</li>
+                        <li>Personal Finance Goal Tracker</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-book-open feature-icon"></i>
+                <h2>Financial Education Center</h2>
+                <p>Comprehensive resources for financial literacy</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>Interactive Learning Modules</li>
+                        <li>Expert-Curated Content Library</li>
+                        <li>Personalized Learning Paths</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-spinner feature-icon"></i>
+                <h2>Engaging User Experience</h2>
+                <p>Seamless and interactive interface design</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>Animated Transaction Processing</li>
+                        <li>Interactive Loading Screens</li>
+                        <li>Micro-interactions for Enhanced Feedback</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-paint-brush feature-icon"></i>
+                <h2>Customizable Interface</h2>
+                <p>Tailor the app to your personal preferences</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>Multiple Theme Options</li>
+                        <li>Adjustable Layout Configurations</li>
+                        <li>Personalized Widget Arrangement</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                
+                <i class="fas fa-lightbulb feature-icon"></i>
+                <h2>Smart Financial Insights</h2>
+                <p>AI-powered suggestions for financial optimization</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>Personalized Saving Tips</li>
+                        <li>Investment Opportunity Alerts</li>
+                        <li>Spending Pattern Analysis</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-shield-alt feature-icon"></i>
+                <h2>Advanced Security Measures</h2>
+                <p>State-of-the-art protection for your financial data</p>
+                <div class="feature-description">
+                    <ul>
+                        <li>Biometric Authentication</li>
+                        <li>End-to-End Encryption</li>
+                        <li>Real-time Fraud Detection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <a href="index.html" class="back-to-home">Return to Magnify Homepage</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            featureCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1 + 2}s`;
+                
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+
+                // Animate icons based on their nature
+                const icon = card.querySelector('.feature-icon');
+                const iconClass = icon.className;
+                
+                if (iconClass.includes('fa-tachometer-alt')) {
+                    setInterval(() => {
+                        icon.style.transform = 'scale(1.1) rotate(20deg)';
+                        setTimeout(() => {
+                            icon.style.transform = 'scale(1) rotate(0deg)';
+                        }, 500);
+                    }, 3000);
+                } else if (iconClass.includes('fa-exchange-alt')) {
+                    setInterval(() => {
+                        icon.style.transform = 'translateX(10px)';
+                        setTimeout(() => {
+                            icon.style.transform  = 'translateX(-10px)';
+                        }, 500);
+                    }, 3000);
+                } else if (iconClass.includes('fa-chart-pie')) {
+                    setInterval(() => {
+                        icon.style.transform = 'rotate(360deg)';
+                    }, 5000);
+                } else if (iconClass.includes('fa-chart-line')) {
+                    setInterval(() => {
+                        icon.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            icon.style.transform = 'translateY(0)';
+                        }, 500);
+                    }, 3000);
+                } else if (iconClass.includes('fa-calculator')) {
+                    setInterval(() => {
+                        icon.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            icon.style.transform = 'scale(1)';
+                        }, 500);
+                    }, 3000);
+                } else if (iconClass.includes('fa-money-bill-wave')) {
+                    setInterval(() => {
+                        icon.style.transform = 'translateX(10px) rotate(10deg)';
+                        setTimeout(() => {
+                            icon.style.transform = 'translateX(-10px) rotate(-10deg)';
+                        }, 500);
+                    }, 3000);
+                } else {
+                    setInterval(() => {
+                        icon.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            icon.style.transform = 'scale(1)';
+                        }, 500);
+                    }, 3000);
+                }
+            });
+
+            // Enhanced particle effect
+            function createParticle(x, y) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 15 + 5;
+                const duration = Math.random() * 1.5 + 0.5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                particle.style.background = `hsl(${Math.random() * 360}, 70%, 70%)`;
+                particle.style.animationDuration = `${duration}s`;
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), duration * 1000);
+            }
+
+            document.addEventListener('mousemove', (e) => {
+                if (Math.random() < 0.1) {
+                    createParticle(e.clientX, e.clientY);
+                }
+            });
+
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Intersection Observer for scroll animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.feature-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
