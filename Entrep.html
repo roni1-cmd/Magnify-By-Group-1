@@ -3,163 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify! By Group 1</title>
-    <link rel="logo.png" href="logo-300x300.png">
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <title>Magnify! - Financial Management Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-    <script src="https://files.bpcontent.cloud/2024/11/02/01/20241102014603-MY6MW47G.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         :root {
-            --primary: #183166;
-            --primary-light: #2a4c8f;
-            --primary-dark: #112347;
-            --accent: #299687;
-            --accent-2: #b48225;
-            --background: #f0f2f5;
-            --card-bg: #ffffff;
-            --text: #2d3748;
-            --text-light: #718096;
-            --success: #48bb78;
-            --danger: #dc3545;
-            --warning: #f6ad55;
+            --gradient-start: #4158D0;
+            --gradient-middle: #C850C0;
+            --gradient-end: #FFCC70;
+            --primary: #4A90E2;
+            --secondary: #8E44AD;
+            --accent: #3498DB;
+            --text: #333333;
+            --text-light: #666666;
+            --background: #F0F8FF;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --success: #2ECC71;
+            --danger: #E74C3C;
+            --warning: #F39C12;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
             min-height: 100vh;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
             color: var(--text);
-            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
         }
 
         .navbar {
-            background: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             padding: 1rem 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-radius: 0 0 1rem 1rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-brand {
             display: flex;
             align-items: center;
             gap: 1rem;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         .navbar-brand img {
-            width: 150px;
-            height: auto;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
-        .navbar h1 {
+        .navbar-brand h1 {
             color: white;
             font-size: 1.5rem;
             font-weight: 600;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .container {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
+            flex-grow: 1;
         }
 
-        .tabs {
+        .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
             margin-bottom: 2rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .tab-button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab-button:hover {
-            background: var(--primary-light);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab-button i {
-            font-size: 1.2rem;
-        }
-
-        .tab-content {
+        .feature-card {
             background: var(--card-bg);
-            padding: 2rem;
             border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            display: none;
-            animation: fadeIn 0.3s ease;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .tab-content.active {
-            display: block;
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-
-        select, input {
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card i {
+            font-size: 2rem;
+            color: var(--primary);
             margin-bottom: 1rem;
-            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
-        select:focus, input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(24, 49, 102, 0.1);
+        .feature-card:hover i {
+            transform: scale(1.1);
+            color: var(--accent);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .button {
@@ -170,16 +174,16 @@
             border-radius: 0.5rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            font-weight: 500;
         }
 
         .button:hover {
-            background: var(--primary-light);
+            background: var(--accent);
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .button.danger {
@@ -187,12 +191,48 @@
         }
 
         .button.danger:hover {
-            background: #c82333;
+            background: #c0392b;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         #transactionList {
             list-style: none;
-            margin: 1rem 0;
+            margin-top: 1rem;
         }
 
         #transactionList li {
@@ -221,175 +261,182 @@
             animation: slideIn 0.3s ease;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .chart-container {
-            background: white;
-            padding: 1rem;
-            border-radius: 1rem;
-            margin-top: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .bills-section {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
+        footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
             text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
         }
 
-        .bills-link {
-            display: inline-block;
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            background: var(--card-bg);
+            color: var(--text);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab-button:hover,
+        .tab-button.active {
             background: var(--primary);
             color: white;
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            margin-top: 1rem;
-            transition: all 0.3s ease;
         }
 
-        .bills-link:hover {
-            background: var(--primary-light);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .tooltip {
+            position: relative;
+            display: inline-block;
         }
 
-        footer {
-            background: var(--primary-dark);
-            color: white;
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: var(--primary);
+            color: #fff;
             text-align: center;
-            padding: 1rem;
-            margin-top: 2rem;
-            border-radius: 1rem 1rem 0 0;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        /* Responsive Design */
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
         @media (max-width: 768px) {
             .navbar {
-                flex-direction: column;
-                text-align: center;
                 padding: 1rem;
             }
 
-            .navbar h1 {
+            .navbar-brand h1 {
                 font-size: 1.2rem;
-                margin-top: 0.5rem;
             }
 
-            .tabs {
+            .feature-grid {
                 grid-template-columns: 1fr;
             }
 
-            .tab-content {
-                padding: 1rem;
+            .content-section {
+                padding: 1.5rem;
             }
         }
 
-        /* Loading Animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 0.5rem;
+        ::-webkit-scrollbar {
+            width: 10px;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Tooltip */
-        [data-tooltip] {
-            position: relative;
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
         }
 
-        [data-tooltip]:before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0.5rem;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            border-radius: 0.25rem;
-            font-size: 0.875rem;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        [data-tooltip]:hover:before {
-            opacity: 1;
-            visibility: visible;
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="navbar-brand">
-            <img src="logo.png" alt="Magnify Logo">
-            <h1>Hello, there! Welcome to Magnify!</h1>
+            <img src="logo.png?height=50&width=50" alt="Magnify Logo">
+            <h1>Hello there! Welcome to Magnify!</h1>
         </div>
     </nav>
 
     <div class="container">
-        <div class="tabs">
-            <button class="tab-button" onclick="openTab('transactionTab')" data-tooltip="Manage your transactions">
-                <i class="fas fa-list-ul"></i> Track List
-            </button>
-            <button class="tab-button" onclick="openTab('calculatorTab')" data-tooltip="Financial calculators">
-                <i class="fas fa-calculator"></i> Calculators
-            </button>
-            <button class="tab-button" onclick="openTab('analyticsTab')" data-tooltip="View your financial analytics">
-                <i class="fas fa-chart-line"></i> Analytics
-            </button>
-            <button class="tab-button" onclick="window.location.href='Entrep7.html'" data-tooltip="View calendar">
-                <i class="fas fa-calendar"></i> Calendar
-            </button>
-            <button class="tab-button" onclick="window.location.href='Entrep8.html'" data-tooltip="Manage your profile">
-                <i class="fas fa-user"></i> Profile
-            </button>
-            <button class="tab-button" onclick="window.location.href='Entrep9.html'" data-tooltip="Convert currencies">
-                <i class="fas fa-exchange-alt"></i> Currency Converter
-            </button>
-            <button class="tab-button" onclick="window.location.href='Entrep12.html'" data-tooltip="Plan your budget">
-                <i class="fas fa-piggy-bank"></i> Budget Planner
-            </button>
-            <button class="tab-button" onclick="window.location.href='Entrep11.html'" data-tooltip="Learn about finances">
-                <i class="fas fa-book"></i> Financial Resources
-            </button>
+        <div class="tab-nav">
+            <button class="tab-button active" onclick="openTab('dashboard')">Dashboard</button>
+            <button class="tab-button" onclick="openTab('transactionTab')">Track List</button>
+            <button class="tab-button" onclick="openTab('calculatorTab')">Calculators</button>
+            <button class="tab-button" onclick="openTab('analyticsTab')">Analytics</button>
+            <button class="tab-button" onclick="openTab('billsTab')">Manage Bills</button>
         </div>
 
-        <div id="transactionTab" class="tab-content">
+        <div id="dashboard" class="content-section">
+            <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+            <div class="feature-grid">
+                <div class="feature-card" onclick="openTab('transactionTab')">
+                    <i class="fas fa-list-ul"></i>
+                    <h3>Track List</h3>
+                    <p>Manage your transactions and expenses</p>
+                </div>
+                <div class="feature-card" onclick="openTab('calculatorTab')">
+                    <i class="fas fa-calculator"></i>
+                    <h3>Calculators</h3>
+                    <p>Financial calculation tools</p>
+                </div>
+                <div class="feature-card" onclick="openTab('analyticsTab')">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Analytics</h3>
+                    <p>View your financial insights</p>
+                </div>
+                <div class="feature-card" onclick="window.location.href='Entrep4.html'">
+                    <i class="fas fa-file-invoice"></i>
+                    <h3>Magnify Remit-It!</h3>
+                    <p>Access and pay your bills using Magnify Remit-It!</p>
+                </div>
+                <div class="feature-card" onclick="window.location.href='Entrep7.html'">
+                    <i class="fas fa-calendar"></i>
+                    <h3>Calendar</h3>
+                    <p>Schedule your financial activities</p>
+                </div>
+                <div class="feature-card" onclick="window.location.href='Entrep8.html'">
+                    <i class="fas fa-user"></i>
+                    <h3>Profile</h3>
+                    <p>Manage your account settings</p>
+                </div>
+                <div class="feature-card" onclick="window.location.href='Entrep9.html'">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h3>Currency Converter</h3>
+                    <p>Convert between different currencies</p>
+                </div>
+                <div class="feature-card" onclick="window.location.href='Entrep12.html'">
+                    <i class="fas fa-piggy-bank"></i>
+                    <h3>Budget Planner</h3>
+                    <p>Plan and track your budget</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="transactionTab" class="content-section" style="display: none;">
             <h2><i class="fas fa-plus-circle"></i> Add Transaction</h2>
             <div class="input-group">
-                <select id="type" onchange="toggleDescriptionOptions()" class="form-select">
+                <label for="type">Transaction Type</label>
+                <select id="type" onchange="toggleDescriptionOptions()">
                     <option value="income">Income</option>
                     <option value="expense">Expense</option>
                 </select>
             </div>
             <div class="input-group">
-                <select id="description" required class="form-select"></select>
+                <label for="description">Description</label>
+                <select id="description" required></select>
             </div>
             <div class="input-group">
-                <input type="number" id="amount" placeholder="Amount" required class="form-input">
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" placeholder="Enter amount" required>
             </div>
             <button id="addTransaction" class="button">
                 <i class="fas fa-plus"></i> Add Transaction
@@ -399,13 +446,10 @@
             <ul id="transactionList"></ul>
 
             <h2 class="mt-6"><i class="fas fa-wallet"></i> Total Balance: ₱<span id="balance">0</span></h2>
-
-            <h2 class="mt-6"><i class="fas fa-lightbulb"></i> Suggestions</h2>
-            <ul id="actionSuggestions"></ul>
         </div>
 
-        <div id="calculatorTab" class="tab-content">
-            <h2><i class="fas fa-calculator"></i> Calculators</h2>
+        <div id="calculatorTab" class="content-section" style="display: none;">
+            <h2><i class="fas fa-calculator"></i> Financial Calculators</h2>
             
             <div class="calculator-section">
                 <h3><i class="fas fa-home"></i> Mortgage Calculator</h3>
@@ -413,11 +457,18 @@
                     <i class="fas fa-calculator"></i> 
                     Open Mortgage Calculator
                 </button>
-                <div  id="mortgageCalculatorModal" class="calculator-modal">
+                <div id="mortgageCalculatorModal" class="calculator-modal">
                     <div class="input-group">
-                        <input type="number" id="mortgageAmount" placeholder="Mortgage Amount">
-                        <input type="number" id="interestRate" placeholder="Interest Rate (%)">
-                        <input type="number" id="loanTerm" placeholder="Loan Term (Years)">
+                        <label for="mortgageAmount">Mortgage Amount</label>
+                        <input type="number" id="mortgageAmount" placeholder="Enter mortgage amount">
+                    </div>
+                    <div class="input-group">
+                        <label for="interestRate">Interest Rate (%)</label>
+                        <input type="number" id="interestRate" placeholder="Enter interest rate">
+                    </div>
+                    <div class="input-group">
+                        <label for="loanTerm">Loan Term (Years)</label>
+                        <input type="number" id="loanTerm" placeholder="Enter loan term">
                     </div>
                     <button id="calculateMortgage" class="button">Calculate</button>
                     <h3 id="mortgageResult" class="mt-4"></h3>
@@ -433,8 +484,12 @@
                 </button>
                 <div id="taxCalculatorModal" class="calculator-modal">
                     <div class="input-group">
-                        <input type="number" id="income" placeholder="Income">
-                        <input type="number" id="taxRate" placeholder="Tax Rate (%)">
+                        <label for="income">Income</label>
+                        <input type="number" id="income" placeholder="Enter income">
+                    </div>
+                    <div class="input-group">
+                        <label for="taxRate">Tax Rate (%)</label>
+                        <input type="number" id="taxRate" placeholder="Enter tax rate">
                     </div>
                     <button id="calculateTax" class="button">Calculate</button>
                     <h3 id="taxResult" class="mt-4"></h3>
@@ -443,11 +498,11 @@
             </div>
         </div>
 
-        <div id="analyticsTab" class="tab-content">
-            <h2><i class="fas fa-chart-pie"></i> Analytics</h2>
+        <div id="analyticsTab" class="content-section" style="display: none;">
+            <h2><i class="fas fa-chart-pie"></i> Financial Analytics</h2>
             <div class="input-group">
                 <label for="graphType"><i class="fas fa-chart-bar"></i> Graph Type</label>
-                <select id="graphType" onchange="updateChart()" class="form-select">
+                <select id="graphType" onchange="updateChart()">
                     <option value="bar">Bar Chart</option>
                     <option value="pie">Pie Chart</option>
                     <option value="line">Line Chart</option>
@@ -458,28 +513,245 @@
             </div>
         </div>
 
-        <div class="bills-section">
-            <h2><i class="fas fa-file-invoice"></i> Manage your bills:</h2>
-            <a href="Entrep4.html" class="bills-link">
-                <i class="fas fa-credit-card"></i> Pay Your Bills Here
-            </a>
+        <div id="billsTab" class="content-section" style="display: none;">
+            <h2><i class="fas fa-file-invoice"></i> Manage your bills</h2>
+            <p>Access all your bills in one place and manage your payments efficiently.</p>
+            <button class="button" style="margin-top: 1rem;">
+                <i class="fas fa-credit-card"></i>
+                Pay Your Bills
+            </button>
         </div>
 
-        <button id="resetButton" onclick="resetAll()" class="button danger">
-            <i class="fas fa-trash-alt"></i> Reset Data
+        <button onclick="resetAll()" class="button danger tooltip">
+            <i class="fas fa-trash-alt"></i>
+            Reset All Data
+            <span class="tooltiptext">This will delete all your data</span>
         </button>
     </div>
 
     <footer>
-        <p>© Magnify! By Group 1 LLC | 2024 All rights reserved</p>
+        <p>© 2024 Magnify! By Group 1 LLC. All rights reserved.</p>
     </footer>
 
-    <script src="Entrep.js"></script>
-
     <script>
-    
+        // Global variables
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        let balance = parseFloat(localStorage.getItem('balance')) || 0;
+        let chart;
+
+        // Function to handle tab switching
+        function openTab(tabId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            const selectedTab = document.getElementById(tabId);
+            if (selectedTab) {
+                selectedTab.style.display = 'block';
+                selectedTab.style.animation = 'slideUp 0.5s ease';
+            }
+
+            const activeButton = document.querySelector(`.tab-button[onclick="openTab('${tabId}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+
+            if (tabId === 'analyticsTab') {
+                updateChart();
+            }
+        }
+
+        // Function to toggle description options based on transaction type
+        function toggleDescriptionOptions() {
+            const type = document.getElementById('type').value;
+            const description = document.getElementById('description');
+            description.innerHTML = '';
+
+            const options = type === 'income' 
+                ? ['Salary', 'Bonus', 'Investment', 'Other Income']
+                : ['Food', 'Transportation', 'Utilities', 'Entertainment', 'Other Expense'];
+
+            options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.toLowerCase();
+                optionElement.textContent = option;
+                description.appendChild(optionElement);
+            });
+        }
+
+        // Function to add a transaction
+        function addTransaction() {
+            const type = document.getElementById('type').value;
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount.');
+                return;
+            }
+
+            const transaction = {
+                type,
+                description,
+                amount,
+                date: new Date().toISOString()
+            };
+
+            transactions.push(transaction);
+            balance += type === 'income' ? amount : -amount;
+
+            updateLocalStorage();
+            updateTransactionList();
+            updateBalance();
+            updateChart();
+
+            // Clear input fields
+            document.getElementById('amount').value = '';
+        }
+
+        // Function to update transaction list
+        function updateTransactionList() {
+            const transactionList = document.getElementById('transactionList');
+            transactionList.innerHTML = '';
+
+            transactions.forEach((transaction, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${transaction.description}: ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}</span>
+                    <button onclick="deleteTransaction(${index})" class="button danger">Delete</button>
+                `;
+                transactionList.appendChild(li);
+            });
+        }
+
+        // Function to delete a transaction
+        function deleteTransaction(index) {
+            const transaction = transactions[index];
+            balance += transaction.type === 'income' ? -transaction.amount : transaction.amount;
+            transactions.splice(index, 1);
+
+            updateLocalStorage();
+            updateTransactionList();
+            updateBalance();
+            updateChart();
+        }
+
+        // Function to update balance display
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance.toFixed(2);
+        }
+
+        // Function to update local storage
+        function updateLocalStorage() {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            localStorage.setItem('balance', balance.toString());
+        }
+
+        // Function to update the chart
+        function updateChart() {
+            const ctx = document.getElementById('financialChart').getContext('2d');
+            const graphType = document.getElementById('graphType').value;
+
+            const incomeData = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenseData = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+
+            const data = {
+                labels: ['Income', 'Expense'],
+                datasets: [{
+                    data: [incomeData, expenseData],
+                    backgroundColor: ['#2ECC71', '#E74C3C']
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                maintainAspectRatio: false
+            };
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: graphType,
+                data: data,
+                options: options
+            });
+        }
+
+        // Mortgage Calculator Functions
+        document.getElementById('openMortgageCalculator').addEventListener('click', () => {
+            document.getElementById('mortgageCalculatorModal').style.display = 'block';
+        });
+
+        document.getElementById('closeMortgageCalculator').addEventListener('click', () => {
+            document.getElementById('mortgageCalculatorModal').style.display = 'none';
+        });
+
+        document.getElementById('calculateMortgage').addEventListener('click', () => {
+            const amount = parseFloat(document.getElementById('mortgageAmount').value);
+            const rate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+            const term = parseFloat(document.getElementById('loanTerm').value) * 12;
+
+            if (isNaN(amount) || isNaN(rate) || isNaN(term)) {
+                alert('Please enter valid numbers for all fields.');
+                return;
+            }
+
+            const monthlyPayment = (amount * rate * Math.pow(1 + rate, term)) / (Math.pow(1 + rate, term) - 1);
+            document.getElementById('mortgageResult').textContent = `Monthly Payment: ₱${monthlyPayment.toFixed(2)}`;
+        });
+
+        // Tax Calculator Functions
+        document.getElementById('openTaxCalculator').addEventListener('click', () => {
+            document.getElementById('taxCalculatorModal').style.display = 'block';
+        });
+
+        document.getElementById('closeTaxCalculator').addEventListener('click', () => {
+            document.getElementById('taxCalculatorModal').style.display = 'none';
+        });
+
+        document.getElementById('calculateTax').addEventListener('click', () => {
+            const income = parseFloat(document.getElementById('income').value);
+            const taxRate = parseFloat(document.getElementById('taxRate').value);
+
+            if (isNaN(income) || isNaN(taxRate)) {
+                alert('Please enter valid numbers for all fields.');
+                return;
+            }
+
+            const taxAmount = income * (taxRate / 100);
+            document.getElementById('taxResult').textContent = `Tax Amount: ₱${taxAmount.toFixed(2)}`;
+        });
+
+        // Function to reset all data
+        function resetAll() {
+            if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {
+                localStorage.clear();
+                transactions = [];
+                balance = 0;
+                updateTransactionList();
+                updateBalance();
+                updateChart();
+                alert('All data has been reset successfully!');
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            toggleDescriptionOptions();
+            updateTransactionList();
+            updateBalance();
+            updateChart();
+
+            document.getElementById('addTransaction').addEventListener('click', addTransaction);
+        });
+    </script>
     <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-<script src="https://files.bpcontent.cloud/2024/11/02/01/20241102014603-MY6MW47G.js"></script>
-    
+    <script src="https://files.bpcontent.cloud/2024/11/02/01/20241102014603-MY6MW47G.js"></script>
+
 </body>
-</html></script>
+</html>
