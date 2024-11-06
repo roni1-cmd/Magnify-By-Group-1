@@ -4,51 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magnify! Budget Planner</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-color: #2563eb;
-            --secondary-color: #16a34a;
-            --accent-color: #dc2626;
-            --background: linear-gradient(135deg, #c7734c, #036491);
-            --text-color: #1f2937;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --input-border: #e5e7eb;
-            --success: #15803d;
-            --warning: #eab308;
-            --error: #dc2626;
+            --primary-gradient: linear-gradient(135deg, #6366f1, #a855f7);
+            --secondary-gradient: linear-gradient(135deg, #3b82f6, #2dd4bf);
+            --background-gradient: linear-gradient(135deg, #818cf8, #c084fc);
+            --card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
+            --text-color: #1e293b;
+            --error-color: #ef4444;
+            --success-color: #22c55e;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: var(--background);
+            background: var(--background-gradient);
             color: var(--text-color);
             min-height: 100vh;
             padding: 2rem;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: var(--card-bg);
-            border-radius: 1.5rem;
-            padding: 2.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 
+                0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
         }
 
         .container:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.01);
+        }
+
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .header {
@@ -57,92 +70,74 @@
             position: relative;
         }
 
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
         .header::after {
             content: '';
             position: absolute;
-            bottom: -1rem;
+            bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
             width: 100px;
-            height: 3px;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            border-radius: 3px;
-        }
-
-        .header h1 {
-            font-size: 2.75rem;
-            color: var(--text-color);
-            margin-bottom: 0.75rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientText 5s ease infinite;
-        }
-
-        @keyframes gradientText {
-            0%, 100% {
-                filter: hue-rotate(0deg);
-            }
-            50% {
-                filter: hue-rotate(30deg);
-            }
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
         }
 
         .description {
-            color: #6b7280;
-            font-size: 1.2rem;
+            color: #64748b;
+            font-size: 1.1rem;
+            font-weight: 300;
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 2.5rem;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
 
         .input-group {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             position: relative;
         }
 
         .input-group label {
             display: block;
-            font-weight: 600;
+            font-weight: 500;
             margin-bottom: 0.75rem;
             color: var(--text-color);
-            transition: color 0.3s ease;
-        }
-
-        .input-group:focus-within label {
-            color: var(--primary-color);
+            font-size: 1rem;
         }
 
         .input-group input {
             width: 100%;
-            padding: 1rem;
-            border: 2px solid var(--input-border);
-            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            border: 2px solid rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
             font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.9);
-        }
-
-        .input-group input:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-1px);
         }
 
         .input-group input:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            border-color: #818cf8;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
             transform: translateY(-2px);
         }
 
         .chart-controls {
             display: flex;
             gap: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -150,170 +145,124 @@
         .chart-button {
             padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 0.75rem;
-            background: #f3f4f6;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
             color: var(--text-color);
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             font-weight: 500;
-            position: relative;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .chart-button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-            transition: transform 0.5s ease, opacity 0.3s ease;
+        .chart-button i {
+            font-size: 1.1rem;
         }
 
-        .chart-button:hover::after {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
+        .chart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
 
         .chart-button.active {
-            background: var(--primary-color);
+            background: var(--primary-gradient);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .chart-container {
-            background: white;
+            background: var(--card-gradient);
             padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
             height: 400px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
         }
 
         .chart-container:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
         }
 
         .summary {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
-            margin: 2.5rem 0;
+            margin: 2rem 0;
         }
 
         .summary-card {
-            background: #f8fafc;
-            padding: 2rem;
-            border-radius: 1rem;
+            background: var(--card-gradient);
+            padding: 1.5rem;
+            border-radius: 20px;
             text-align: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-        }
-
-        .summary-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .summary-card:hover::before {
-            transform: scaleX(1);
         }
 
         .summary-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .summary-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .summary-card p {
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
         }
 
         .update-button {
-            background: var(--secondary-color);
+            background: var(--primary-gradient);
             color: white;
             border: none;
-            padding: 1.25rem 2.5rem;
-            border-radius: 0.75rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .update-button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-            transition: transform 0.5s ease, opacity 0.3s ease;
-        }
-
-        .update-button:hover::after {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-
         .update-button:hover {
-            background: var(--success);
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
 
         .update-button:active {
-            transform: scale(0.98);
+            transform: translateY(1px);
         }
 
         .suggestions {
-            background: #f8fafc;
+            background: var(--card-gradient);
             padding: 2rem;
-            border-radius: 1rem;
-            border-left: 4px solid var(--primary-color);
-            margin-top: 2.5rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            margin-top: 2rem;
+            border-left: 4px solid #6366f1;
+            transition: all 0.3s ease;
         }
 
         .suggestions:hover {
             transform: translateX(5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         .suggestions h3 {
-            color: var(--text-color);
+            color: #6366f1;
             margin-bottom: 1rem;
             font-size: 1.25rem;
+            font-weight: 600;
         }
 
         .suggestions ul {
@@ -331,127 +280,94 @@
             content: '→';
             position: absolute;
             left: 0;
-            color: var(--primary-color);
-            transition: transform 0.3s ease;
-        }
-
-        .suggestions li:hover::before {
-            transform: translateX(5px);
+            color: #6366f1;
         }
 
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
             }
-            
+
             .container {
                 padding: 1.5rem;
-            }
-            
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
             }
 
             .header h1 {
                 font-size: 2rem;
             }
 
-            .chart-controls {
-                flex-direction: column;
+            .chart-container {
+                height: 300px;
             }
-
-            .chart-button {
-                width: 100%;
-            }
-
-            .summary {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .loading {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            margin-right: 0.75rem;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        html {
-            scroll-behavior: smooth;
+        .update-button.loading {
+            background: var(--secondary-gradient);
+            pointer-events: none;
         }
 
-        ::selection {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        :focus-visible {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
+        .update-button.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Magnify! Budget Planner</h1>
+            <h1><i class="fas fa-wallet"></i> Magnify! Budget Planner</h1>
             <p class="description">Track your income and expenses to achieve your financial goals</p>
         </div>
 
         <div class="grid">
             <div>
                 <div class="input-group">
-                    <label for="monthlyIncome">Monthly Income (₱)</label>
+                    <label for="monthlyIncome"><i class="fas fa-money-bill-wave"></i> Monthly Income (₱)</label>
                     <input type="number" id="monthlyIncome" placeholder="Enter your monthly income" required>
                 </div>
 
                 <div class="input-group">
-                    <label for="savingsGoal">Monthly Savings Goal (₱)</label>
+                    <label for="savingsGoal"><i class="fas fa-piggy-bank"></i> Monthly Savings Goal (₱)</label>
                     <input type="number" id="savingsGoal" placeholder="Enter your savings goal">
                 </div>
             </div>
 
             <div>
                 <div class="input-group">
-                    <label for="housingExpense">Housing (₱)</label>
+                    <label for="housingExpense"><i class="fas fa-home"></i> Housing (₱)</label>
                     <input type="number" id="housingExpense" placeholder="Rent, mortgage, utilities">
                 </div>
 
                 <div class="input-group">
-                    <label for="foodExpense">Food (₱)</label>
+                    <label for="foodExpense"><i class="fas fa-utensils"></i> Food (₱)</label>
                     <input type="number" id="foodExpense" placeholder="Groceries, dining">
                 </div>
 
                 <div class="input-group">
-                    <label for="transportExpense">Transport (₱)</label>
+                    <label for="transportExpense"><i class="fas fa-car"></i> Transport (₱)</label>
                     <input type="number" id="transportExpense" placeholder="Fuel, maintenance, fares">
                 </div>
 
                 <div class="input-group">
-                    <label for="entertainmentExpense">Entertainment  (₱)</label>
+                    <label for="entertainmentExpense"><i class="fas fa-film"></i> Entertainment (₱)</label>
                     <input type="number" id="entertainmentExpense" placeholder="Movies, hobbies, activities">
                 </div>
 
                 <div class="input-group">
-                    <label for="otherExpense">Other (₱)</label>
+                    <label for="otherExpense"><i class="fas fa-ellipsis-h"></i> Other (₱)</label>
                     <input type="number" id="otherExpense" placeholder="Miscellaneous expenses">
                 </div>
             </div>
@@ -459,15 +375,15 @@
 
         <div class="summary">
             <div class="summary-card">
-                <h3>Total Income</h3>
+                <h3><i class="fas fa-money-bill-wave"></i> Total Income</h3>
                 <p id="totalIncome">₱0.00</p>
             </div>
             <div class="summary-card">
-                <h3>Total Expenses</h3>
+                <h3><i class="fas fa-credit-card"></i> Total Expenses</h3>
                 <p id="totalExpenses">₱0.00</p>
             </div>
             <div class="summary-card">
-                <h3>Remaining</h3>
+                <h3><i class="fas fa-wallet"></i> Remaining</h3>
                 <p id="remaining">₱0.00</p>
             </div>
         </div>
@@ -521,7 +437,17 @@
                         datasets: [{
                             label: 'Budget Overview',
                             data: [0, 0, 0],
-                            backgroundColor: ['#16a34a', '#dc2626', '#2563eb']
+                            backgroundColor: [
+                                'rgba(99, 102, 241, 0.8)',
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(34, 197, 94, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgb(99, 102, 241)',
+                                'rgb(239, 68, 68)',
+                                'rgb(34, 197, 94)'
+                            ],
+                            borderWidth: 2
                         }]
                     }
                 },
@@ -532,8 +458,10 @@
                         datasets: [{
                             label: 'Budget Overview',
                             data: [0, 0, 0],
-                            borderColor: '#2563eb',
-                            tension: 0.1
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            tension: 0.4,
+                            fill: true
                         }]
                     }
                 },
@@ -544,12 +472,20 @@
                         datasets: [{
                             data: [0, 0, 0, 0, 0],
                             backgroundColor: [
-                                '#2563eb',
-                                '#16a34a',
-                                '#dc2626',
-                                '#eab308',
-                                '#8b5cf6'
-                            ]
+                                'rgba(99, 102, 241, 0.8)',
+                                'rgba(34, 197, 94, 0.8)',
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(234, 179, 8, 0.8)',
+                                'rgba(139, 92, 246, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgb(99, 102, 241)',
+                                'rgb(34, 197, 94)',
+                                'rgb(239, 68, 68)',
+                                'rgb(234, 179, 8)',
+                                'rgb(139, 92, 246)'
+                            ],
+                            borderWidth: 2
                         }]
                     }
                 }
@@ -562,72 +498,88 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Poppins'
+                                },
+                                padding: 20
+                            }
                         }
                     },
                     animation: {
-                        duration: 1000,
-                        easing: 'easeOutQuart'
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
                     }
                 }
             });
         }
 
         function updateChart() {
-            const income = parseFloat(document.getElementById('monthlyIncome').value) || 0;
-            const housing = parseFloat(document.getElementById('housingExpense').value) || 0;
-            const food = parseFloat(document.getElementById('foodExpense').value) || 0;
-            const transport = parseFloat(document.getElementById('transportExpense').value) || 0;
-            const entertainment = parseFloat(document.getElementById('entertainmentExpense').value) || 0;
-            const other = parseFloat(document.getElementById('otherExpense').value) || 0;
-            const savingsGoal = parseFloat(document.getElementById('savingsGoal').value) || 0;
+            const updateBtn = document.getElementById('updateChartBtn');
+            updateBtn.classList.add('loading');
+            updateBtn.disabled = true;
 
-            const totalExpenses = housing + food + transport + entertainment + other;
+            setTimeout(() => {
+                const income = parseFloat(document.getElementById('monthlyIncome').value) || 0;
+                const housing = parseFloat(document.getElementById('housingExpense').value) || 0;
+                const food = parseFloat(document.getElementById('foodExpense').value) || 0;
+                const transport = parseFloat(document.getElementById('transportExpense').value) || 0;
+                const entertainment = parseFloat(document.getElementById('entertainmentExpense').value) || 0;
+                const other = parseFloat(document.getElementById('otherExpense').value) || 0;
+                const savingsGoal = parseFloat(document.getElementById('savingsGoal').value) || 0;
 
-            document.getElementById('totalIncome').textContent = formatPeso(income);
-            document.getElementById('totalExpenses').textContent = formatPeso(totalExpenses);
-            document.getElementById('remaining').textContent = formatPeso(income - totalExpenses);
+                const totalExpenses = housing + food + transport + entertainment + other;
 
-            if (currentChartType === 'pie') {
-                budgetChart.data.datasets[0].data = [housing, food, transport, entertainment, other];
-            } else {
-                budgetChart.data.datasets[0].data = [income, totalExpenses, savingsGoal];
-            }
-            
-            budgetChart.update();
+                document.getElementById('totalIncome').textContent = formatPeso(income);
+                document.getElementById('totalExpenses').textContent = formatPeso(totalExpenses);
+                document.getElementById('remaining').textContent = formatPeso(income - totalExpenses);
 
-            const suggestions = document.getElementById('suggestions');
-            if (income < totalExpenses) {
-                suggestions.innerHTML = `
-                    <h3><i class="fas fa-exclamation-triangle"></i> Budget Alert</h3>
-                    <p>Your expenses (${formatPeso(totalExpenses)}) exceed your income (${formatPeso(income)}). Consider these tips:</p>
-                    <ul>
-                        <li>Review your monthly expenses and identify non-essential items</li>
-                        <li>Create a detailed spending plan</li>
-                        <li>Look for additional income opportunities</li>
-                    </ul>
-                `;
-            } else if (income - totalExpenses < savingsGoal) {
-                suggestions.innerHTML = `
-                    <h3><i class="fas fa-piggy-bank"></i> Savings Goal Alert</h3>
-                    <p>You're ${formatPeso(savingsGoal - (income - totalExpenses))} short of your savings goal. Try these strategies:</p>
-                    <ul>
-                        <li>Look for expenses you can reduce</li>
-                        <li>Set up automatic savings transfers</li>
-                        <li>Find ways to increase your income</li>
-                    </ul>
-                `;
-            } else {
-                suggestions.innerHTML = `
-                    <h3><i class="fas fa-check-circle"></i> Great Job!</h3>
-                    <p>You're on track with your budget! You can save ${formatPeso(income - totalExpenses)} this month.</p>
-                    <ul>
-                        <li>Consider increasing your savings goal</li>
-                        <li>Look into investment opportunities</li>
-                        <li>Build an emergency fund if you haven't already</li>
-                    </ul>
-                `;
-            }
+                if (currentChartType === 'pie') {
+                    budgetChart.data.datasets[0].data = [housing, food, transport, entertainment, other];
+                } else {
+                    budgetChart.data.datasets[0].data = [income, totalExpenses, savingsGoal];
+                }
+                
+                budgetChart.update();
+
+                const suggestions = document.getElementById('suggestions');
+                if (income < totalExpenses) {
+                    suggestions.innerHTML = `
+                        <h3><i class="fas fa-exclamation-triangle"></i> Budget Alert</h3>
+                        <p>Your expenses (${formatPeso(totalExpenses)}) exceed your income (${formatPeso(income)}). Consider these tips:</p>
+                        <ul>
+                            <li>Review your monthly expenses and identify non-essential items</li>
+                            <li>Create a detailed spending plan</li>
+                            <li>Look for additional income opportunities</li>
+                        </ul>
+                    `;
+                } else if (income - totalExpenses < savingsGoal) {
+                    suggestions.innerHTML = `
+                        <h3><i class="fas fa-piggy-bank"></i> Savings Goal Alert</h3>
+                        <p>You're ${formatPeso(savingsGoal - (income - totalExpenses))} short of your savings goal. Try these strategies:</p>
+                        <ul>
+                            <li>Look for expenses you can reduce</li>
+                            <li>Set up automatic savings transfers</li>
+                            <li>Find ways to increase your income</li>
+                        </ul>
+                    `;
+                } else {
+                    suggestions.innerHTML = `
+                        <h3><i class="fas fa-check-circle"></i> Great Job!</h3>
+                        <p>You're on track with your budget! You can save ${formatPeso(income - totalExpenses)} this month.</p>
+                        <ul>
+                            <li>Consider increasing your savings goal</li>
+                            <li>Look into investment opportunities</li>
+                            <li>Build an emergency fund if you haven't already</li>
+                        </ul>
+                    `;
+                }
+
+                updateBtn.classList.remove('loading');
+                updateBtn.disabled = false;
+                updateBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Budget';
+            }, 800);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -636,29 +588,22 @@
             document.querySelectorAll('.chart-button').forEach(button => {
                 button.addEventListener('click', (e) => {
                     document.querySelectorAll('.chart-button').forEach(btn => btn.classList.remove('active'));
-                    e.target.classList.add('active');
-                    currentChartType = e.target.dataset.type;
+                    e.target.closest('.chart-button').classList.add('active');
+                    currentChartType = e.target.closest('.chart-button').dataset.type;
                     createChart(currentChartType);
                     updateChart();
                 });
             });
 
-            document.getElementById('updateChartBtn').addEventListener('click', () => {
-                const button = document.getElementById('updateChartBtn');
-                button.innerHTML = '<span class="loading"></span>Updating...';
-                button.disabled = true;
-                
-                setTimeout(() => {
-                    updateChart();
-                    button.innerHTML = '<i class="fas fa-sync-alt"></i> Update Budget';
-                    button.disabled = false;
-                }, 1000);
-            });
+            document.getElementById('updateChartBtn').addEventListener('click', updateChart);
 
+            // Auto-update on input changes
             const inputs = document.querySelectorAll('input[type="number"]');
             inputs.forEach(input => {
                 input.addEventListener('input', () => {
-                    input.style.borderColor = input.value ? '#16a34a' : '#e5e7eb';
+                    if (input.value && !isNaN(input.value)) {
+                        updateChart();
+                    }
                 });
             });
         });
