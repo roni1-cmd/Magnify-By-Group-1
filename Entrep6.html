@@ -9,10 +9,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
         :root {
-            --gradient: linear-gradient(135deg, rgba(255, 105, 180, 0.7), rgba(138, 43, 226, 0.7), rgba(30, 144, 255, 0.7), rgba(64, 224, 208, 0.7));
+            --gradient: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
             --text: #ffffff;
             --card-bg: rgba(255, 255, 255, 0.1);
-            --accent: #40E0D0;
+            --accent: #ffaf7b;
+            --icon-color: #3a1c71;
             --error: #ff4444;
             --success: #00C851;
         }
@@ -31,7 +32,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         .container {
@@ -111,7 +112,7 @@
 
         .input-group input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(64, 224, 208, 0.3);
+            box-shadow: 0 0 15px rgba(255, 175, 123, 0.3);
             outline: none;
         }
 
@@ -120,7 +121,7 @@
             right: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text);
+            color: var(--icon-color);
             transition: all 0.3s ease;
         }
 
@@ -159,7 +160,7 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--icon-color);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -172,7 +173,7 @@
         }
 
         .social-icon:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--accent);
             transform: translateY(-5px) rotate(360deg);
         }
 
@@ -235,7 +236,13 @@
         .stat-card i {
             font-size: 2rem;
             margin-bottom: 1rem;
+            color: var(--icon-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover i {
             color: var(--accent);
+            transform: scale(1.1);
         }
 
         .stat-value {
@@ -294,7 +301,7 @@
 
         .meter i {
             font-size: 1.5rem;
-            color: var(--text);
+            color: var(--icon-color);
             z-index: 2;
         }
 
@@ -328,6 +335,35 @@
             opacity: 1;
         }
 
+        .scroll-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--icon-color);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+            z-index: 100;
+        }
+
+        .scroll-button.visible {
+            opacity: 1;
+        }
+
+        .scroll-button:hover {
+            transform: translateY(-5px);
+            background-color: var(--accent);
+        }
+
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -349,7 +385,7 @@
     <main class="container">
         <section class="login-section">
             <div class="logo-container">
-                <img src="logo.png" alt="Magnify Logo" class="logo">
+                <img src="logo.png?height=60&width=60" alt="Magnify Logo" class="logo">
                 <h1 class="brand-name"><strong>Magnify!</strong></h1>
             </div>
             <form id="loginForm">
@@ -424,6 +460,10 @@
         </div>
     </div>
 
+    <button class="scroll-button" id="scrollButton">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <script>
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -446,7 +486,6 @@
             }
 
             // If all checks pass, proceed with login
-            
             errorMessage.classList.remove('visible');
             const loadingScreen = document.getElementById('loadingScreen');
             loadingScreen.classList.add('active');
@@ -514,6 +553,24 @@
             icon.addEventListener('mouseout', () => {
                 icon.style.transform = 'scale(1) translateY(0)';
                 icon.style.boxShadow = 'none';
+            });
+        });
+
+        // Scroll button functionality
+        const scrollButton = document.getElementById('scrollButton');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollButton.classList.add('visible');
+            } else {
+                scrollButton.classList.remove('visible');
+            }
+        });
+
+        scrollButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         });
     </script>
