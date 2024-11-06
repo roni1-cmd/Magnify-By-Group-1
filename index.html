@@ -6,827 +6,572 @@
     <title>Magnify! - Your Gateway to Financial Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         :root {
-            --gradient-start: #4158D0;
-            --gradient-middle: #C850C0;
-            --gradient-end: #FFCC70;
-            --accent: #50C878;
+            --gradient: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
             --text: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --accent: #ffaf7b;
+            --icon-color: #3a1c71;
+            --error: #ff4444;
+            --success: #00C851;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+            background: var(--gradient);
             color: var(--text);
-            overflow-x: hidden;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
         }
 
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 1rem 2rem;
+        .container {
+            width: 100%;
+            max-width: 1200px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            background: rgba(65, 88, 208, 0.1);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-section, .finance-section {
+            flex: 1;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .logo-container {
             display: flex;
             align-items: center;
             gap: 1rem;
+            margin-bottom: 3rem;
+            animation: slideDown 0.8s ease-out;
         }
 
-        .logo-img {
-            height: 40px;
-            width: auto;
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: bold;
+        .logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            animation: pulse 2s infinite;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        .nav-link {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            opacity: 0.8;
-            transform: translateY(-2px);
-        }
-
-        .google-btn {
-            background: #fff;
-            color: #757575;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
+        .brand-name {
+            font-size: 2.5rem;
             font-weight: 600;
+            color: var(--text);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 2rem;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(255, 175, 123, 0.3);
+            outline: none;
+        }
+
+        .input-group i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--icon-color);
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus + i {
+            color: var(--accent);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .login-button {
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--gradient);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-        }
-
-        .google-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .google-btn img {
-            width: 20px;
-            height: 20px;
-        }
-
-        .hero {
-            min-height: 100vh;
-            padding: 6rem 2rem 2rem;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: center;
         }
 
-        .hero-content {
+        .login-button:hover {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .social-login {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--icon-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-icon:hover {
+            background: var(--accent);
+            transform: translateY(-5px) rotate(360deg);
+        }
+
+        .finance-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .finance-content {
             position: relative;
             z-index: 1;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        .hero-content.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hero-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-title::after {
-            content: '|';
-            animation: blink 1s step-end infinite;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .cta-primary, .cta-secondary {
-            padding: 1rem 2rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .cta-primary {
-            background: var(--accent);
-            color: #000;
-        }
-
-        .cta-secondary {
-            background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--text);
-        }
-
-        .cta-primary:hover, .cta-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            transform: rotate(-15deg) scale(1.2);
-        }
-
-        .image-item {
-            position: relative;
-            aspect-ratio: 1;
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .financial-icon {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .financial-icon:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-10px);
-        }
-
-        .financial-icon i {
-            transition: all 0.3s ease;
-        }
-
-        .financial-icon.chart-line:hover i {
-            animation: chartLineGrow 1.5s ease-in-out infinite;
-        }
-
-        @keyframes chartLineGrow {
-            0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(1.3); }
-        }
-
-        .financial-icon.coins:hover i {
-            animation: coinSpin 1.5s ease-in-out infinite;
-        }
-
-        @keyframes coinSpin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        .financial-icon.wallet:hover i {
-            animation: walletBounce 0.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes walletBounce {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-10px); }
-        }
-
-        .financial-icon.hand-holding-usd:hover i {
-            animation: cashFlow 2s linear infinite;
-        }
-
-        @keyframes cashFlow {
-            0% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.1); }
-            100% { transform: translateY(0) scale(1); }
-        }
-
-        .financial-icon.chart-pie {
-            perspective: 1000px;
-        }
-
-        .financial-icon.chart-pie:hover i {
-            animation: pieRotate 2s ease-in-out infinite;
-        }
-
-        @keyframes pieRotate {
-            0% { transform: rotateY(0deg); }
-            50% { transform: rotateY(180deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        .financial-icon.piggy-bank:hover i {
-            animation: piggyShake 0.5s ease-in-out infinite;
-        }
-
-        @keyframes piggyShake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px) rotate(-5deg); }
-            75% { transform: translateX(5px) rotate(5deg); }
-        }
-
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: #fff;
-            border-radius: 50%;
-            opacity: 0;
-        }
-
-        .footer {
-            background: rgba(65, 88, 208, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
+        .finance-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
             text-align: center;
-            margin-top: auto;
+            color: var(--text);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        .footer-names {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+        .finance-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
+            animation: fadeInUp 1s ease-out;
         }
 
-        .footer-name {
-            opacity: 0.7;
-            transition: all 0.3s ease;
-            padding: 0.5rem 1rem;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card {
             background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
             border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
-        .footer-name:hover {
-            opacity: 1;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--icon-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover i {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
 
         .loading-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            inset: 0;
+            background: var(--gradient);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading-screen.fade-out {
             opacity: 0;
-            pointer-events: none;
+            visibility: hidden;
+            transition: 0.5s;
         }
 
-        .loader {
-            width: 120px;
-            height: 120px;
-            position: relative;
+        .loading-screen.active {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .loader-circle {
-            position: absolute;
-            inset: 0;
-            border: 4px solid transparent;
+        .loading-animation {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .loading-meters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .meter {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            animation: rotate var(--duration) var(--timing) infinite;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .loader-circle:nth-child(1) {
-            border-top-color: #fff;
-            --duration: 1.5s;
-            --timing: ease-in-out;
+        .meter i {
+            font-size: 1.5rem;
+            color: var(--icon-color);
+            z-index: 2;
         }
 
-        .loader-circle:nth-child(2) {
-            border-right-color: var(--accent);
-            --duration: 2s;
-            --timing: ease-in;
-        }
-
-        .loader-circle:nth-child(3) {
-            border-bottom-color: #fff;
-            --duration: 2.5s;
-            --timing: ease-out;
+        .meter-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--accent);
+            transition: height 0.5s ease;
         }
 
         .loading-text {
-            margin-top: 20px;
-            font-size: 1.5rem;
-            color: #fff;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: var(--text);
             text-align: center;
         }
 
-        .loading-progress {
-            width: 300px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-
-        .loading-bar {
-            width: 0;
-            height: 100%;
-            background: var(--accent);
-            transition: width 0.5s ease;
-        }
-
-        .loading-particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .learn-more-loading {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
             opacity: 0;
-            pointer-events: none;
             transition: opacity 0.3s ease;
         }
 
-        .learn-more-loading.active {
+        .error-message.visible {
             opacity: 1;
-            pointer-events: auto;
         }
 
-        .learn-more-content {
-            text-align: center;
+        .scroll-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--icon-color);
             color: #fff;
-        }
-
-        .learn-more-icons {
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+            z-index: 100;
         }
 
-        .learn-more-icon {
-            font-size: 3rem;
-            color: var(--accent);
-            animation: iconPulse 1.5s ease-in-out infinite;
+        .scroll-button.visible {
+            opacity: 1;
         }
 
-        .learn-more-icon:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-
-        .learn-more-icon:nth-child(3) {
-            animation-delay: 1s;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 1; }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-10px); }
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        .scroll-button:hover {
+            transform: translateY(-5px);
+            background-color: var(--accent);
         }
 
         @media (max-width: 768px) {
-            .hero {
+            .container {
+                flex-direction: column;
+                margin: 1rem;
+            }
+
+            .login-section, .finance-section {
+                width: 100%;
+                padding: 2rem;
+            }
+
+            .finance-stats {
                 grid-template-columns: 1fr;
-                padding-top: 5rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .image-grid {
-                transform: rotate(-15deg) scale(0.9);
-                margin-top: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="loading-screen">
-        <div class="loader">
-            <div class="loader-circle"></div>
-            <div class="loader-circle"></div>
-            <div class="loader-circle"></div>
-        </div>
-        <div class="loading-text">Magnifying Your Financial Future...</div>
-        <div class="loading-progress">
-            <div class="loading-bar"></div>
-        </div>
-        <div class="loading-particles"></div>
-    </div>
+    <main class="container">
+        <section class="login-section">
+            <div class="logo-container">
+                <img src="logo.png?height=60&width=60" alt="Magnify Logo" class="logo">
+                <h1 class="brand-name"><strong>Magnify!</strong></h1>
+            </div>
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="email" id="email" placeholder="Email" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                <button type="submit" class="login-button">Sign In</button>
+                <div id="errorMessage" class="error-message"></div>
+            </form>
+            <div class="social-login">
+                <a href="#" class="social-icon"><i class="fab fa-google"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </section>
+        <section class="finance-section">
+            <div class="finance-content">
+                <h2 class="finance-title">Your Gateway to Financial Management</h2>
+                <div class="finance-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-piggy-bank"></i>
+                        <div class="stat-value">Mark!</div>
+                        <div class="stat-label">Your Total Savings</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="stat-value">Organize</div>
+                        <div class="stat-label">Your Monthly Income</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-coins"></i>
+                        <div class="stat-value">Assemble</div>
+                        <div class="stat-label">Your Investment Growth</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="stat-value">Magnify It!</div>
+                        <div class="stat-label">You Are Safe With Us</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <div class="learn-more-loading">
-        <div  class="learn-more-content">
-            <h2>Preparing Your Financial Journey</h2>
-            <div class="learn-more-icons">
-                <i class="learn-more-icon fas fa-chart-line"></i>
-                <i class="learn-more-icon fas fa-coins"></i>
-                <i class="learn-more-icon fas fa-piggy-bank"></i>
-            </div>
-            <p>Loading valuable insights for you...</p>
-        </div>
-    </div>
-
-    <nav class="nav">
-        <div class="logo-container">
-            <img src="logo.png" alt="Magnify!" class="logo-img">
-            <span class="logo-text">Magnify!</span>
-        </div>
-        <div class="nav-links">
-            <a href="#" class="nav-link">Mark</a>
-            <a href="#" class="nav-link">Organize</a>
-            <a href="#" class="nav-link">Assemble</a>
-            <a href="#" class="nav-link">Magnify It</a>
-        </div>
-        <a href="#" class="google-btn" id="googleLoginBtn">
-            <img src="png-transparent-google-logo-google-logo-g-suite-chrome-text-logo-chrome-removebg-preview.png"alt="Google Logo">
-            Continue with Google
-        </a>
-    </nav>
-
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title"></h1>
-            <p class="hero-subtitle">Experience next-generation financial tools designed for your success</p>
-            <div class="cta-buttons">
-                <a href="#" class="cta-primary">Get Started</a>
-                <a href="#" class="cta-secondary" id="learnMoreBtn">Learn More</a>
-            </div>
-        </div>
-        <div class="image-grid" id="imageGrid">
-            <div class="image-item">
-                <div class="financial-icon chart-line">
-                    <i class="fas fa-chart-line"></i>
-                    <div class="particles"></div>
-                </div>
-            </div>
-            <div class="image-item">
-                <div class="financial-icon coins">
-                    <i class="fas fa-coins"></i>
-                    <div class="particles"></div>
-                </div>
-            </div>
-            <div class="image-item">
-                <div class="financial-icon wallet">
-                    <i class="fas fa-wallet"></i>
-                    <div class="particles"></div>
-                </div>
-            </div>
-            <div class="image-item">
-                <div class="financial-icon hand-holding-usd">
-                    <i class="fas fa-hand-holding-usd"></i>
-                    <div class="particles"></div>
-                </div>
-            </div>
-            <div class="image-item">
-                <div class="financial-icon chart-pie">
-                    <i class="fas fa-chart-pie"></i>
-                    <div class="particles"></div>
-                </div>
-            </div>
-            <div class="image-item">
-                <div class="financial-icon piggy-bank">
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-animation">
+            <div class="loading-meters">
+                <div class="meter">
                     <i class="fas fa-piggy-bank"></i>
-                    <div class="particles"></div>
+                    <div class="meter-fill"></div>
+                </div>
+                <div class="meter">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="meter-fill"></div>
+                </div>
+                <div class="meter">
+                    <i class="fas fa-coins"></i>
+                    <div class="meter-fill"></div>
+                </div>
+                <div class="meter">
+                    <i class="fas fa-shield-alt"></i>
+                    <div class="meter-fill"></div>
                 </div>
             </div>
+            <div class="loading-text">Magnifying your future...</div>
         </div>
-    </section>
+    </div>
 
-    <footer class="footer">
-        <div class="footer-names">
-            <div class="footer-name">Shelina Mae Dela Cruz</div>
-            <div class="footer-name">Ron Asnahon</div>
-            <div class="footer-name">Sean Ferneil Ricaza</div>
-            <div class="footer-name">Carl John Arpay</div>
-            <div class="footer-name">Vince Gerard Gonzaga</div>
-            <div class="footer-name">Joeron Zeniff Paloma</div>
-            <div class="footer-name">James Virtucio</div>
-            <div class="footer-name">Van Erich Nisnisan</div>
-        </div>
-    </footer>
+    <button class="scroll-button" id="scrollButton">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <script>
-        // DOM Elements
-        const imageItems = document.querySelectorAll('.image-item');
-        const heroContent = document.querySelector('.hero-content');
-        const footerNames = document.querySelectorAll('.footer-name');
-        const loadingScreen = document.querySelector('.loading-screen');
-        const loadingBar = document.querySelector('.loading-bar');
-        const loadingText = document.querySelector('.loading-text');
-        const heroTitle = document.querySelector('.hero-title');
-        const googleLoginBtn = document.getElementById('googleLoginBtn');
-        const learnMoreBtn = document.getElementById('learnMoreBtn');
-        const learnMoreLoading = document.querySelector('.learn-more-loading');
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
 
-        // Loading phrases
-        const loadingPhrases = [
-            "Magnifying Your Financial Future...",
-            "Focusing on Your Success...",
-            "Sharpening Your Financial Vision...",
-            "Enhancing Your Financial Clarity...",
-            "Ready to Magnify!"
-        ];
-
-        // Utility function to preload images
-        function preloadImages() {
-            const imagePromises = Array.from(imageItems).map(item => {
-                return new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.src = item.querySelector('img')?.src || '';
-                    img.onload = resolve;
-                    img.onerror = reject;
-                });
-            });
-            return Promise.all(imagePromises);
-        }
-
-        // Typing animation
-        function typeWriter(element, text, speed = 50, delay = 0) {
-            return new Promise(resolve => {
-                let i = 0;
-                element.textContent = '';
-
-                setTimeout(() => {
-                    function type() {
-                        if (i < text.length) {
-                            element.textContent = text.substring(0, i + 1);
-                            i++;
-                            setTimeout(type, speed + (Math.random() * 50));
-                        } else {
-                            resolve();
-                        }
-                    }
-                    type();
-                }, delay);
-            });
-        }
-
-        // Setup parallax effect
-        function setupParallax() {
-            document.addEventListener('mousemove', (e) => {
-                const mouseX = e.clientX / window.innerWidth - 0.5;
-                const mouseY = e.clientY / window.innerHeight - 0.5;
-
-                imageItems.forEach((item, index) => {
-                    const depth = 1 + index * 0.1;
-                    const translateX = mouseX * 50 * depth;
-                    const translateY = mouseY * 50 * depth;
-                    item.style.transform = `translate(${translateX}px, ${translateY}px)`;
-                });
-            });
-        }
-
-        // Setup floating animation
-        function setupFloatingAnimation() {
-            imageItems.forEach((item, index) => {
-                item.style.animation = `float 3s ease-in-out ${index * 0.5}s infinite alternate`;
-            });
-        }
-
-        // Create floating particles
-        function createParticles() {
-            const particlesContainer = document.querySelector('.loading-particles');
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.animationDelay = `${Math.random() * 2}s`;
-                particlesContainer.appendChild(particle);
+            // Check if email is a Gmail account
+            if (!email.endsWith('@gmail.com')) {
+                errorMessage.textContent = 'Please use a Gmail account.';
+                errorMessage.classList.add('visible');
+                return;
             }
-        }
 
-        // Loading simulation
-        function simulateLoading() {
-            let progress = 0;
-            const loadingInterval = setInterval(() => {
-                progress += 2;
-                loadingBar.style.width = `${progress}%`;
-                loadingText.textContent = `${loadingPhrases[Math.floor(progress / 20)]} (${progress}%)`;
-
-                if (progress >= 100) {
-                    clearInterval(loadingInterval);
-                    setTimeout(() => {
-                        loadingScreen.classList.add('fade-out');
-                        initializePageContent();
-                    }, 500);
-                }
-            }, 50);
-        }
-
-        // Initialize page content
-        async function initializePageContent() {
-            // Setup image hover effects
-            imageItems.forEach(item => {
-                item.addEventListener('mouseenter', () => {
-                    item.style.zIndex = '10';
-                    createIconParticles(item.querySelector('.financial-icon'));
-                });
-                item.addEventListener('mouseleave', () => item.style.zIndex = '');
-            });
-
-            // Initialize hero content
-            heroContent.classList.add('active');
-            await typeWriter(heroTitle, "Your Gateway to Financial Management.");
-
-            // Setup animations
-            setupParallax();
-            setupFloatingAnimation();
-
-            // Setup footer interactions
-            footerNames.forEach(name => {
-                name.addEventListener('mouseenter', () => {
-                    name.style.transform = 'translateY(-5px)';
-                    name.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
-                });
-                name.addEventListener('mouseleave', () => {
-                    name.style.transform = 'translateY(0)';
-                    name.style.boxShadow = 'none';
-                });
-            });
-        }
-
-        // Create particles for icon animation
-        function createIconParticles(icon) {
-            const particlesContainer = icon.querySelector('.particles');
-            particlesContainer.innerHTML = '';
-
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                const size = Math.random() * 4 + 2;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                const startX = Math.random() * 100;
-                const startY = Math.random() * 100;
-                const duration = Math.random() * 1 + 0.5;
-                
-                particle.style.left = `${startX}%`;
-                particle.style.top = `${startY}%`;
-                
-                particlesContainer.appendChild(particle);
-                
-                setTimeout(() => {
-                    particle.style.transition = `all ${duration}s ease-out`;
-                    particle.style.transform = `translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px)`;
-                    particle.style.opacity = '1';
-                    
-                    setTimeout(() => {
-                        particle.style.opacity = '0';
-                    }, duration * 500);
-                    
-                    setTimeout(() => {
-                        particle.remove();
-                    }, duration * 1000);
-                }, 0);
+            // Check if password is at least 8 characters long
+            if (password.length < 8) {
+                errorMessage.textContent = 'Password must be at least 8 characters long.';
+                errorMessage.classList.add('visible');
+                return;
             }
-        }
 
-        // Google login handler
-        function handleGoogleLogin(event) {
-            event.preventDefault();
-            loadingScreen.classList.remove('fade-out');
-            loadingBar.style.width = '0%';
-            loadingText.textContent = 'Connecting to Google...';
+            // If all checks pass, proceed with login
+            errorMessage.classList.remove('visible');
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.classList.add('active');
+            
+            const loadingTexts = [
+                'Preparing your dashboard...',
+                'Checking your credentials...',
+                'Almost there...',
+                'Loading financial data...',
+                'Securing connection...'
+            ];
+            
+            let currentIndex = 0;
+            const loadingText = document.querySelector('.loading-text');
+            const textInterval = setInterval(() => {
+                loadingText.textContent = loadingTexts[currentIndex];
+                currentIndex = (currentIndex + 1) % loadingTexts.length;
+            }, 2000);
 
-            let progress = 0;
-            const loadingInterval = setInterval(() => {
-                progress += 5;
-                loadingBar.style.width = `${progress}%`;
-                loadingText.textContent = `Connecting to Magnify... ${progress}%`;
-
-                if (progress >= 100) {
-                    clearInterval(loadingInterval);
-                    setTimeout(() => {
-                        // Redirect to Google login page (replace with actual URL)
-                        window.location.href = 'Entrep6.html';
-                    }, 500);
-                }
-            }, 100);
-        }
-
-        // Learn More handler
-        function handleLearnMore(event) {
-            event.preventDefault();
-            learnMoreLoading.classList.add('active');
+            const meters = document.querySelectorAll('.meter-fill');
+            meters.forEach((meter, index) => {
+                setTimeout(() => {
+                    meter.style.height = '100%';
+                }, index * 500);
+            });
             
             setTimeout(() => {
-                learnMoreLoading.classList.remove('active');
-                // Replace with actual "Learn More" page URL
-                window.location.href = 'Entrep16.html';
-            }, 2000);
-        }
+                clearInterval(textInterval);
+                window.location.href = 'Entrep.html';
+            }, 5000);
+        });
 
-        // Event listeners
-        googleLoginBtn.addEventListener('click', handleGoogleLogin);
-        learnMoreBtn.addEventListener('click', handleLearnMore);
+        // Enhanced input animations
+        document.querySelectorAll('.input-group input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.style.transform = 'scale(1.02)';
+                input.parentElement.style.transition = 'all 0.3s ease';
+            });
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            preloadImages()
-                .then(simulateLoading)
-                .catch(error => {
-                    console.error('Error preloading images:', error);
-                    loadingScreen.classList.add('fade-out');
-                    initializePageContent();
-                });
+            input.addEventListener('blur', () => {
+                input.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Enhanced stat card animations
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('mouseover', () => {
+                card.style.transform = 'translateY(-10px) scale(1.02)';
+                card.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
+            });
+
+            card.addEventListener('mouseout', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+                card.style.boxShadow = 'none';
+            });
+        });
+
+        // Social icons enhanced animation
+        document.querySelectorAll('.social-icon').forEach(icon => {
+            icon.addEventListener('mouseover', () => {
+                icon.style.transform = 'scale(1.2) translateY(-5px)';
+                icon.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+            });
+
+            icon.addEventListener('mouseout', () => {
+                icon.style.transform = 'scale(1) translateY(0)';
+                icon.style.boxShadow = 'none';
+            });
+        });
+
+        // Scroll button functionality
+        const scrollButton = document.getElementById('scrollButton');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollButton.classList.add('visible');
+            } else {
+                scrollButton.classList.remove('visible');
+            }
+        });
+
+        scrollButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
     </script>
 </body>
