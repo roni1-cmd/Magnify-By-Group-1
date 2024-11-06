@@ -3,249 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify: Revolutionizing Your Financial Future</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <title>Magnify! - Financial Empowerment Platform</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --gradient-start: #4158D0;
-            --gradient-middle: #C850C0;
-            --gradient-end: #FFCC70;
-            --text-color: #333;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --card-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --primary-gradient: linear-gradient(135deg, #6366f1, #a855f7);
+            --secondary-gradient: linear-gradient(135deg, #3b82f6, #2dd4bf);
+            --background-gradient: linear-gradient(135deg, #818cf8, #c084fc);
+            --card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
+            --text-color: #1e293b;
+            --error-color: #ef4444;
+            --success-color: #22c55e;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background: linear-gradient(-45deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end), #23D5AB);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: var(--background-gradient);
             color: var(--text-color);
-            line-height: 1.6;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            padding: 2rem;
+            line-height: 1.6;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
-            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 
+                0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 2rem;
+            background: var(--card-gradient);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
         }
 
         .title-container {
-            text-align: center;
-            margin-bottom: 50px;
-            position: relative;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        h1 {
-            color: white;
-            font-size: 4em;
-            font-weight: 900;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            letter-spacing: -1px;
-            margin-bottom: 10px;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 1s forwards 0.5s;
-        }
-
-        .subtitle {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.5em;
-            font-weight: 300;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s forwards 1s;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
         }
 
         .creators {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 40px;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s forwards 1.5s;
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.6;
+            text-align: center;
         }
 
-        .creators:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2);
+        .creators-container {
+            background: var(--card-gradient);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
-        .features {
+        .content-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            opacity: 0;
-            animation: fadeIn 1s forwards 2s;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        .feature-card {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            padding: 30px;
+        .content-card {
+            background: var(--card-gradient);
+            border-radius: 20px;
+            padding: 2rem;
             transition: all 0.3s ease;
-            cursor: pointer;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
             position: relative;
-            transform: translateY(50px);
-            opacity: 0;
+            overflow: hidden;
+            cursor: pointer;
         }
 
-        .feature-card:nth-child(odd) {
-            animation: slideInLeft 0.5s forwards;
+        .content-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .feature-card:nth-child(even) {
-            animation: slideInRight 0.5s forwards;
-        }
-
-        @keyframes slideInLeft {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideInRight {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-middle));
+        .content-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             transition: transform 0.3s ease;
         }
 
-        .feature-card:hover .feature-icon {
+        .content-card:hover .content-icon {
             transform: scale(1.1) rotate(5deg);
         }
 
-        h2 {
-            margin-bottom: 15px;
-            color: var(--gradient-start);
+        .content-title {
+            font-size: 1.5rem;
             font-weight: 600;
-            font-size: 1.5em;
+            margin-bottom: 1rem;
+            color: #1e293b;
         }
 
-        .feature-description {
-            height: 0;
-            opacity: 0;
-            transition: height 0.3s ease, opacity 0.3s ease;
-            overflow: hidden;
-        }
-
-        .feature-card.active .feature-description {
-            height: auto;
-            opacity: 1;
-            margin-top: 15px;
-        }
-
-        .feature-card::after {
-            content: '\f078';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            position: absolute;
-            bottom: 15px;
-            right: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card.active::after {
-            transform: rotate(180deg);
-        }
-
-        .back-to-home {
-            display: inline-block;
-            margin-top: 40px;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-middle));
-            color: white;
-            text-decoration: none;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .back-to-home:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .back-to-home::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: all 0.5s;
-        }
-
-        .back-to-home:hover::before {
-            left: 100%;
+        .content-text {
+            color: #64748b;
+            line-height: 1.7;
         }
 
         @media (max-width: 768px) {
-            .features {
+            body {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+            }
+
+            .logo {
+                margin-bottom: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .content-grid {
                 grid-template-columns: 1fr;
-            }
-            h1 {
-                font-size: 3em;
-            }
-            .subtitle {
-                font-size: 1.2em;
             }
         }
 
@@ -261,246 +200,181 @@
             0% { transform: scale(0); opacity: 1; }
             100% { transform: scale(1); opacity: 0; }
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: var(--card-gradient);
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-card {
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .content-card:nth-child(1) { animation-delay: 0.1s; }
+        .content-card:nth-child(2) { animation-delay: 0.2s; }
+        .content-card:nth-child(3) { animation-delay: 0.3s; }
+        .content-card:nth-child(4) { animation-delay: 0.4s; }
+        .content-card:nth-child(5) { animation-delay: 0.5s; }
+        .content-card:nth-child(6) { animation-delay: 0.6s; }
+        .content-card:nth-child(7) { animation-delay: 0.7s; }
+        .content-card:nth-child(8) { animation-delay: 0.8s; }
+        .content-card:nth-child(9) { animation-delay: 0.9s; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="title-container">
-            <h1>Magnify!: Revolutionizing Your Financial Future</h1>
-            <p class="subtitle">Empowering You with Cutting-Edge Financial Tracking Tools.</p>
-        </div>
-        
-        <div class="creators">
-            <p>Created by Grade 12 ICT Students (CP12A1 A.Y. 2024-2025): Ron Asnahon, Carl John Arpay, Shelina Mae Dela Cruz, Sean Ricaza, Joeron Zeniff Paloma, Van Erich Nisnisan, Vince Gerard Gonzaga and James Virtucio as part of our Entrepreneurship Business Plan.</p>
-        </div>
-        
-        <div class="features">
-            <div class="feature-card">
-                <i class="fas fa-tachometer-alt feature-icon"></i>
-                <h2>Smart Dashboard</h2>
-                <p>Comprehensive view of your financial landscape</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>Real-time Balance Display</li>
-                        <li>Dynamic Expense and Income Summary</li>
-                        <li>Intelligent Bill Reminders</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <i class="fas fa-exchange-alt feature-icon"></i>
-                <h2>Intelligent Transaction Tracker</h2>
-                <p>Advanced logging and categorization of financial activities</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>One-Click Transaction Entry</li>
-                        <li>AI-Powered Category Suggestions</li>
-                        <li>Customizable Tags and Filters</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <i class="fas fa-chart-pie feature-icon"></i>
-                <h2>Dynamic Budget Planner</h2>
-                <p>Adaptive budgeting tool for optimal income allocation</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>Flexible Monthly Budget Creation</li>
-                        <li>Interactive Visual Breakdowns</li>
-                        <li>Predictive Budget Insights</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <i class="fas fa-chart-line feature-icon"></i>
-                <h2>Advanced Analytics Hub</h2>
-                <p>In-depth financial analysis and reporting</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>Multi-dimensional Data Visualization</li>
-                        <li>Customizable Report Generation</li>
-                        <li>Trend Analysis and Forecasting</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <i class="fas fa-calculator feature-icon"></i>
-                <h2>Financial Calculators Suite</h2>
-                <p>Comprehensive tools for financial planning and estimation</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>Advanced Mortgage Calculator</li>
-                        <li>Tax Estimation Tools</li>
-                        <li>Investment Return Projector</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <i class="fas fa-money-bill-wave feature-icon"></i>
-                <h2>Secure Bills Payment Hub</h2>
-                <p>Centralized platform for efficient bill management</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>Multi-Provider Payment Integration</li>
-                        <li>Automated Payment Scheduling</li>
-                        <li>Real-time Payment Confirmations</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <i class="fas fa-user-circle feature-icon"></i>
-                <h2>Personalized Financial Profile</h2>
-                <p>Tailored user experience with smart financial insights</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>AI-Driven Financial Health Score</li>
-                        <li>Customizable Dashboard Widgets</li>
-                        <li>Personal Finance Goal Tracker</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <i class="fas fa-book-open feature-icon"></i>
-                <h2>Financial Education Center</h2>
-                <p>Comprehensive resources for financial literacy</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>Interactive Learning Modules</li>
-                        <li>Expert-Curated Content Library</li>
-                        <li>Personalized Learning Paths</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <i class="fas fa-spinner feature-icon"></i>
-                <h2>Engaging User Experience</h2>
-                <p>Seamless and interactive interface design</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>Animated Transaction Processing</li>
-                        <li>Interactive Loading Screens</li>
-                        <li>Micro-interactions for Enhanced Feedback</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <i class="fas fa-paint-brush feature-icon"></i>
-                <h2>Customizable Interface</h2>
-                <p>Tailor the app to your personal preferences</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>Multiple Theme Options</li>
-                        <li>Adjustable Layout Configurations</li>
-                        <li>Personalized Widget Arrangement</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                
-                <i class="fas fa-lightbulb feature-icon"></i>
-                <h2>Smart Financial Insights</h2>
-                <p>AI-powered suggestions for financial optimization</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>Personalized Saving Tips</li>
-                        <li>Investment Opportunity Alerts</li>
-                        <li>Spending Pattern Analysis</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <i class="fas fa-shield-alt feature-icon"></i>
-                <h2>Advanced Security Measures</h2>
-                <p>State-of-the-art protection for your financial data</p>
-                <div class="feature-description">
-                    <ul>
-                        <li>Biometric Authentication</li>
-                        <li>End-to-End Encryption</li>
-                        <li>Real-time Fraud Detection</li>
-                    </ul>
-                </div>
+        <div class="header">
+            <div class="header-content">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo.png-kLyCPLAeIu5lfJJjJDViTOR5ByvMTP.png" alt="Magnify! Logo" class="logo">
+                <h1>Magnify!</h1>
             </div>
         </div>
-        
-        <a href="index.html" class="back-to-home">Return to Magnify Homepage</a>
+        <div class="creators-container">
+            <p class="creators">
+                Created by Grade 12 ICT Students (CP12A1): Ron Asnahon, Carl John Arpay, Shelina Mae Dela Cruz, Sean Ricaza, Joeron Zeniff Paloma, Van Erich Nisnisan, Vince Gerard Gonzaga and James Virtucio as part of their Entrepreneurship Business Plan.
+            </p>
+        </div>
+
+        <div class="content-grid">
+            <div class="content-card">
+                <i class="fas fa-graduation-cap content-icon"></i>
+                <h2 class="content-title">Empowering Financial Literacy</h2>
+                <p class="content-text">
+                    Financial literacy is essential, yet it's not always prioritized in formal education. Magnify! aims to help users gain confidence in managing money, understanding budgeting, and making informed financial decisions.
+                </p>
+            </div>
+
+            <div class="content-card">
+                <i class="fas fa-chart-line content-icon"></i>
+                <h2 class="content-title">Simplified Financial Tracking</h2>
+                <p class="content-text">
+                    Consolidating essential finance management tools in one place, from tracking transactions to visualizing spending patterns, helping users make better financial decisions.
+                </p>
+            </div>
+
+            <div class="content-card">
+                <i class="fas fa-piggy-bank content-icon"></i>
+                <h2 class="content-title">Responsible Spending Habits</h2>
+                <p class="content-text">
+                    Promoting better money management through budget planning, spending analysis, and personalized suggestions to build habits that positively impact future financial health.
+                </p>
+            </div>
+
+            <div class="content-card">
+                <i class="fas fa-bullseye content-icon"></i>
+                <h2 class="content-title">Customizable Financial Tools</h2>
+                <p class="content-text">
+                    Supporting personal financial goals with tailored tools like budgeting, mortgage calculators, and tax estimations that align with each user's unique situation.
+                </p>
+            </div>
+
+            <div class="content-card">
+                <i class="fas fa-receipt content-icon"></i>
+                <h2 class="content-title">Convenient Bill Payments</h2>
+                <p class="content-text">
+                    Integrated secure bills payment portal with receipt-style confirmation enhances transparency and helps maintain good financial standing.
+                </p>
+            </div>
+
+            <div class="content-card">
+                <i class="fas fa-book-reader content-icon"></i>
+                <h2 class="content-title">Educational Resources</h2>
+                <p class="content-text">
+                    Curated resources for deepening knowledge of budgeting, financial planning, and responsible spending, emphasizing financial education as a continuous journey.
+                </p>
+            </div>
+
+            <div class="content-card">
+                <i class="fas fa-mobile-alt content-icon"></i>
+                <h2 class="content-title">Digital Age Finance</h2>
+                <p class="content-text">
+                    Engaging and visually appealing platform with real-time updates, interactive UI elements, and consistent access to financial data from any device.
+                </p>
+            </div>
+
+            <div class="content-card">
+                <i class="fas fa-users content-icon"></i>
+                <h2 class="content-title">Student-Focused Solutions</h2>
+                <p class="content-text">
+                    Tailored for University of Cebu Lapu-Lapu and Mandaue students, addressing the gap in personal finance education for young adults.
+                </p>
+            </div>
+
+            <div class="content-card">
+                <i class="fas fa-hands-helping content-icon"></i>
+                <h2 class="content-title">Building Financial Community</h2>
+                <p class="content-text">
+                    Cultivating a community of informed, financially independent users who are proactive in managing their finances for long-term benefits.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-text"></p>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const featureCards = document.querySelectorAll('.feature-card');
-            
-            featureCards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1 + 2}s`;
-                
-                card.addEventListener('click', () => {
-                    card.classList.toggle('active');
-                });
-
-                // Animate icons based on their nature
-                const icon = card.querySelector('.feature-icon');
-                const iconClass = icon.className;
-                
-                if (iconClass.includes('fa-tachometer-alt')) {
-                    setInterval(() => {
-                        icon.style.transform = 'scale(1.1) rotate(20deg)';
-                        setTimeout(() => {
-                            icon.style.transform = 'scale(1) rotate(0deg)';
-                        }, 500);
-                    }, 3000);
-                } else if (iconClass.includes('fa-exchange-alt')) {
-                    setInterval(() => {
-                        icon.style.transform = 'translateX(10px)';
-                        setTimeout(() => {
-                            icon.style.transform  = 'translateX(-10px)';
-                        }, 500);
-                    }, 3000);
-                } else if (iconClass.includes('fa-chart-pie')) {
-                    setInterval(() => {
-                        icon.style.transform = 'rotate(360deg)';
-                    }, 5000);
-                } else if (iconClass.includes('fa-chart-line')) {
-                    setInterval(() => {
-                        icon.style.transform = 'translateY(-10px)';
-                        setTimeout(() => {
-                            icon.style.transform = 'translateY(0)';
-                        }, 500);
-                    }, 3000);
-                } else if (iconClass.includes('fa-calculator')) {
-                    setInterval(() => {
-                        icon.style.transform = 'scale(1.1)';
-                        setTimeout(() => {
-                            icon.style.transform = 'scale(1)';
-                        }, 500);
-                    }, 3000);
-                } else if (iconClass.includes('fa-money-bill-wave')) {
-                    setInterval(() => {
-                        icon.style.transform = 'translateX(10px) rotate(10deg)';
-                        setTimeout(() => {
-                            icon.style.transform = 'translateX(-10px) rotate(-10deg)';
-                        }, 500);
-                    }, 3000);
-                } else {
-                    setInterval(() => {
-                        icon.style.transform = 'scale(1.1)';
-                        setTimeout(() => {
-                            icon.style.transform = 'scale(1)';
-                        }, 500);
-                    }, 3000);
-                }
-            });
-
-            // Enhanced particle effect
+            // Particle effect
             function createParticle(x, y) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
@@ -522,30 +396,41 @@
                 }
             });
 
-            // Smooth scroll for internal links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
+            // Animate icons
+            const icons = document.querySelectorAll('.content-icon');
+            icons.forEach(icon => {
+                setInterval(() => {
+                    icon.style.transform = 'scale(1.1) rotate(5deg)';
+                    setTimeout(() => {
+                        icon.style.transform = 'scale(1) rotate(0deg)';
+                    }, 500);
+                }, 3000);
+            });
+
+            // Modal functionality
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalText = document.getElementById('modal-text');
+            const closeBtn = document.getElementsByClassName('close')[0];
+
+            const cards = document.querySelectorAll('.content-card');
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    modalTitle.textContent = card.querySelector('.content-title').textContent;
+                    modalText.textContent = card.querySelector('.content-text').textContent;
+                    modal.style.display = 'block';
                 });
             });
 
-            // Intersection Observer for scroll animations
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view');
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
+            closeBtn.onclick = () => {
+                modal.style.display = 'none';
+            };
 
-            document.querySelectorAll('.feature-card').forEach(card => {
-                observer.observe(card);
-            });
+            window.onclick = (event) => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            };
         });
     </script>
 </body>
