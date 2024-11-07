@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magnify! - Bills Payment Portal</title>
-    <link rel="logo.png" href="logo-300x300.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary: #007bff;
-            --primary-dark: #0056b3;
-            --success: #28a745;
-            --success-dark: #218838;
-            --danger: #dc3545;
-            --warning: #ffc107;
-            --info: #17a2b8;
-            --background: linear-gradient(135deg, #2e2655, #186d94);
+            --gradient-start: #8E2DE2;
+            --gradient-end: #FF69B4;
+            --primary: #9C27B0;
+            --primary-dark: #7B1FA2;
+            --success: #4CAF50;
+            --success-dark: #388E3C;
+            --danger: #F44336;
+            --warning: #FFC107;
+            --info: #2196F3;
+            --background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
@@ -26,7 +30,7 @@
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: var(--background);
             min-height: 100vh;
             color: #333;
@@ -73,7 +77,7 @@
 
         .portal-header h2 {
             font-size: 2.5rem;
-            background: linear-gradient(45deg, var(--primary), var(--info));
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             -webkit-background-clip: text;
             color: transparent;
             margin-bottom: 1rem;
@@ -109,7 +113,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, var(--primary), var(--info));
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             opacity: 0;
             transition: opacity 0.3s ease;
             z-index: 1;
@@ -139,7 +143,7 @@
             padding: 10px;
             border-radius: 12px;
             margin-right: 1rem;
-            background: linear-gradient(45deg, var(--primary), var(--info));
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -166,7 +170,7 @@
         }
 
         .payment-button {
-            background: linear-gradient(45deg, var(--success), var(--success-dark));
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             color: white;
             border: none;
             padding: 1rem;
@@ -388,7 +392,7 @@
 </head>
 <body>
     <div class="logo-container">
-        <img src="logo.png.png" alt="Magnify Logo" class="logo">
+        <img src="logo.png" alt="Magnify Logo" class="logo">
     </div>
 
     <div class="bills-portal">
@@ -485,8 +489,7 @@
         function handlePayment(billType) {
             // Store the bill type and show notification
             localStorage.setItem("billType", billType);
-            showNotification(`Magnifying your way to ${billType} 
-            bill payment...`);
+            showNotification(`Magnifying your way to ${billType} bill payment...`);
             
             // Redirect after a short delay
             setTimeout(() => {
@@ -565,6 +568,26 @@
                 document.getElementById('sellSection').classList.remove('active');
             }
         });
+
+        // Add interactive particle background
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+            },
+            retina_detect: true
+        });
     </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </body>
 </html>
