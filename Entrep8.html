@@ -437,81 +437,23 @@
     <script>
         function showToast(type, message) {
             const toast = document.getElementById(`${type}Toast`);
-            const messageSpan = toast.querySelector('span');
-            messageSpan.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        document.getElementById('subscriptionButton').addEventListener('click', () => {
-            window.location.href = 'Entrep15.html';
-        });
-
-        document.getElementById('notificationButton').addEventListener('click', () => {
-            showToast('success', 'No new notifications');
-        });
-
-        document.getElementById('settingsButton').addEventListener('click', () => {
-            showToast('success', 'Settings panel coming soon!');
-        });
-
-        document.getElementById('logoutButton').addEventListener('click', function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
-            showToast('success', 'Logging out...');
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1500);
-        });
-
-        document.getElementById('changeNameButton').addEventListener('click', function() {
-            const newName = document.getElementById('newName').value.trim();
-            if (newName) {
-                if (newName.length < 2) {
-                    showToast('error', 'Name must be at least 2 characters long');
-                    return;
+            if (toast) {
+                const messageSpan = toast.querySelector('span');
+                if (messageSpan) {
+                    messageSpan.textContent = message;
                 }
-                document.getElementById('username').innerText = newName;
-                document.getElementById('newName').value = '';
-                showToast('success', 'Name updated successfully!');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
             } else {
-                showToast('error', 'Please enter a new name');
+                console.error(`Toast element with id "${type}Toast" not found`);
             }
-        });
-
-        document.getElementById('depositButton').addEventListener('click', function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            this.disabled = true;
-            showToast('success', 'Preparing deposit form...');
-            setTimeout(() => {
-                window.location.href = 'Entrep10.html';
-            }, 1000);
-        });
-
-        document.querySelectorAll('.card, .stat-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-5px) scale(1.02)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.key === 's') {
-                e.preventDefault();
-                document.getElementById('changeNameButton').click();
-            }
-            if (e.ctrlKey && e.key === 'l') {
-                e.preventDefault();
-                document.getElementById('logoutButton').click();
-            }
-        });
+        }
 
         function updateBalance() {
             let currentBalance = 0;
-            const targetBalance = ;
+            const targetBalance = 10000; // You can change this to any default value
             const duration = 2000;
             const steps = 60;
             const increment = targetBalance / steps;
@@ -545,7 +487,74 @@
             document.getElementById('lastUpdated').textContent = formattedDate;
         }
 
-        window.addEventListener('load', () => {
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
+                showToast('success', 'Logging out...');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            });
+
+            document.getElementById('subscriptionButton').addEventListener('click', function() {
+                showToast('success', 'Redirecting to subscription page...');
+                setTimeout(() => {
+                    window.location.href = 'Entrep15.html';
+                }, 1000);
+            });
+
+            document.getElementById('notificationButton').addEventListener('click', () => {
+                showToast('success', 'No new notifications');
+            });
+
+            document.getElementById('settingsButton').addEventListener('click', () => {
+                showToast('success', 'Settings panel coming soon!');
+            });
+
+            document.getElementById('changeNameButton').addEventListener('click', function() {
+                const newName = document.getElementById('newName').value.trim();
+                if (newName) {
+                    if (newName.length < 2) {
+                        showToast('error', 'Name must be at least 2 characters long');
+                        return;
+                    }
+                    document.getElementById('username').innerText = newName;
+                    document.getElementById('newName').value = '';
+                    showToast('success', 'Name updated successfully!');
+                } else {
+                    showToast('error', 'Please enter a new name');
+                }
+            });
+
+            document.getElementById('depositButton').addEventListener('click', function() {
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                this.disabled = true;
+                showToast('success', 'Preparing deposit form...');
+                setTimeout(() => {
+                    window.location.href = 'Entrep10.html';
+                }, 1000);
+            });
+
+            document.querySelectorAll('.card, .stat-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    document.getElementById('changeNameButton').click();
+                }
+                if (e.ctrlKey && e.key === 'l') {
+                    e.preventDefault();
+                    document.getElementById('logoutButton').click();
+                }
+            });
+
             updateBalance();
             updateLastUpdated();
             document.querySelectorAll('.fade-in').forEach((el, i) => {
