@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magnify! Comprehensive Feature Index</title>
-    <link rel="logo.png" href="logo-300x300.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #0d47a1;
-            --secondary: #1976d2;
-            --accent: #e3f2fd;
+            --primary: #8E2DE2;
+            --secondary: #4A00E0;
+            --accent: #FF69B4;
             --text: #333;
-            --background: #f0f8ff;
+            --background: #f0f0f0;
         }
 
         * {
@@ -87,7 +87,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             cursor: pointer;
             opacity: 0;
             transform: translateY(20px);
@@ -99,7 +99,7 @@
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.03);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
@@ -107,6 +107,11 @@
             font-size: 2.5rem;
             color: var(--primary);
             margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: rotate(360deg);
         }
 
         .feature-title {
@@ -206,77 +211,7 @@
 
     <div class="container">
         <div class="features-grid">
-            <div class="feature-card" data-feature="track-list">
-                <i class="feature-icon fas fa-list-check" aria-hidden="true"></i>
-                <h2 class="feature-title">Track List</h2>
-                <p class="feature-description">Effortlessly manage your financial transactions.</p>
-            </div>
-
-            <div class="feature-card" data-feature="calculators">
-                <i class="feature-icon fas fa-calculator" aria-hidden="true"></i>
-                <h2 class="feature-title">Calculators</h2>
-                <p class="feature-description">Powerful tools for financial decision-making.</p>
-            </div>
-
-            <div class="feature-card" data-feature="analytics">
-                <i class="feature-icon fas fa-chart-line" aria-hidden="true"></i>
-                <h2 class="feature-title">Analytics</h2>
-                <p class="feature-description">Visualize and analyze your financial data.</p>
-            </div>
-
-            <div class="feature-card" data-feature="audit-calendar">
-                <i class="feature-icon far fa-calendar-alt" aria-hidden="true"></i>
-                <h2 class="feature-title">Audit Calendar</h2>
-                <p class="feature-description">Plan and track important financial dates.</p>
-            </div>
-
-            <div class="feature-card" data-feature="currency-converter">
-                <i class="feature-icon fas fa-exchange-alt" aria-hidden="true"></i>
-                <h2 class="feature-title">Currency Converter</h2>
-                <p class="feature-description">Real-time currency conversion at your fingertips.</p>
-            </div>
-
-            <div class="feature-card" data-feature="budget-planner">
-                <i class="feature-icon fas fa-piggy-bank" aria-hidden="true"></i>
-                <h2 class="feature-title">Budget Planner</h2>
-                <p class="feature-description">Create and manage your personalized budget.</p>
-            </div>
-
-            <div class="feature-card" data-feature="monthly-tracker">
-                <i class="feature-icon fas fa-wallet" aria-hidden="true"></i>
-                <h2 class="feature-title">Monthly Tracker</h2>
-                <p class="feature-description">Keep detailed records of income and expenses.</p>
-            </div>
-
-            <div class="feature-card" data-feature="financial-resources">
-                <i class="feature-icon fas fa-book-reader" aria-hidden="true"></i>
-                <h2 class="feature-title">Financial Resources</h2>
-                <p class="feature-description">Access educational content on financial topics.</p>
-            </div>
-
-            <div class="feature-card" data-feature="online-store">
-                <i class="feature-icon fas fa-store" aria-hidden="true"></i>
-                <h2 class="feature-title">Online Store</h2>
-                <p class="feature-description">Shop for financial products and resources.</p>
-            </div>
-
-            <div class="feature-card" data-feature="depository">
-                <i class="feature-icon fas fa-vault" aria-hidden="true"></i>
-                <h2 class="feature-title">Depository</h2>
-                <p class="feature-description">Securely store and manage your assets.</p>
-            </div>
-
-            <div class="feature-card" data-feature="bills-payment">
-                <i class="feature-icon fas fa-file-invoice-dollar" aria-hidden="true"></i>
-                <h2 class="feature-title">Bills Payment</h2>
-                <p class="feature-description">Streamline your bill payments effortlessly.</p>
-            </div>
-
-            <div class="feature-card" data-feature="chatbot">
-                <i class="feature-icon fas fa-robot" aria-hidden="true"></i>
-                <h2 class="feature-title">Chatbot E.R.I.C.H.</h2>
-                <p class="feature-description">Get assistance from our AI-powered helper.</p>
-            </div>
+            <!-- Feature cards will be dynamically inserted here -->
         </div>
     </div>
 
@@ -293,72 +228,85 @@
         const featureDetails = {
             'track-list': {
                 title: 'Track List',
-                description: 'The Track List feature is your personal financial ledger, allowing you to meticulously record and categorize every financial transaction. From daily coffee purchases to monthly salary deposits, this comprehensive tool provides a 360-degree view of your financial activities. You can effortlessly filter transactions by date, category, or amount, giving you unprecedented clarity on your spending habits and cash flow patterns. The intuitive interface makes it easy to input new transactions on-the-go, ensuring your financial records are always up-to-date. By analyzing this data, you can identify areas of overspending, track your savings progress, and make informed decisions to optimize your budget. The Track List also integrates with other Magnify! features, providing a solid foundation for your overall financial management strategy.',
+                description: 'Effortlessly manage your financial transactions with our comprehensive Track List feature.',
                 icon: 'fas fa-list-check'
             },
             'calculators': {
                 title: 'Calculators',
-                description: 'Our suite of Calculators is designed to empower you with precise financial planning tools. The Budget Calculator helps you allocate your income across various categories, considering your financial goals and lifestyle needs. It suggests optimal distributions for savings, necessities, and discretionary spending based on popular budgeting methods like the 50/30/20 rule. The Mortgage Calculator goes beyond basic payment estimates; it factors in property taxes, insurance, and PMI to give you a true picture of homeownership costs. You can compare different scenarios by adjusting loan terms, interest rates, and down payments. Our Tax Calculator is regularly updated with the latest tax brackets and deduction rules, helping you estimate your tax liability or refund. It even provides tips on potential deductions you might have overlooked. Whether you\'re planning for retirement, considering a major purchase, or just trying to optimize your daily finances, these calculators provide the insights you need to make confident financial decisions.',
+                description: 'Access powerful tools for financial decision-making with our suite of Calculators.',
                 icon: 'fas fa-calculator'
             },
             'analytics': {
                 title: 'Analytics',
-                description: 'The Analytics feature transforms your financial data into actionable insights through a series of interactive and customizable visualizations. Dive deep into your spending patterns with color-coded pie charts that break down your expenses by category. Track your income vs. expenses over time with dynamic line graphs, allowing you to identify trends and forecast future financial scenarios. Our unique "Financial Health Score" aggregates various metrics to give you a quick snapshot of your overall financial wellbeing, with detailed breakdowns on areas of strength and opportunities for improvement. The "Goal Tracker" visualization allows you to set financial targets and visually monitor your progress, whether it\'s saving for a vacation or paying off debt. With machine learning-powered predictive analytics, you can even get insights into potential future financial challenges or opportunities based on your current habits. All visualizations are interactive, allowing you to zoom in on specific time periods or categories for granular analysis.',
+                description: 'Visualize and analyze your financial data with our advanced Analytics tools.',
                 icon: 'fas fa-chart-line'
             },
             'audit-calendar': {
                 title: 'Audit Calendar',
-                description: 'The Audit Calendar is your centralized financial planning and tracking tool. It\'s not just a reminder system; it\'s a comprehensive financial scheduler that integrates with your Track List and Bills Payment features. Set up recurring reminders for regular bills, loan payments, or savings deposits. The calendar provides a visual representation of your financial obligations throughout the month or year, helping you avoid missed payments and late fees. You can log transactions directly from calendar events, streamlining your financial record-keeping process. The "Financial Forecast" feature uses your scheduled income and expenses to project your account balances into the future, helping you anticipate and prevent cash flow issues. Custom event categories allow you to color-code different types of financial activities for easy visual parsing. The calendar also integrates with popular digital calendar platforms, ensuring your financial schedule is always in sync with your personal and professional commitments.',
+                description: 'Plan and track important financial dates with our intuitive Audit Calendar.',
                 icon: 'far fa-calendar-alt'
             },
             'currency-converter': {
                 title: 'Currency Converter',
-                description: 'Our Currency Converter is an indispensable tool for global citizens and international investors alike. It provides real-time exchange rates for over 170 currencies, sourced from reliable financial data providers. Beyond simple conversions, this feature offers historical exchange rate data, allowing you to track currency trends over time. This is particularly useful for timing large international transactions or investments. The "Rate Alert" function lets you set notifications for when a currency pair reaches a specified exchange rate, helping you capitalize on favorable market conditions. For frequent travelers, the "Travel Budget" tool helps you convert your home currency budget into your destination\'s currency, with the ability to factor in typical tourist exchange rates and fees. The converter also provides insights into factors affecting exchange rates, such as economic indicators and geopolitical events, helping you make more informed decisions about international money matters.',
+                description: 'Get real-time currency conversion at your fingertips with our Currency Converter.',
                 icon: 'fas fa-exchange-alt'
             },
             'budget-planner': {
-                
                 title: 'Budget Planner',
-                description: 'The Budget Planner is your personal financial architect, helping you design and implement a tailored spending plan. Start by inputting your income sources and fixed expenses, then use our guided process to allocate funds across various spending categories. The planner suggests budget percentages based on financial best practices, but allows full customization to fit your unique situation. As you use Magnify!, the Budget Planner learns from your spending habits and suggests realistic, achievable budgets. The "Flex Budget" feature automatically adjusts your budget in other areas if you overspend in one category, helping you stay on track overall. Visual progress bars and charts provide real-time feedback on your budget adherence throughout the month. The "What-If Scenarios" tool lets you model how life changes (like a new job or moving to a new city) would impact your budget. Integration with the Track List feature allows for automatic budget tracking, while connections with the Analytics tool provide deep insights into your budgeting successes and challenges over time.',
+                description: 'Create and manage your personalized budget with our comprehensive Budget Planner.',
                 icon: 'fas fa-piggy-bank'
             },
             'monthly-tracker': {
-                title: 'Monthly Income and Expense Tracker',
-                description: 'The Monthly Income and Expense Tracker is the cornerstone of your day-to-day financial management. This feature provides a detailed, categorized breakdown of all your financial inflows and outflows. For income, it doesn\'t just record your primary salary, but also accounts for additional sources like freelance work, investments, and gifts. On the expense side, it goes beyond basic categories, allowing you to create custom subcategories for granular tracking. The "Recurring Transactions" function automatically logs regular incomes and expenses, saving you time and ensuring accuracy. A standout feature is the "Expense Anomaly Detection," which uses machine learning to identify unusual spending patterns and alert you to potential issues like fraud or unexpected fees. The "Income Diversification Score" helps you visualize how well-balanced your income sources are, encouraging financial resilience. At month\'s end, the tracker generates a comprehensive report, complete with trend analysis and personalized insights to help you continuously improve your financial health.',
+                title: 'Monthly Tracker',
+                description: 'Keep detailed records of income and expenses with our Monthly Tracker.',
                 icon: 'fas fa-wallet'
             },
             'financial-resources': {
-                title: 'Financial Resources and Guidance',
-                description: 'Our Financial Resources and Guidance section is a comprehensive library of financial knowledge, tailored to your personal finance journey. It features a wide array of articles, video tutorials, and interactive courses covering topics from basic budgeting to advanced investment strategies. The content is regularly updated to reflect the latest financial trends and regulations. Our "Financial Literacy Path" feature assesses your current knowledge and creates a customized learning plan to improve your financial acumen. The "Ask an Expert" function allows you to submit questions to certified financial advisors, with a 24-hour response guarantee. For those who prefer community-based learning, our moderated forums provide a platform to discuss financial strategies and experiences with peers. The "Financial Tool Guides" offer in-depth tutorials on how to maximize the use of all Magnify! features. Additionally, the "Market Insights" section provides daily updates on economic news and its potential impact on personal finances, helping you stay informed and proactive in your financial decision-making.',
+                title: 'Financial Resources',
+                description: 'Access educational content on financial topics with our curated Financial Resources.',
                 icon: 'fas fa-book-reader'
             },
             'online-store': {
                 title: 'Online Store',
-                description: 'The Magnify! Online Store, powered by Shopify, is your one-stop shop for financial empowerment tools and resources. Browse through carefully curated categories including "Budgeting Tools," "Investment Guides," "Financial Planning Software," and "Educational Courses." Each product in our store is vetted by financial experts to ensure it aligns with sound financial principles. The "Product Advisor" feature asks about your financial goals and recommends relevant tools and resources. For books and courses, you\'ll find in-depth reviews from both financial professionals and everyday users. The "Bundle and Save" option allows you to purchase complementary products at a discount, maximizing the value of your investment in financial education. Our "Digital Delivery" system ensures immediate access to e-books, software, and online courses upon purchase. The store also features exclusive Magnify!-branded products, designed to seamlessly integrate with our app\'s features. Plus, with our "Satisfaction Guarantee," you can shop with confidence, knowing that your purchase is backed by our commitment to your financial success.',
+                description: 'Shop for financial products and resources in our convenient Online Store.',
                 icon: 'fas fa-store'
             },
             'depository': {
                 title: 'Depository',
-                description: 'The Depository feature serves as your secure digital vault for all important financial information and documents. It provides bank-level encryption for storing sensitive data like account numbers, investment portfolios, and important financial documents. The "Account Aggregator" function allows you to securely link your bank accounts, credit cards, and investment accounts, providing a consolidated view of your entire financial portfolio. For document storage, our OCR (Optical Character Recognition) technology allows you to simply snap a photo of important financial documents, which are then automatically categorized and stored. The "Version History" feature keeps track of changes to your stored information, allowing you to revert to previous versions if needed. Our "Secure Sharing" function lets you safely share specific documents or information with trusted individuals like your accountant or financial advisor. The Depository also includes a "Financial Legacy" section, where you can store and manage information crucial for estate planning. Regular security audits and multi-factor authentication ensure that your sensitive financial data remains protected at all times.',
+                description: 'Securely store and manage your assets with our advanced Depository feature.',
                 icon: 'fas fa-vault'
             },
             'bills-payment': {
                 title: 'Bills Payment',
-                description: 'The Bills Payment feature transforms the often stressful task of managing and paying bills into a streamlined, almost effortless process. It begins with the "Bill Discovery" function, which can scan your emails or paper bills to automatically set up payment reminders. The "Payment Dashboard" gives you a clear overview of upcoming bills, with the ability to sort by due date, amount, or priority. For added convenience, you can set up automatic payments for recurring bills, with safeguards in place to prevent overdrafts. The "Bill Negotiation" tool analyzes your recurring payments and provides tips on how you might be able to lower them, even offering to contact service providers on your behalf to secure better rates. The "Payment Optimization" feature suggests the best timing for your bill payments based on your income schedule and account balances, helping you avoid late fees and overdraft charges. For shared expenses, the "Split Bill" function allows you to divide payments among multiple parties and send reminders. All transactions are automatically recorded in your Track List, ensuring your financial records are always up-to-date.',
+                description: 'Streamline your bill payments effortlessly with our Bills Payment system.',
                 icon: 'fas fa-file-invoice-dollar'
             },
             'chatbot': {
                 title: 'Chatbot E.R.I.C.H.',
-                description: 'E.R.I.C.H. (Expert Resource and Information Chat Helper) is your 24/7 AI-powered financial assistant. Using advanced natural language processing, E.R.I.C.H. can understand and respond to a wide range of financial queries, from simple balance checks to complex questions about investment strategies. The chatbot is deeply integrated with all other Magnify! features, allowing it to provide personalized advice based on your financial data and usage patterns. E.R.I.C.H. can guide you through complex processes like setting up a budget or analyzing your investment portfolio, breaking them down into simple, actionable steps. The "Learn Mode" allows E.R.I.C.H. to explain financial concepts in detail, adapting its language to your level of financial literacy. For more complex issues, E.R.I.C.H. can seamlessly connect you with human customer support or even schedule a consultation with a financial advisor. The chatbot also proactively offers tips and insights based on your financial behavior, helping you make better financial decisions day-to-day. With each interaction, E.R.I.C.H. learns and improves, providing an increasingly personalized and valuable experience over time.',
+                description: 'Get assistance from our AI-powered helper, E.R.I.C.H., for all your financial queries.',
                 icon: 'fas fa-robot'
             }
         };
 
+        const featuresGrid = document.querySelector('.features-grid');
         const modal = document.getElementById("featureModal");
         const modalTitle = document.getElementById("modalTitle");
         const modalDescription = document.getElementById("modalDescription");
         const modalIcon = document.getElementById("modalIcon");
         const closeBtn = document.getElementsByClassName("close")[0];
+
+        // Dynamically create feature cards
+        Object.entries(featureDetails).forEach(([key, value]) => {
+            const card = document.createElement('div');
+            card.className = 'feature-card';
+            card.setAttribute('data-feature', key);
+            card.innerHTML = `
+                <i class="feature-icon ${value.icon}" aria-hidden="true"></i>
+                <h2 class="feature-title">${value.title}</h2>
+                <p class="feature-description">${value.description}</p>
+            `;
+            featuresGrid.appendChild(card);
+        });
 
         document.querySelectorAll('.feature-card').forEach(card => {
             card.addEventListener('click', function() {
@@ -375,9 +323,7 @@
             });
         });
 
-        closeBtn.onclick = function() {
-            closeModal();
-        }
+        closeBtn.onclick = closeModal;
 
         window.onclick = function(event) {
             if (event.target == modal) {
@@ -397,17 +343,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Add hover effect to feature cards
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.addEventListener('mouseover', function() {
-                this.style.transform = 'scale(1.05)';
-            });
-            card.addEventListener('mouseout', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
-
-        // Add scroll reveal effect
+        // Scroll reveal effect
         function revealOnScroll() {
             var cards = document.querySelectorAll('.feature-card');
             for (var i = 0; i < cards.length; i++) {
@@ -422,6 +358,71 @@
 
         window.addEventListener("scroll", revealOnScroll);
         window.addEventListener("load", revealOnScroll);
+
+        // Particle background effect
+        const canvas = document.createElement('canvas');
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.zIndex = '-1';
+
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].size <= 0.2) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            while (particles.length < particleCount) {
+                particles.push(new Particle());
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
     </script>
 </body>
 </html>
