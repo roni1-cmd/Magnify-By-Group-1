@@ -10,15 +10,15 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
         :root {
-            --gradient-start: #4158D0;
-            --gradient-middle: #C850C0;
-            --gradient-end: #FFCC70;
-            --primary: #4A90E2;
-            --secondary: #8E44AD;
-            --accent: #3498DB;
+            --gradient-start: #FF69B4;
+            --gradient-middle: #FF1493;
+            --gradient-end: #FF69B4;
+            --primary: #FF1493;
+            --secondary: #FF69B4;
+            --accent: #FF69B4;
             --text: #333333;
             --text-light: #666666;
-            --background: #F0F8FF;
+            --background: #FFF0F5;
             --card-bg: rgba(255, 255, 255, 0.9);
             --success: #2ECC71;
             --danger: #E74C3C;
@@ -219,7 +219,7 @@
         .input-group select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 20, 147, 0.1);
         }
 
         .chart-container {
@@ -373,6 +373,7 @@
             <button class="tab-button" onclick="openTab('calculatorTab')">Calculators</button>
             <button class="tab-button" onclick="openTab('analyticsTab')">Analytics</button>
             <button class="tab-button" onclick="openTab('billsTab')">Manage Bills</button>
+            <button class="tab-button" onclick="openTab('resourcesTab')">Resources</button>
         </div>
 
         <div id="dashboard" class="content-section">
@@ -417,6 +418,11 @@
                     <i class="fas fa-piggy-bank"></i>
                     <h3>Budget Planner</h3>
                     <p>Plan your next finance and track your budget for the next times.</p>
+                </div>
+                <div class="feature-card" onclick="window.location.href='Entrep11.html'">
+                    <i class="fas fa-book-reader"></i>
+                    <h3>Financial Resources and Guidance</h3>
+                    <p>Access valuable financial resources and expert guidance to improve your financial literacy.</p>
                 </div>
             </div>
         </div>
@@ -519,6 +525,15 @@
             <button class="button" style="margin-top: 1rem;">
                 <i class="fas fa-credit-card"></i>
                 Pay Your Bills
+            </button>
+        </div>
+
+        <div id="resourcesTab" class="content-section" style="display: none;">
+            <h2><i class="fas fa-book-reader"></i> Financial Resources and Guidance</h2>
+            <p>Access valuable financial resources and expert guidance to improve your financial literacy.</p>
+            <button class="button" style="margin-top: 1rem;" onclick="window.location.href='Entrep11.html'">
+                <i class="fas fa-external-link-alt"></i>
+                Explore Resources
             </button>
         </div>
 
