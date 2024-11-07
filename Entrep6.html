@@ -9,11 +9,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
         :root {
-            --gradient: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+            --gradient-light: #FFC0CB;  /* Light pink */
+            --gradient-medium: #FF69B4; /* Hot pink */
+            --gradient-dark: #C71585;   /* Deep pink */
             --text: #ffffff;
             --card-bg: rgba(255, 255, 255, 0.1);
-            --accent: #ffaf7b;
-            --icon-color: #3a1c71;
+            --accent: #FF1493;
+            --icon-color: #8B0046;
             --error: #ff4444;
             --success: #00C851;
         }
@@ -27,7 +29,7 @@
 
         body {
             min-height: 100vh;
-            background: var(--gradient);
+            background: linear-gradient(135deg, var(--gradient-light), var(--gradient-medium), var(--gradient-dark));
             color: var(--text);
             display: flex;
             justify-content: center;
@@ -112,7 +114,7 @@
 
         .input-group input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(255, 175, 123, 0.3);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
             outline: none;
         }
 
@@ -259,7 +261,7 @@
         .loading-screen {
             position: fixed;
             inset: 0;
-            background: var(--gradient);
+            background: linear-gradient(135deg, var(--gradient-light), var(--gradient-medium), var(--gradient-dark));
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -491,8 +493,8 @@
             loadingScreen.classList.add('active');
             
             const loadingTexts = [
-                'Preparing your dashboard...',
                 'Checking your credentials...',
+                'Preparing your dashboard...',
                 'Almost there...',
                 'Loading financial data...',
                 'Securing connection...'
