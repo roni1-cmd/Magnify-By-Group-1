@@ -28,6 +28,12 @@
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
             color: var(--text);
             overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        body.loaded {
+            opacity: 1;
         }
 
         .pattern-bg {
@@ -114,6 +120,14 @@
         .hero-content {
             padding-right: 4rem;
             position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .hero-content.animate {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .hero-subtitle {
@@ -173,6 +187,13 @@
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
+            opacity: 0;
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .diamond-grid.animate {
+            opacity: 1;
+            transform: rotate(-12deg) translateY(0);
         }
 
         .accent-line {
@@ -213,6 +234,13 @@
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .diamond.animate {
+            opacity: 1;
+            transform: rotate(45deg) scale(1);
         }
 
         .diamond-content {
@@ -714,9 +742,29 @@
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 document.body.classList.add('loaded');
+                animateHeroContent();
+                animateDiamondGrid();
                 typeWriter(document.querySelector('.hero-title'), "Your Gateway to Financial Management.", 50);
             }, 100);
         });
+
+        function animateHeroContent() {
+            const heroContent = document.querySelector('.hero-content');
+            heroContent.classList.add('animate');
+        }
+
+        function animateDiamondGrid() {
+            const diamondGrid = document.querySelector('.diamond-grid');
+            const diamonds = document.querySelectorAll('.diamond');
+            
+            diamondGrid.classList.add('animate');
+            
+            diamonds.forEach((diamond, index) => {
+                setTimeout(() => {
+                    diamond.classList.add('animate');
+                }, index * 200);
+            });
+        }
 
         const loadingMessages = [
             "Tip: A money a day, keeps the sadness away",
