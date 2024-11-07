@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #6366f1, #a855f7);
-            --secondary-gradient: linear-gradient(135deg, #3b82f6, #2dd4bf);
-            --background-gradient: linear-gradient(135deg, #818cf8, #c084fc);
+            --primary-gradient: linear-gradient(135deg, #8E2DE2, #4A00E0);
+            --secondary-gradient: linear-gradient(135deg, #FF69B4, #FF1493);
+            --background-gradient: linear-gradient(135deg, #9C27B0, #E91E63);
             --card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
-            --text-color: #1e293b;
+            --text-color: #333;
             --error-color: #ef4444;
             --success-color: #22c55e;
         }
@@ -122,7 +122,7 @@
         select {
             width: 100%;
             padding: 1rem 1.25rem;
-            border: 2px solid rgba(99, 102, 241, 0.1);
+            border: 2px solid rgba(142, 45, 226, 0.1);
             border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s ease;
@@ -132,8 +132,8 @@
         input:focus,
         select:focus {
             outline: none;
-            border-color: #818cf8;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            border-color: #8E2DE2;
+            box-shadow: 0 0 0 4px rgba(142, 45, 226, 0.1);
             transform: translateY(-2px);
         }
 
@@ -149,7 +149,7 @@
             top: 50%;
             transform: translateY(-50%);
             pointer-events: none;
-            color: #6366f1;
+            color: #8E2DE2;
         }
 
         button {
@@ -169,7 +169,7 @@
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 15px rgba(142, 45, 226, 0.3);
         }
 
         button:active {
@@ -197,7 +197,7 @@
         #notice {
             margin-top: 1.5rem;
             font-size: 0.9rem;
-            color: #6366f1;
+            color: #8E2DE2;
             text-align: center;
         }
 
@@ -219,7 +219,7 @@
         #swapButton {
             background: none;
             border: none;
-            color: #6366f1;
+            color: #8E2DE2;
             font-size: 1.5rem;
             cursor: pointer;
             position: absolute;
@@ -233,7 +233,7 @@
 
         #swapButton:hover {
             transform: translateY(-50%) rotate(180deg);
-            color: #a855f7;
+            color: #FF1493;
         }
 
         #historicalRates {
@@ -245,7 +245,7 @@
         #historicalRates h3 {
             font-size: 1.25rem;
             margin-bottom: 1rem;
-            color: #6366f1;
+            color: #8E2DE2;
             text-align: center;
             position: relative;
             padding-bottom: 1rem;
@@ -350,6 +350,16 @@
             font-weight: 600;
             margin: 0.5rem 0;
         }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
     </style>
 </head>
 <body>
@@ -374,7 +384,7 @@
             </div>
 
             <div class="input-group">
-                <label for="fromCurrency">What Currency?</label>
+                <label for="fromCurrency">From Currency</label>
                 <div class="select-wrapper">
                     <select id="fromCurrency">
                         <option value="PHP">🇵🇭 Philippine Peso (PHP)</option>
@@ -392,7 +402,7 @@
             </div>
 
             <div class="input-group">
-                <label for="toCurrency">To Currency for?</label>
+                <label for="toCurrency">To Currency</label>
                 <div class="select-wrapper">
                     <select id="toCurrency">
                         <option value="USD">🇺🇸 US Dollar (USD)</option>
@@ -412,7 +422,7 @@
                 </button>
             </div>
 
-            <button id="convertCurrency">
+            <button id="convertCurrency" class="pulse">
                 <i class="fas fa-sync-alt" style="margin-right: 0.5rem;"></i>
                 Magnify!
             </button>
@@ -521,22 +531,34 @@
                 resultDiv.classList.add('show');
 
                 convertButton.classList.remove('loading');
-                convertButton.innerHTML = '<i class="fas fa-sync-alt" style="margin-right: 0.5rem;"></i>Convert';
+                convertButton.innerHTML = '<i class="fas fa-sync-alt" style="margin-right: 0.5rem;"></i>Magnify!';
 
                 updateChart(fromCurrency, toCurrency);
             }, 800);
         }
 
-        amountInput.addEventListener('input', convertCurrency);
-        fromCurrencySelect.addEventListener('change', convertCurrency);
-        toCurrencySelect.addEventListener('change', convertCurrency);
-        convertButton.addEventListener('click', convertCurrency);
+        amountInput.addEventListener('input', () => {
+            convertButton.classList.add('pulse');
+        });
+
+        fromCurrencySelect.addEventListener('change', () => {
+            convertButton.classList.add('pulse');
+        });
+
+        toCurrencySelect.addEventListener('change', () => {
+            convertButton.classList.add('pulse');
+        });
+
+        convertButton.addEventListener('click', () => {
+            convertButton.classList.remove('pulse');
+            convertCurrency();
+        });
 
         swapButton.addEventListener('click', () => {
             const temp = fromCurrencySelect.value;
             fromCurrencySelect.value = toCurrencySelect.value;
             toCurrencySelect.value = temp;
-            convertCurrency();
+            convertButton.classList.add('pulse');
         });
 
         amountInput.addEventListener('keypress', (e) => {
@@ -555,8 +577,8 @@
                     datasets: [{
                         label: 'Exchange Rate',
                         data: [],
-                        borderColor: '#818cf8',
-                        backgroundColor: 'rgba(129, 140, 248, 0.1)',
+                        borderColor: '#8E2DE2',
+                        backgroundColor: 'rgba(142, 45, 226, 0.1)',
                         tension: 0.4,
                         fill: true
                     }]
@@ -577,7 +599,7 @@
                         y: {
                             beginAtZero: false,
                             grid: {
-                                color: 'rgba(99, 102, 241, 0.1)'
+                                color: 'rgba(142, 45, 226, 0.1)'
                             },
                             ticks: {
                                 font: {
@@ -587,7 +609,7 @@
                         },
                         x: {
                             grid: {
-                                color: 'rgba(99, 102, 241, 0.1)'
+                                color: 'rgba(142, 45, 226, 0.1)'
                             },
                             ticks: {
                                 font: {
