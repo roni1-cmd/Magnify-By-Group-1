@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magnify! Financial Resources and Guidance</title>
-    <link rel="logo.png" href="logo-300x300.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #007bff;
-            --primary-dark: #0056b3;
-            --success: #28a745;
-            --success-dark: #218838;
+            --primary: #8a2be2;
+            --primary-dark: #4b0082;
+            --success: #ff69b4;
+            --success-dark: #ff1493;
             --background: #f8f9fa;
             --text: #333;
             --text-light: #666;
@@ -20,10 +20,10 @@
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #8a2be2 0%, #ff69b4 100%);
             color: var(--text);
             min-height: 100vh;
             line-height: 1.6;
@@ -69,6 +69,12 @@
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.6s ease forwards;
+            transition: var(--transition);
+        }
+
+        .resource-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         }
 
         .resource-section h2 {
@@ -88,6 +94,11 @@
             height: 3px;
             background: var(--primary);
             border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        .resource-section:hover h2::after {
+            width: 100px;
         }
 
         .resource-card {
@@ -183,6 +194,26 @@
             transition: var(--transition);
             border: none;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .cta-button:hover {
@@ -207,11 +238,13 @@
             transition: var(--transition);
             border: none;
             z-index: 1000;
+            animation: pulse 2s infinite;
         }
 
         .chatbot-button:hover {
             transform: scale(1.1);
             background: var(--primary-dark);
+            animation: none;
         }
 
         .chatbot-button i {
@@ -222,6 +255,18 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(138, 43, 226, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(138, 43, 226, 0);
             }
         }
 
@@ -244,7 +289,6 @@
             }
         }
 
-        /* Loading animation */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -398,17 +442,14 @@
     </button>
 
     <script>
-        // Show loading animation
         function showLoading() {
             document.querySelector('.loading-overlay').classList.add('active');
         }
 
-        // Hide loading animation
         function hideLoading() {
             document.querySelector('.loading-overlay').classList.remove('active');
         }
 
-        // Navigation with loading animation
         function navigateTo(url) {
             showLoading();
             setTimeout(() => {
@@ -416,7 +457,6 @@
             }, 500);
         }
 
-        // Add click handlers to resource cards
         document.querySelectorAll('.resource-card').forEach(card => {
             card.addEventListener('click', () => {
                 const url = card.dataset.url;
@@ -428,12 +468,11 @@
             });
         });
 
-        // Hide loading overlay on page load
         window.addEventListener('load', () => {
             hideLoading();
+            animateResourceSections();
         });
 
-        // Add keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Tab') {
                 document.body.classList.add('keyboard-nav');
@@ -442,6 +481,41 @@
 
         document.addEventListener('mousedown', () => {
             document.body.classList.remove('keyboard-nav');
+        });
+
+        function animateResourceSections() {
+            const sections = document.querySelectorAll('.resource-section');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        }
+
+        document.querySelectorAll('.resource-section').forEach(section => {
+            section.addEventListener('mouseover', () => {
+                section.style.transform = 'scale(1.05)';
+            });
+            section.addEventListener('mouseout', () => {
+                section.style.transform = 'scale(1)';
+            });
+        });
+
+        const ctaButton = document.querySelector('.cta-button');
+        ctaButton.addEventListener('mouseover', () => {
+            ctaButton.style.transform = 'scale(1.1) rotate(5deg)';
+        });
+        ctaButton.addEventListener('mouseout', () => {
+            ctaButton.style.transform = 'scale(1) rotate(0deg)';
+        });
+
+        const chatbotButton = document.querySelector('.chatbot-button');
+        chatbotButton.addEventListener('mouseover', () => {
+            chatbotButton.style.animation = 'none';
+        });
+        chatbotButton.addEventListener('mouseout', () => {
+            chatbotButton.style.animation = 'pulse 2s infinite';
         });
     </script>
 </body>
