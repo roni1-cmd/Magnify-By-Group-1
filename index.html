@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify! - Your Gateway to Financial Management</title>
+    <title>Magnify! - Modern Financial Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         :root {
             --gradient-start: #4158D0;
             --gradient-middle: #C850C0;
             --gradient-end: #FFCC70;
-            --accent: #50C878;
+            --accent: #C850C0;
             --text: #ffffff;
         }
 
@@ -18,7 +20,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
@@ -26,22 +28,30 @@
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
             color: var(--text);
             overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
         }
 
-        .nav {
+        .pattern-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            background: rgba(65, 88, 208, 0.1);
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 20px 20px, rgba(255,255,255,0.1) 2px, transparent 0),
+                radial-gradient(circle at 40px 40px, rgba(255,255,255,0.1) 2px, transparent 0);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
         .logo-container {
@@ -50,50 +60,38 @@
             gap: 1rem;
         }
 
-        .logo-img {
+        .logo {
+            width: 40px;
             height: 40px;
-            width: auto;
+            object-fit: contain;
         }
 
-        .logo-text {
+        .brand-name {
             font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-link {
+            font-weight: 700;
             color: var(--text);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            opacity: 0.8;
-            transform: translateY(-2px);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .google-btn {
-            background: #fff;
-            color: #757575;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50px;
+            color: #444;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
             cursor: pointer;
         }
 
         .google-btn:hover {
+            background: rgba(255, 255, 255, 1);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .google-btn img {
@@ -102,223 +100,236 @@
         }
 
         .hero {
-            min-height: 100vh;
-            padding: 6rem 2rem 2rem;
-            position: relative;
-            overflow: hidden;
+            min-height: calc(100vh - 70px);
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            grid-template-columns: 45% 55%;
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
         .hero-content {
+            padding-right: 4rem;
             position: relative;
-            z-index: 1;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        .hero-content.active {
-            opacity: 1;
-            transform: translateY(0);
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .hero-title {
             font-size: clamp(2.5rem, 5vw, 4rem);
             line-height: 1.2;
             margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(to right, #fff, rgba(255,255,255,0.8));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .hero-title::after {
-            content: '|';
-            animation: blink 1s step-end infinite;
-        }
-
-        .hero-subtitle {
+        .hero-description {
             font-size: 1.25rem;
-            opacity: 0.9;
             margin-bottom: 2rem;
+            opacity: 0.9;
         }
 
-        .cta-buttons {
+        .cta-container {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
+            align-items: center;
         }
 
-        .cta-primary, .cta-secondary {
-            padding: 1rem 2rem;
-            border-radius: 25px;
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--accent);
             text-decoration: none;
+            border-radius: 50px;
             font-weight: 600;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
         }
 
-        .cta-primary {
-            background: var(--accent);
-            color: #000;
-        }
-
-        .cta-secondary {
+        .cta-button:hover {
             background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--text);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
 
-        .cta-primary:hover, .cta-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        .diamond-grid {
+            position: relative;
+            transform: rotate(-12deg);
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .image-grid {
+        .accent-line {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: -1;
+        }
+
+        .line-1 {
+            width: 4px;
+            height: 120%;
+            right: -2rem;
+            top: -10%;
+        }
+
+        .line-2 {
+            width: 120%;
+            height: 4px;
+            left: -10%;
+            bottom: -2rem;
+        }
+
+        .diamond-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
-            transform: rotate(-15deg) scale(1.2);
+            transform-origin: center;
         }
 
-        .image-item {
+        .diamond {
             position: relative;
-            aspect-ratio: 1;
-            border-radius: 12px;
+            width: 100%;
+            padding-top: 100%;
+            transform: rotate(45deg);
             overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .financial-icon {
+        .diamond-content {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            transform: rotate(-45deg) scale(1.42);
+            overflow: hidden;
+        }
+
+        .diamond img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .diamond:hover img {
+            transform: scale(1.1);
+        }
+
+        .diamond:nth-child(1) { grid-column: 2; grid-row: 1; }
+        .diamond:nth-child(2) { grid-column: 1; grid-row: 2; }
+        .diamond:nth-child(3) { grid-column: 2; grid-row: 2; }
+        .diamond:nth-child(4) { grid-column: 3; grid-row: 2; }
+        .diamond:nth-child(5) { grid-column: 1; grid-row: 3; }
+        .diamond:nth-child(6) { grid-column: 2; grid-row: 3; }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .team-member {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .member-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
+            font-size: 2rem;
             color: #fff;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        .financial-icon:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-10px);
+        .member-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        .financial-icon i {
-            transition: all 0.3s ease;
+        .member-role {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
         }
 
-        .financial-icon.chart-line:hover i {
-            animation: chartLineGrow 1.5s ease-in-out infinite;
-        }
-
-        @keyframes chartLineGrow {
-            0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(1.3); }
-        }
-
-        .financial-icon.coins:hover i {
-            animation: coinSpin 1.5s ease-in-out infinite;
-        }
-
-        @keyframes coinSpin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        .financial-icon.wallet:hover i {
-            animation: walletBounce 0.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes walletBounce {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-10px); }
-        }
-
-        .financial-icon.hand-holding-usd:hover i {
-            animation: cashFlow 2s linear infinite;
-        }
-
-        @keyframes cashFlow {
-            0% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.1); }
-            100% { transform: translateY(0) scale(1); }
-        }
-
-        .financial-icon.chart-pie {
-            perspective: 1000px;
-        }
-
-        .financial-icon.chart-pie:hover i {
-            animation: pieRotate 2s ease-in-out infinite;
-        }
-
-        @keyframes pieRotate {
-            0% { transform: rotateY(0deg); }
-            50% { transform: rotateY(180deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        .financial-icon.piggy-bank:hover i {
-            animation: piggyShake 0.5s ease-in-out infinite;
-        }
-
-        @keyframes piggyShake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px) rotate(-5deg); }
-            75% { transform: translateX(5px) rotate(5deg); }
-        }
-
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: #fff;
-            border-radius: 50%;
-            opacity: 0;
-        }
-
-        .footer {
-            background: rgba(65, 88, 208, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            text-align: center;
-            margin-top: auto;
-        }
-
-        .footer-names {
+        .social-links {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
             gap: 1rem;
         }
 
-        .footer-name {
-            opacity: 0.7;
-            transition: all 0.3s ease;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            cursor: pointer;
+        .social-link {
+            color: #fff;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
         }
 
-        .footer-name:hover {
-            opacity: 1;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .social-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .loading-screen {
@@ -327,507 +338,458 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading-screen.fade-out {
             opacity: 0;
-            pointer-events: none;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
-        .loader {
-            width: 120px;
-            height: 120px;
-            position: relative;
+        .loading-screen.active {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .loader-circle {
-            position: absolute;
-            inset: 0;
-            border: 4px solid transparent;
+        .loading-content {
+            text-align: center;
+            color: #fff;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .loading-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .loading-icon {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            animation: rotate var(--duration) var(--timing) infinite;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
 
-        .loader-circle:nth-child(1) {
-            border-top-color: #fff;
-            --duration: 1.5s;
-            --timing: ease-in-out;
+        .loading-icon:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
-        .loader-circle:nth-child(2) {
-            border-right-color: var(--accent);
-            --duration: 2s;
-            --timing: ease-in;
+        .loading-icon::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--gradient-middle);
+            transition: height 0.5s ease;
         }
 
-        .loader-circle:nth-child(3) {
-            border-bottom-color: #fff;
-            --duration: 2.5s;
-            --timing: ease-out;
+        .loading-icon.filled::before {
+            height: 100%;
+        }
+
+        .loading-icon i {
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .loading-icon:hover i {
+            color: var(--accent);
         }
 
         .loading-text {
-            margin-top: 20px;
             font-size: 1.5rem;
-            color: #fff;
-            text-align: center;
+            font-weight: 600;
+            margin-top: 1rem;
+            min-height: 3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .loading-progress {
-            width: 300px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            margin-top: 20px;
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 2rem;
             overflow: hidden;
+            position: relative;
         }
 
         .loading-bar {
             width: 0;
             height: 100%;
-            background: var(--accent);
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
             transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .loading-particles {
+        .loading-bar::after {
+            content: '';
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            animation: shimmer 1.5s infinite;
         }
 
-        .learn-more-loading {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
         }
 
-        .learn-more-loading.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+                text-align: center;
+                padding: 2rem 1rem;
+            }
 
-        .learn-more-content {
-            text-align: center;
-            color: #fff;
-        }
+            .hero-content {
+                padding-right: 0;
+            }
 
-        .learn-more-icons {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
-        }
+            .cta-container {
+                justify-content: center;
+            }
 
-        .learn-more-icon {
-            font-size: 3rem;
-            color: var(--accent);
-            animation: iconPulse 1.5s ease-in-out infinite;
-        }
+            .diamond-grid {
+                transform: rotate(-12deg) scale(0.9);
+            }
 
-        .learn-more-icon:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-
-        .learn-more-icon:nth-child(3) {
-            animation-delay: 1s;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 1; }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-10px); }
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+            .team-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
         }
 
         @media (max-width: 768px) {
-            .hero {
-                grid-template-columns: 1fr;
-                padding-top: 5rem;
+            .navbar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
             }
 
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.25rem;
+            }
+
+            .diamond-grid {
+                transform: rotate(-12deg) scale(0.8);
+            }
+
+            .cta-container {
+                flex-direction: column;
+            }
+
+            .google-btn {
+                padding: 0.5rem 1rem;
+            }
+
+            .footer {
+                padding: 2rem 1rem;
+            }
             .nav-links {
                 display: none;
             }
-
-            .image-grid {
-                transform: rotate(-15deg) scale(0.9);
-                margin-top: 2rem;
+            .loading-icons {
+                flex-wrap: wrap;
             }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            margin: 0 2rem;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 <body>
-    <div class="loading-screen">
-        <div class="loader">
-            <div class="loader-circle"></div>
-            <div class="loader-circle"></div>
-            <div class="loader-circle"></div>
-        </div>
-        <div class="loading-text">Magnifying Your Financial Future...</div>
-        <div class="loading-progress">
-            <div class="loading-bar"></div>
-        </div>
-        <div class="loading-particles"></div>
-    </div>
-
-    <div class="learn-more-loading">
-        <div  class="learn-more-content">
-            <h2>Preparing Your Financial Journey</h2>
-            <div class="learn-more-icons">
-                <i class="learn-more-icon fas fa-chart-line"></i>
-                <i class="learn-more-icon fas fa-coins"></i>
-                <i class="learn-more-icon fas fa-piggy-bank"></i>
-            </div>
-            <p>Loading valuable insights for you...</p>
-        </div>
-    </div>
-
-    <nav class="nav">
+    <div class="pattern-bg"></div>
+    <nav class="navbar">
         <div class="logo-container">
-            <img src="logo.png" alt="Magnify!" class="logo-img">
-            <span class="logo-text">Magnify!</span>
+            <img src="logo.png" alt="logo.png" class="logo">
+            <span class="brand-name">Magnify!</span>
         </div>
         <div class="nav-links">
-            <a href="#" class="nav-link">Mark</a> 
-            <a href="#" class="nav-link">Organize</a>
-            <a href="#" class="nav-link">Assemble</a>
-            <a href="#" class="nav-link">Magnify It</a>
+            <a href="#" class="nav-link">Mark.</a>
+            <a href="#" class="nav-link">Organize.</a>
+            <a href="#" class="nav-link">Assemble.</a>
+            <a href="#" class="nav-link">Magnify It!</a>
         </div>
-        <a href="#" class="google-btn" id="googleLoginBtn">
-            <img src="png-transparent-google-logo-google-logo-g-suite-chrome-text-logo-chrome-removebg-preview.png"alt="Google Logo">
+        <button class="google-btn" onclick="showLoading('Entrep6.html')">
+            <img src="png-transparent-google-logo-google-logo-g-suite-chrome-text-logo-chrome-removebg-preview.png" alt="Google Logo">
             Continue with Google
-        </a>
+        </button>
     </nav>
 
-    <section class="hero">
+    <main class="hero">
         <div class="hero-content">
+            <p class="hero-subtitle">Entrepreneurship: Business Plan</p>
             <h1 class="hero-title"></h1>
-            <p class="hero-subtitle">Experience next-generation financial tools designed for your success</p>
-            <div class="cta-buttons">
-                <a href="#" class="cta-primary">Get Started</a>
-                <a href="#" class="cta-secondary" id="learnMoreBtn">Learn More</a>
+            <p class="hero-description">One family, one community at a time.</p>
+            <div class="cta-container">
+                <button class="cta-button" onclick="showLoading('Entrep16.html')">LEARN MORE</button>
             </div>
         </div>
-        <div class="image-grid" id="imageGrid">
-            <div class="image-item">
-                <div class="financial-icon chart-line">
-                    <i class="fas fa-chart-line"></i>
-                    <div class="particles"></div>
+
+        <div class="diamond-grid">
+            <div class="accent-line line-1"></div>
+            <div class="accent-line line-2"></div>
+            <div class="diamond-container">
+                <div class="diamond">
+                    <div class="diamond-content">
+                        <img src="Arpay and shelina (2).jpg" alt="Business">
+                    </div>
                 </div>
-            </div>
-            <div class="image-item">
-                <div class="financial-icon coins">
-                    <i class="fas fa-coins"></i>
-                    <div class="particles"></div>
+                <div class="diamond">
+                    <div class="diamond-content">
+                        <img src="JOERON.jpg" alt="Finance">
+                    </div>
                 </div>
-            </div>
-            <div class="image-item">
-                <div class="financial-icon wallet">
-                    <i class="fas fa-wallet"></i>
-                    <div class="particles"></div>
+                <div class="diamond">
+                    <div class="diamond-content">
+                        <img src="VAN.jpg" alt="Technology">
+                    </div>
                 </div>
-            </div>
-            <div class="image-item">
-                <div class="financial-icon hand-holding-usd">
-                    <i class="fas fa-hand-holding-usd"></i>
-                    <div class="particles"></div>
+                <div class="diamond">
+                    <div class="diamond-content">
+                        <img src="Virtucio.jpg" alt="Community">
+                    </div>
                 </div>
-            </div>
-            <div class="image-item">
-                <div class="financial-icon chart-pie">
-                    <i class="fas fa-chart-pie"></i>
-                    <div class="particles"></div>
+                <div class="diamond">
+                    <div class="diamond-content">
+                        <img src="Vince.jpg" alt="Growth">
+                    </div>
                 </div>
-            </div>
-            <div class="image-item">
-                <div class="financial-icon piggy-bank">
-                    <i class="fas fa-piggy-bank"></i>
-                    <div class="particles"></div>
+                <div class="diamond">
+                    <div class="diamond-content">
+                        <img src="Joeron2.jpg" alt="Success">
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
     <footer class="footer">
-        <div class="footer-names">
-            <div class="footer-name">Shelina Mae Dela Cruz</div>
-            <div class="footer-name">Ron Asnahon</div>
-            <div class="footer-name">Sean Ferneil Ricaza</div>
-            <div class="footer-name">Carl John Arpay</div>
-            <div class="footer-name">Vince Gerard Gonzaga</div>
-            <div class="footer-name">Joeron Zeniff Paloma</div>
-            <div class="footer-name">James Virtucio</div>
-            <div class="footer-name">Van Erich Nisnisan</div>
+        <div class="footer-container">
+            <h2 class="footer-title">Meet Our Team.</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-avatar">SM</div>
+                    <h3 class="member-name">Shelina Mae Dela Cruz</h3>
+                    <p class="member-role">Team Lead</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">SR</div>
+                    <h3 class="member-name">Sean Ferneil Ricaza</h3>
+                    <p class="member-role">Member</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">CJ</div>
+                    <h3 class="member-name">Carl John Arpay</h3>
+                    <p class="member-role">Developer</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">RA</div>
+                    <h3 class="member-name">Ron Asnahon</h3>
+                    <p class="member-role">Developer</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">VE</div>
+                    <h3 class="member-name">Van Erich Nisnisan</h3>
+                    <p class="member-role">Member</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">VG</div>
+                    <h3 class="member-name">Vince Jerard Gonzaga</h3>
+                    <p class="member-role">Member</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">JV</div>
+                    <h3 class="member-name">James Virtucio</h3>
+                    <p class="member-role">Member</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Magnify! All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
-    <script>
-        // DOM Elements
-        const imageItems = document.querySelectorAll('.image-item');
-        const heroContent = document.querySelector('.hero-content');
-        const footerNames = document.querySelectorAll('.footer-name');
-        const loadingScreen = document.querySelector('.loading-screen');
-        const loadingBar = document.querySelector('.loading-bar');
-        const loadingText = document.querySelector('.loading-text');
-        const heroTitle = document.querySelector('.hero-title');
-        const googleLoginBtn = document.getElementById('googleLoginBtn');
-        const learnMoreBtn = document.getElementById('learnMoreBtn');
-        const learnMoreLoading = document.querySelector('.learn-more-loading');
+    <div class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-icons">
+                <div class="loading-icon" data-tip="Analyze your finances">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="loading-icon" data-tip="Manage your money">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="loading-icon" data-tip="Save for the future">
+                    <i class="fas fa-piggy-bank"></i>
+                </div>
+            </div>
+            <div class="loading-text"></div>
+            <div class="loading-progress">
+                <div class="loading-bar"></div>
+            </div>
+        </div>
+    </div>
 
-        // Loading phrases
-        const loadingPhrases = [
-            "Magnifying Your Financial Future...",
-            "Focusing on Your Success...",
-            "Sharpening Your Financial Vision...",
-            "Enhancing Your Financial Clarity...",
-            "Ready to Magnify!"
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+                typeWriter(document.querySelector('.hero-title'), "Your Gateway to Financial Management.", 50);
+            }, 100);
+        });
+
+        const loadingMessages = [
+            "Tip: A money a day, keeps the sadness away",
+            "Tip: 1 peso is the foundation of all",
+            "Finance here, finance there, maybe you need a hand?",
+            "Saving today for a brighter tomorrow",
+            "Every coin counts on your journey to wealth"
         ];
 
-        // Utility function to preload images
-        function preloadImages() {
-            const imagePromises = Array.from(imageItems).map(item => {
-                return new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.src = item.querySelector('img')?.src || '';
-                    img.onload = resolve;
-                    img.onerror = reject;
-                });
-            });
-            return Promise.all(imagePromises);
-        }
-
-        // Typing animation
-        function typeWriter(element, text, speed = 50, delay = 0) {
-            return new Promise(resolve => {
-                let i = 0;
-                element.textContent = '';
-
-                setTimeout(() => {
-                    function type() {
-                        if (i < text.length) {
-                            element.textContent = text.substring(0, i + 1);
-                            i++;
-                            setTimeout(type, speed + (Math.random() * 50));
-                        } else {
-                            resolve();
-                        }
-                    }
-                    type();
-                }, delay);
-            });
-        }
-
-        // Setup parallax effect
-        function setupParallax() {
-            document.addEventListener('mousemove', (e) => {
-                const mouseX = e.clientX / window.innerWidth - 0.5;
-                const mouseY = e.clientY / window.innerHeight - 0.5;
-
-                imageItems.forEach((item, index) => {
-                    const depth = 1 + index * 0.1;
-                    const translateX = mouseX * 50 * depth;
-                    const translateY = mouseY * 50 * depth;
-                    item.style.transform = `translate(${translateX}px, ${translateY}px)`;
-                });
-            });
-        }
-
-        // Setup floating animation
-        function setupFloatingAnimation() {
-            imageItems.forEach((item, index) => {
-                item.style.animation = `float 3s ease-in-out ${index * 0.5}s infinite alternate`;
-            });
-        }
-
-        // Create floating particles
-        function createParticles() {
-            const particlesContainer = document.querySelector('.loading-particles');
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.animationDelay = `${Math.random() * 2}s`;
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        // Loading simulation
-        function simulateLoading() {
-            let progress = 0;
-            const loadingInterval = setInterval(() => {
-                progress += 2;
-                loadingBar.style.width = `${progress}%`;
-                loadingText.textContent = `${loadingPhrases[Math.floor(progress / 20)]} (${progress}%)`;
-
-                if (progress >= 100) {
-                    clearInterval(loadingInterval);
-                    setTimeout(() => {
-                        loadingScreen.classList.add('fade-out');
-                        initializePageContent();
-                    }, 500);
+        function typeWriter(element, text, speed) {
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
                 }
-            }, 50);
-        }
-
-        // Initialize page content
-        async function initializePageContent() {
-            // Setup image hover effects
-            imageItems.forEach(item => {
-                item.addEventListener('mouseenter', () => {
-                    item.style.zIndex = '10';
-                    createIconParticles(item.querySelector('.financial-icon'));
-                });
-                item.addEventListener('mouseleave', () => item.style.zIndex = '');
-            });
-
-            // Initialize hero content
-            heroContent.classList.add('active');
-            await typeWriter(heroTitle, "Your Gateway to Financial Management");
-
-            // Setup animations
-            setupParallax();
-            setupFloatingAnimation();
-
-            // Setup footer interactions
-            footerNames.forEach(name => {
-                name.addEventListener('mouseenter', () => {
-                    name.style.transform = 'translateY(-5px)';
-                    name.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
-                });
-                name.addEventListener('mouseleave', () => {
-                    name.style.transform = 'translateY(0)';
-                    name.style.boxShadow = 'none';
-                });
-            });
-        }
-
-        // Create particles for icon animation
-        function createIconParticles(icon) {
-            const particlesContainer = icon.querySelector('.particles');
-            particlesContainer.innerHTML = '';
-
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                const size = Math.random() * 4 + 2;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                const startX = Math.random() * 100;
-                const startY = Math.random() * 100;
-                const duration = Math.random() * 1 + 0.5;
-                
-                particle.style.left = `${startX}%`;
-                particle.style.top = `${startY}%`;
-                
-                particlesContainer.appendChild(particle);
-                
-                setTimeout(() => {
-                    particle.style.transition = `all ${duration}s ease-out`;
-                    particle.style.transform = `translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px)`;
-                    particle.style.opacity = '1';
-                    
-                    setTimeout(() => {
-                        particle.style.opacity = '0';
-                    }, duration * 500);
-                    
-                    setTimeout(() => {
-                        particle.remove();
-                    }, duration * 1000);
-                }, 0);
             }
+            type();
         }
 
-        // Google login handler
-        function handleGoogleLogin(event) {
-            event.preventDefault();
-            loadingScreen.classList.remove('fade-out');
-            loadingBar.style.width = '0%';
-            loadingText.textContent = 'Connecting to Google...';
-
-            let progress = 0;
-            const loadingInterval = setInterval(() => {
-                progress += 5;
-                loadingBar.style.width = `${progress}%`;
-                loadingText.textContent = `Connecting to Magnify... ${progress}%`;
-
-                if (progress >= 100) {
-                    clearInterval(loadingInterval);
-                    setTimeout(() => {
-                        // Redirect to Google login page (replace with actual URL)
-                        window.location.href = 'Entrep6.html';
-                    }, 500);
-                }
-            }, 100);
-        }
-
-        // Learn More handler
-        function handleLearnMore(event) {
-            event.preventDefault();
-            learnMoreLoading.classList.add('active');
+        function showLoading(redirectUrl) {
+            const loadingScreen = document.querySelector('.loading-screen');
+            const loadingIcons = document.querySelectorAll('.loading-icon');
+            const loadingText = document.querySelector('.loading-text');
+            const loadingBar = document.querySelector('.loading-bar');
+            loadingScreen.classList.add('active');
             
-            setTimeout(() => {
-                learnMoreLoading.classList.remove('active');
-                // Replace with actual "Learn More" page URL
-                window.location.href = 'Entrep16.html';
-            }, 2000);
-        }
+            let messageIndex = 0;
+            let progress = 0;
+            const changeMessage = () => {
+                typeWriter(loadingText, loadingMessages[messageIndex], 50);
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+            };
+            changeMessage();
+            const messageInterval = setInterval(changeMessage, 4000);
 
-        // Event listeners
-        googleLoginBtn.addEventListener('click', handleGoogleLogin);
-        learnMoreBtn.addEventListener('click', handleLearnMore);
+            const updateProgress = () => {
+                progress += 1;
+                loadingBar.style.width = `${progress}%`;
+                if (progress < 100) {
+                    requestAnimationFrame(updateProgress);
+                } else {
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 500);
+                }
+            };
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            preloadImages()
-                .then(simulateLoading)
-                .catch(error => {
-                    console.error('Error preloading images:', error);
-                    loadingScreen.classList.add('fade-out');
-                    initializePageContent();
+            loadingIcons.forEach((icon, index) => {
+                icon.addEventListener('click', () => {
+                    icon.classList.toggle('filled');
+                    const tip = icon.getAttribute('data-tip');
+                    loadingText.textContent = '';
+                    typeWriter(loadingText, tip, 50);
+                    clearInterval(messageInterval);
+                    setTimeout(() => {
+                        messageInterval = setInterval(changeMessage, 4000);
+                    }, 4000);
                 });
-        });
+
+                setTimeout(() => {
+                    icon.classList.add('filled');
+                }, index * 500);
+            });
+
+            updateProgress();
+
+            setTimeout(() => {
+                clearInterval(messageInterval);
+                loadingScreen.classList.remove('active');
+            }, 6000);
+        }
     </script>
 </body>
 </html>
