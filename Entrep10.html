@@ -4,22 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Bank to Deposit - Magnify!</title>
-    <link rel="logo.png" href="logo-300x300.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #00796b;
-            --secondary-color: #4db6ac;
-            --background-color: #e0f2f1;
+            --gradient-start: #8E2DE2;
+            --gradient-end: #FF69B4;
             --text-color: #333;
             --card-bg: #ffffff;
-            --card-hover-bg: #e1f5fe;
-            --button-bg: #00897b;
-            --button-hover-bg: #00695c;
+            --card-hover-bg: #f0e6ff;
+            --button-bg: #9c27b0;
+            --button-hover-bg: #7b1fa2;
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: var(--background-color);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             margin: 0;
             padding: 20px;
             display: flex;
@@ -42,7 +43,17 @@
         h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
-            color: var(--primary-color);
+            color: var(--gradient-start);
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 5s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .description {
@@ -72,12 +83,29 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bank-option::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            opacity: 0.1;
+            transition: top 0.3s ease;
+        }
+
+        .bank-option:hover::before {
+            top: 0;
         }
 
         .bank-option:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            background: var(--card-hover-bg);
         }
 
         .bank-logo {
@@ -100,13 +128,33 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background-color 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
             margin-top: 20px;
             width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bank-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .bank-button:hover::before {
+            left: 100%;
         }
 
         .bank-button:hover {
             background-color: var(--button-hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .footer {
@@ -132,11 +180,12 @@
         }
 
         .spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary-color);
-            border-radius: 50%;
             width: 50px;
             height: 50px;
+            border-radius: 50%;
+            border: 5px solid transparent;
+            border-top-color: var(--gradient-start);
+            border-bottom-color: var(--gradient-end);
             animation: spin 1s linear infinite;
         }
 
@@ -149,7 +198,7 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(0.9);
             background: white;
             padding: 30px;
             border-radius: 10px;
@@ -157,11 +206,18 @@
             z-index: 1001;
             display: none;
             text-align: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        #confirmation-modal.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
         }
 
         #confirmation-modal h2 {
             margin-top: 0;
-            color: var(--primary-color);
+            color: var(--gradient-start);
         }
 
         #confirmation-modal button {
@@ -171,7 +227,8 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background-color 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
         }
 
         #confirm-btn {
@@ -181,6 +238,8 @@
 
         #confirm-btn:hover {
             background-color: var(--button-hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         #cancel-btn {
@@ -190,6 +249,7 @@
 
         #cancel-btn:hover {
             background-color: #e0e0e0;
+            transform: translateY(-2px);
         }
 
         @media (max-width: 768px) {
@@ -214,7 +274,7 @@
 <body>
     <div class="container">
         <h1>Select Bank to Deposit</h1>
-        <p class="description">Please choose a bank below to proceed with your deposit. Your transactions are secure and processed instantly. These are all embedded and integrated with your preferred banks.</p>
+        <p class="description">Choose a bank below to proceed with your deposit. Your transactions are secure and processed instantly. These are all embedded and integrated with your preferred banks.</p>
         <div class="options-container" id="bank-options">
             <!-- Bank options will be dynamically inserted here -->
         </div>
@@ -277,10 +337,14 @@
             selectedBank = bank;
             selectedBankName.textContent = bank.name;
             confirmationModal.style.display = 'block';
+            setTimeout(() => confirmationModal.classList.add('active'), 10);
         }
 
         function hideConfirmationModal() {
-            confirmationModal.style.display = 'none';
+            confirmationModal.classList.remove('active');
+            setTimeout(() => {
+                confirmationModal.style.display = 'none';
+            }, 300);
         }
 
         function handleBankSelection(bankId) {
@@ -318,6 +382,18 @@
         // Accessibility enhancements
         document.querySelectorAll('.bank-button').forEach(button => {
             button.setAttribute('aria-label', `Choose ${button.textContent.trim()}`);
+        });
+
+        // Interactive hover effects
+        document.querySelectorAll('.bank-option').forEach(option => {
+            option.addEventListener('mousemove', (e) => {
+                const { left, top } = option.getBoundingClientRect();
+                const x = e.clientX - left;
+                const y = e.clientY - top;
+                
+                option.style.setProperty('--x', `${x}px`);
+                option.style.setProperty('--y', `${y}px`);
+            });
         });
     </script>
 </body>
