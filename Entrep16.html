@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #6366f1, #a855f7);
-            --secondary-gradient: linear-gradient(135deg, #3b82f6, #2dd4bf);
-            --background-gradient: linear-gradient(135deg, #818cf8, #c084fc);
+            --primary-gradient: linear-gradient(135deg, #FF69B4, #8A2BE2);
+            --secondary-gradient: linear-gradient(135deg, #FF1493, #9400D3);
+            --background-gradient: linear-gradient(135deg, #FFC0CB, #DDA0DD);
             --card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
-            --text-color: #1e293b;
-            --error-color: #ef4444;
-            --success-color: #22c55e;
+            --text-color: #4A0E4E;
+            --text-color-light: #7B337D;
+            --accent-color: #FF69B4;
         }
 
         * {
@@ -40,9 +40,9 @@
             border-radius: 24px;
             padding: 2rem;
             box-shadow: 
-                0 10px 15px -3px rgba(0, 0, 0, 0.1),
-                0 4px 6px -2px rgba(0, 0, 0, 0.05),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
+                0 10px 15px -3px rgba(138, 43, 226, 0.1),
+                0 4px 6px -2px rgba(138, 43, 226, 0.05),
+                0 0 0 1px rgba(255, 105, 180, 0.1);
             animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -63,9 +63,9 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding: 2rem;
-            background: var(--card-gradient);
+            background: var(--primary-gradient);
             border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.1);
         }
 
         .header-content {
@@ -77,27 +77,21 @@
         .header h1 {
             font-size: 3rem;
             font-weight: 700;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: white;
             margin: 0;
-        }
-
-        .title-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .logo {
             width: 100px;
             height: 100px;
             object-fit: contain;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
         }
 
         .creators {
             font-size: 1rem;
-            color: #64748b;
+            color: var(--text-color-light);
             line-height: 1.6;
             text-align: center;
         }
@@ -107,7 +101,7 @@
             border-radius: 20px;
             padding: 1.5rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.05);
         }
 
         .content-grid {
@@ -129,7 +123,7 @@
 
         .content-card:hover {
             transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.1);
         }
 
         .content-icon {
@@ -149,11 +143,11 @@
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            color: #1e293b;
+            color: var(--text-color);
         }
 
         .content-text {
-            color: #64748b;
+            color: var(--text-color-light);
             line-height: 1.7;
         }
 
@@ -219,7 +213,7 @@
             padding: 2rem;
             border-radius: 20px;
             max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.1);
             animation: slideDown 0.3s ease-out;
         }
 
@@ -234,18 +228,17 @@
         }
 
         .close {
-            color: #aaa;
+            color: var(--text-color-light);
             float: right;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            transition: color 0.3s ease;
         }
 
         .close:hover,
         .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
+            color: var(--accent-color);
         }
 
         @keyframes fadeInUp {
@@ -285,7 +278,7 @@
         </div>
         <div class="creators-container">
             <p class="creators">
-                Developed by Grade 12 ICT Students (CP12A1): Ron Asnahon, Carl John Arpay, Shelina Mae Dela Cruz, Sean Ricaza, Joeron Zeniff Paloma, Van Erich Nisnisan, Vince Gerard Gonzaga and James Virtucio as part of our Entrepreneurship Business Plan.
+                Developed by Grade 12 ICT Students (CP12A1 | A.Y. 2024-2025): Ron Asnahon, Carl John Arpay, Shelina Mae Dela Cruz, Sean Ricaza, Joeron Zeniff Paloma, Van Erich Nisnisan, Vince Gerard Gonzaga and James Virtucio as part of our Entrepreneurship Business Plan.
             </p>
         </div>
 
@@ -384,7 +377,7 @@
                 particle.style.height = `${size}px`;
                 particle.style.left = `${x}px`;
                 particle.style.top = `${y}px`;
-                particle.style.background = `hsl(${Math.random() * 360}, 70%, 70%)`;
+                particle.style.background = `hsl(${Math.random() * 60 + 300}, 70%, 70%)`;
                 particle.style.animationDuration = `${duration}s`;
                 document.body.appendChild(particle);
                 setTimeout(() => particle.remove(), duration * 1000);
