@@ -4,33 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magnify! - Pay Your Bills</title>
-    <link rel="logo.png" href="logo-300x300.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary: #186d94;
-            --primary-light: #2389b9;
-            --primary-dark: #145576;
-            --accent: #c7bb4c;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --warning: #f1c40f;
-            --background: #f8fafc;
-            --text: #2d3748;
-            --text-light: #718096;
-            --card: #ffffff;
+            --gradient-start: #8E2DE2;
+            --gradient-end: #FF69B4;
+            --primary: #9C27B0;
+            --primary-light: #BA68C8;
+            --primary-dark: #7B1FA2;
+            --accent: #FF4081;
+            --success: #4CAF50;
+            --danger: #F44336;
+            --warning: #FFC107;
+            --background: #F3E5F5;
+            --text: #333333;
+            --text-light: #757575;
+            --card: #FFFFFF;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--accent), var(--primary));
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             color: var(--text);
             display: flex;
             flex-direction: column;
@@ -124,7 +128,7 @@
             left: 0;
             width: 100%;
             height: 5px;
-            background: linear-gradient(to right, var(--accent), var(--primary));
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
         }
 
         .form-header {
@@ -165,7 +169,7 @@
         .form-control {
             width: 100%;
             padding: 1rem 1rem 1rem 3rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #E1BEE7;
             border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s ease;
@@ -175,7 +179,7 @@
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(24, 109, 148, 0.1);
+            box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
         }
 
         .form-control:focus + i {
@@ -191,7 +195,7 @@
 
         .payment-method {
             background: var(--background);
-            border: 2px solid #e2e8f0;
+            border: 2px solid #E1BEE7;
             border-radius: 12px;
             padding: 1rem;
             cursor: pointer;
@@ -234,7 +238,7 @@
         .confirm-button {
             width: 100%;
             padding: 1rem;
-            background: var(--primary);
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             color: white;
             border: none;
             border-radius: 12px;
@@ -249,9 +253,8 @@
         }
 
         .confirm-button:hover {
-            background: var(--primary-light);
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(24, 109, 148, 0.1);
+            box-shadow: 0 4px 6px rgba(156, 39, 176, 0.1);
         }
 
         .loading-screen {
@@ -279,13 +282,13 @@
             width: 100%;
             height: 100%;
             border: 5px solid transparent;
-            border-top-color: var(--primary);
+            border-top-color: var(--gradient-start);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         .loader-circle:nth-child(2) {
-            border-top-color: var(--accent);
+            border-top-color: var(--gradient-end);
             animation-delay: 0.2s;
             scale: 0.8;
         }
@@ -342,7 +345,7 @@
             text-align: center;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid #E1BEE7;
         }
 
         .modal-close {
@@ -370,7 +373,7 @@
             justify-content: space-between;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #E1BEE7;
         }
 
         .receipt-label {
@@ -398,7 +401,7 @@
         .return-button {
             width: 100%;
             padding: 1rem;
-            background: var(--primary);
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             color: white;
             border: none;
             border-radius: 12px;
@@ -410,8 +413,8 @@
         }
 
         .return-button:hover {
-            background: var(--primary-light);
             transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(156, 39, 176, 0.1);
         }
 
         footer {
@@ -490,7 +493,7 @@
                         <i class="fas fa-wallet"></i>
                         <div>GCash</div>
                     </div>
-                    <div  class="payment-method" data-method="GooglePay">
+                    <div class="payment-method" data-method="GooglePay">
                         <i class="fab fa-google-pay"></i>
                         <div>Google Pay</div>
                     </div>
@@ -717,6 +720,26 @@
                 modal.style.display = 'none';
             }
         };
+
+        // Add interactive particle background
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+            },
+            retina_detect: true
+        });
     </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </body>
 </html>
