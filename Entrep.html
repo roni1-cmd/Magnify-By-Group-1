@@ -10,15 +10,15 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
         :root {
-            --gradient-start: #FF69B4;
-            --gradient-middle: #FF1493;
+            --gradient-start: #8A2BE2;
+            --gradient-middle: #9932CC;
             --gradient-end: #FF69B4;
-            --primary: #FF1493;
+            --primary: #9932CC;
             --secondary: #FF69B4;
-            --accent: #FF69B4;
+            --accent: #DA70D6;
             --text: #333333;
             --text-light: #666666;
-            --background: #FFF0F5;
+            --background: #F8E8FF;
             --card-bg: rgba(255, 255, 255, 0.9);
             --success: #2ECC71;
             --danger: #E74C3C;
@@ -219,7 +219,7 @@
         .input-group select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(255, 20, 147, 0.1);
+            box-shadow: 0 0 0 3px rgba(153, 50, 204, 0.1);
         }
 
         .chart-container {
@@ -677,7 +677,7 @@
                 labels: ['Income', 'Expense'],
                 datasets: [{
                     data: [incomeData, expenseData],
-                    backgroundColor: ['#2ECC71', '#E74C3C']
+                    backgroundColor: ['#9932CC', '#FF69B4']
                 }]
             };
 
@@ -765,9 +765,5 @@
             document.getElementById('addTransaction').addEventListener('click', addTransaction);
         });
     </script>
-
-    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-<script src="https://files.bpcontent.cloud/2024/11/02/01/20241102014603-MY6MW47G.js"></script>
-
 </body>
 </html>
