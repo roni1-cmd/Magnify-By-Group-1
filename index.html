@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify! - Modern Financial Dashboard</title>
+    <title>Magnify!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -318,12 +318,13 @@
             height: 100px;
             border-radius: 50%;
             margin: 0 auto 1rem;
-            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: #fff;
+            overflow: hidden;
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .member-name {
@@ -646,46 +647,56 @@
 
     <footer class="footer">
         <div class="footer-container">
-            <h2 class="footer-title">Meet Our Team.</h2>
+            <h2 class="footer-title">Meet Our Team</h2>
             <div class="team-grid">
                 <div class="team-member">
-                    <div class="member-avatar">SM</div>
+                    <div class="member-avatar">
+                        <img src="SHELINA 1X1.jpg" alt="Shelina Mae Dela Cruz">
+                    </div>
                     <h3 class="member-name">Shelina Mae Dela Cruz</h3>
-                    <p class="member-role">Team Lead</p>
+                    <p class="member-role">Team Leader</p>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-github"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar">SR</div>
+                    <div class="member-avatar">
+                        <img src="SEAN 1X1.jpg" alt="Sean Ferneil Ricaza">
+                    </div>
                     <h3 class="member-name">Sean Ferneil Ricaza</h3>
-                    <p class="member-role">Member</p>
+                    <p class="member-role">Co-Leader</p>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-github"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar">CJ</div>
+                    <div class="member-avatar">
+                        <img src="ARPAY 1X1.jpg" alt="Carl John Arpay">
+                    </div>
                     <h3 class="member-name">Carl John Arpay</h3>
-                    <p class="member-role">Developer</p>
+                    <p class="member-role">Web Developer</p>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-github"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar">RA</div>
+                    <div class="member-avatar">
+                        <img src="RONI 1X1.jpg" alt="Ron Asnahon">
+                    </div>
                     <h3 class="member-name">Ron Asnahon</h3>
-                    <p class="member-role">Developer</p>
+                    <p class="member-role">Web Developer</p>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-github"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar">VE</div>
+                    <div class="member-avatar">
+                        <img src="VAN 1X1.jpg" alt="Van Erich Nisnisan">
+                    </div>
                     <h3 class="member-name">Van Erich Nisnisan</h3>
                     <p class="member-role">Member</p>
                     <div class="social-links">
@@ -694,7 +705,9 @@
                     </div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar">VG</div>
+                    <div class="member-avatar">
+                        <img src="VINCE 1X1.jpg" alt="Vince Jerard Gonzaga">
+                    </div>
                     <h3 class="member-name">Vince Jerard Gonzaga</h3>
                     <p class="member-role">Member</p>
                     <div class="social-links">
@@ -703,8 +716,21 @@
                     </div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar">JV</div>
+                    <div class="member-avatar">
+                        <img src="VIRTUCIO 1X1.jpg" alt="James Virtucio">
+                    </div>
                     <h3 class="member-name">James Virtucio</h3>
+                    <p class="member-role">Member</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <img src="JOERON 1X1.jpg" alt="Joeron Zeniff Paloma">
+                    </div>
+                    <h3 class="member-name">Joeron Zeniff Paloma</h3>
                     <p class="member-role">Member</p>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-github"></i></a>
