@@ -9,9 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #6366f1, #a855f7);
-            --secondary-gradient: linear-gradient(135deg, #3b82f6, #2dd4bf);
-            --background-gradient: linear-gradient(135deg, #818cf8, #c084fc);
+            --primary-gradient: linear-gradient(135deg, #8B5CF6, #EC4899);
+            --secondary-gradient: linear-gradient(135deg, #A78BFA, #F472B6);
+            --background-gradient: linear-gradient(135deg, #C4B5FD, #F9A8D4);
             --card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
             --text-color: #1e293b;
             --error-color: #ef4444;
@@ -120,7 +120,7 @@
         .input-group input {
             width: 100%;
             padding: 1rem 1.25rem;
-            border: 2px solid rgba(99, 102, 241, 0.1);
+            border: 2px solid rgba(139, 92, 246, 0.1);
             border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s ease;
@@ -129,8 +129,8 @@
 
         .input-group input:focus {
             outline: none;
-            border-color: #818cf8;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
             transform: translateY(-2px);
         }
 
@@ -162,7 +162,7 @@
 
         .chart-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
         }
 
         .chart-button.active {
@@ -238,7 +238,7 @@
 
         .update-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
         }
 
         .update-button:active {
@@ -250,7 +250,7 @@
             padding: 2rem;
             border-radius: 20px;
             margin-top: 2rem;
-            border-left: 4px solid #6366f1;
+            border-left: 4px solid #8B5CF6;
             transition: all 0.3s ease;
         }
 
@@ -259,7 +259,7 @@
         }
 
         .suggestions h3 {
-            color: #6366f1;
+            color: #8B5CF6;
             margin-bottom: 1rem;
             font-size: 1.25rem;
             font-weight: 600;
@@ -280,7 +280,7 @@
             content: '→';
             position: absolute;
             left: 0;
-            color: #6366f1;
+            color: #8B5CF6;
         }
 
         @media (max-width: 768px) {
@@ -323,6 +323,56 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f2d74e;
+            position: absolute;
+            left: 50%;
+            animation: confetti 5s ease-in-out -2s infinite;
+            transform-origin: left top;
+        }
+
+        .confetti:nth-child(1) {
+            background-color: #f2d74e; left: 10%; animation-delay: 0;
+        }
+        .confetti:nth-child(2) {
+            background-color: #95c3de; left: 20%; animation-delay: -5s;
+        }
+        .confetti:nth-child(3) {
+            background-color: #ff9a91; left: 30%; animation-delay: -3s;
+        }
+        .confetti:nth-child(4) {
+            background-color: #f2d74e; left: 40%; animation-delay: -2.5s;
+        }
+        .confetti:nth-child(5) {
+            background-color: #95c3de; left: 50%; animation-delay: -4s;
+        }
+        .confetti:nth-child(6) {
+            background-color: #ff9a91; left: 60%; animation-delay: -6s;
+        }
+        .confetti:nth-child(7) {
+            background-color: #f2d74e; left: 70%; animation-delay: -1.5s;
+        }
+        .confetti:nth-child(8) {
+            background-color: #95c3de; left: 80%; animation-delay: -2s;
+        }
+        .confetti:nth-child(9) {
+            background-color: #ff9a91; left: 90%; animation-delay: -3.5s;
+        }
+        .confetti:nth-child(10) {
+            background-color: #f2d74e; left: 100%; animation-delay: -2.5s;
+        }
+
+        @keyframes confetti {
+            0% { transform: rotateZ(15deg) rotateY(0deg) translate(0,0); }
+            25% { transform: rotateZ(5deg) rotateY(360deg) translate(-5vw,20vh); }
+            50% { transform: rotateZ(15deg) rotateY(720deg) translate(5vw,60vh); }
+            75% { transform: rotateZ(5deg) rotateY(1080deg) translate(-10vw,80vh); }
+            100% { transform: rotateZ(15deg) rotateY(1440deg) translate(10vw,110vh); }
+        }
     </style>
 </head>
 <body>
@@ -336,39 +386,40 @@
             <div>
                 <div class="input-group">
                     <label for="monthlyIncome"><i class="fas fa-money-bill-wave"></i> Monthly Income (₱)</label>
-                    <input type="number" id="monthlyIncome" placeholder="Enter your monthly income" required>
+                    <input type="number" id="monthlyIncome" placeholder="Enter your monthly income" min="0" step="100">
                 </div>
 
                 <div class="input-group">
                     <label for="savingsGoal"><i class="fas fa-piggy-bank"></i> Monthly Savings Goal (₱)</label>
-                    <input type="number" id="savingsGoal" placeholder="Enter your savings goal">
+                    <input type="number" id="savingsGoal" placeholder="Enter your savings goal" min="0" step="100">
                 </div>
             </div>
 
             <div>
                 <div class="input-group">
                     <label for="housingExpense"><i class="fas fa-home"></i> Housing (₱)</label>
-                    <input type="number" id="housingExpense" placeholder="Rent, mortgage, utilities">
+                    <input type="number" id="housingExpense" placeholder="Rent, mortgage, utilities" min="0" step="100">
                 </div>
 
                 <div class="input-group">
                     <label for="foodExpense"><i class="fas fa-utensils"></i> Food (₱)</label>
-                    <input type="number" id="foodExpense" placeholder="Groceries, dining">
+                    <input type="number" id="foodExpense" placeholder="Groceries, dining" min="0" step="100">
                 </div>
 
                 <div class="input-group">
                     <label for="transportExpense"><i class="fas fa-car"></i> Transport (₱)</label>
-                    <input type="number" id="transportExpense" placeholder="Fuel, maintenance, fares">
+                    <input type="number" id="transportExpense" placeholder="Fuel, maintenance, fares" min="0" step="100">
                 </div>
 
                 <div class="input-group">
                     <label for="entertainmentExpense"><i class="fas fa-film"></i> Entertainment (₱)</label>
-                    <input type="number" id="entertainmentExpense" placeholder="Movies, hobbies, activities">
+                    <input type="number" id="entertainmentExpense" placeholder="Movies, hobbies, activities" min="0"
+                        step="100">
                 </div>
 
                 <div class="input-group">
                     <label for="otherExpense"><i class="fas fa-ellipsis-h"></i> Other (₱)</label>
-                    <input type="number" id="otherExpense" placeholder="Miscellaneous expenses">
+                    <input type="number" id="otherExpense" placeholder="Miscellaneous expenses" min="0" step="100">
                 </div>
             </div>
         </div>
@@ -411,6 +462,8 @@
         <div id="suggestions" class="suggestions"></div>
     </div>
 
+    <div class="confetti-container"></div>
+
     <script>
         let currentChartType = 'bar';
         let budgetChart = null;
@@ -424,7 +477,7 @@
 
         function createChart(type) {
             const ctx = document.getElementById('budgetChart').getContext('2d');
-            
+
             if (budgetChart) {
                 budgetChart.destroy();
             }
@@ -438,13 +491,13 @@
                             label: 'Budget Overview',
                             data: [0, 0, 0],
                             backgroundColor: [
-                                'rgba(99, 102, 241, 0.8)',
-                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(139, 92, 246, 0.8)',
+                                'rgba(236, 72, 153, 0.8)',
                                 'rgba(34, 197, 94, 0.8)'
                             ],
                             borderColor: [
-                                'rgb(99, 102, 241)',
-                                'rgb(239, 68, 68)',
+                                'rgb(139, 92, 246)',
+                                'rgb(236, 72, 153)',
                                 'rgb(34, 197, 94)'
                             ],
                             borderWidth: 2
@@ -458,8 +511,8 @@
                         datasets: [{
                             label: 'Budget Overview',
                             data: [0, 0, 0],
-                            borderColor: '#6366f1',
-                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            borderColor: '#8B5CF6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
                             tension: 0.4,
                             fill: true
                         }]
@@ -472,18 +525,18 @@
                         datasets: [{
                             data: [0, 0, 0, 0, 0],
                             backgroundColor: [
-                                'rgba(99, 102, 241, 0.8)',
+                                'rgba(139, 92, 246, 0.8)',
+                                'rgba(236, 72, 153, 0.8)',
                                 'rgba(34, 197, 94, 0.8)',
-                                'rgba(239, 68, 68, 0.8)',
                                 'rgba(234, 179, 8, 0.8)',
-                                'rgba(139, 92, 246, 0.8)'
+                                'rgba(59, 130, 246, 0.8)'
                             ],
                             borderColor: [
-                                'rgb(99, 102, 241)',
+                                'rgb(139, 92, 246)',
+                                'rgb(236, 72, 153)',
                                 'rgb(34, 197, 94)',
-                                'rgb(239, 68, 68)',
                                 'rgb(234, 179, 8)',
-                                'rgb(139, 92, 246)'
+                                'rgb(59, 130, 246)'
                             ],
                             borderWidth: 2
                         }]
@@ -540,7 +593,7 @@
                 } else {
                     budgetChart.data.datasets[0].data = [income, totalExpenses, savingsGoal];
                 }
-                
+
                 budgetChart.update();
 
                 const suggestions = document.getElementById('suggestions');
@@ -574,6 +627,7 @@
                             <li>Build an emergency fund if you haven't already</li>
                         </ul>
                     `;
+                    createConfetti();
                 }
 
                 updateBtn.classList.remove('loading');
@@ -582,9 +636,24 @@
             }, 800);
         }
 
+        function createConfetti() {
+            const confettiContainer = document.querySelector('.confetti-container');
+            confettiContainer.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                confettiContainer.appendChild(confetti);
+            }
+            setTimeout(() => {
+                confettiContainer.innerHTML = '';
+            }, 5000);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             createChart('bar');
-            
+
             document.querySelectorAll('.chart-button').forEach(button => {
                 button.addEventListener('click', (e) => {
                     document.querySelectorAll('.chart-button').forEach(btn => btn.classList.remove('active'));
@@ -606,6 +675,8 @@
                     }
                 });
             });
+
+            updateChart();
         });
     </script>
 </body>
