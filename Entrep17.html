@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAGNIFY! DATABASE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --gradient-start: #FF69B4;
+            --gradient-end: #8A2BE2;
+            --primary: #8A2BE2;
+            --border: #e0e0e0;
+            --header-bg: rgba(255, 255, 255, 0.1);
+            --cell-bg: rgba(255, 255, 255, 0.8);
+            --selected: rgba(138, 43, 226, 0.2);
+            --text: #333333;
+            --highlight: rgba(255, 255, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--text);
+        }
+
+        .title-section {
+            text-align: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .title-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .title-section p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .toolbar {
+            background: var(--header-bg);
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .formula-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            background: var(--cell-bg);
+            padding: 4px 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        #selected-cell {
+            font-weight: 500;
+            color: var(--primary);
+            min-width: 40px;
+        }
+
+        #formula-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            padding: 4px;
+            color: var(--text);
+            background: transparent;
+        }
+
+        .spreadsheet-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+        }
+
+        .spreadsheet-content {
+            flex: 1;
+            overflow: auto;
+            max-height: calc(100vh - 150px);
+        }
+
+        table {
+            border-collapse: collapse;
+            background: var(--cell-bg);
+            margin: 0;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            min-width: 100px;
+            height: 25px;
+            padding: 4px;
+            position: relative;
+        }
+
+        th {
+            background: var(--header-bg);
+            font-weight: 500;
+            text-align: center;
+            user-select: none;
+            color: black;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .row-header {
+            min-width: 40px;
+            width: 40px;
+            color: black;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            background: var(--header-bg);
+        }
+
+        td {
+            position: relative;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .cell-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            padding: 4px;
+            font-size: 14px;
+            background: transparent;
+            display: none;
+        }
+
+        .cell-display {
+            width: 100%;
+            height: 100%;
+            padding: 4px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        td.selected .cell-input {
+            display: block;
+            z-index: 2;
+        }
+
+        td.selected .cell-display {
+            display: none;
+        }
+
+        .selected {
+            outline: 2px solid var(--primary);
+            outline-offset: -2px;
+            background: var(--selected);
+        }
+
+        .highlighted {
+            background-color: var(--highlight);
+        }
+
+        button {
+            padding: 6px 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .number { text-align: right; }
+        .text { text-align: left; }
+        .formula { color: var(--primary); }
+        .error { color: #dc3545; background: #fff3f3; }
+
+        #color-picker, #highlight-color {
+            margin-right: 10px;
+        }
+
+        .resize-handle {
+            position: absolute;
+            right: -5px;
+            bottom: -5px;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            cursor: nwse-resize;
+        }
+
+        .floating-tab {
+            position: fixed;
+            right: -300px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+            background-color: white;
+            border-radius: 10px 0 0 10px;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+        .floating-tab.open {
+            right: 0;
+        }
+
+        .tab-toggle {
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--primary);
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px 0 0 5px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .tab-content {
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .tab-content h3 {
+            margin-bottom: 10px;
+        }
+
+        .tab-content ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .tab-content code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .scrollbar {
+            width: 20px;
+            background-color: #f0f0f0;
+            position: sticky;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 15;
+        }
+
+        .scrollbar-thumb {
+            width: 100%;
+            background-color: var(--primary);
+            position: absolute;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-section">
+        <h1><i class="material-icons">table_chart</i> Magnify! Solu-data</h1>
+        <p>Your powerful spreadsheet solution for data management and analysis.</p>
+    </div>
+    <div class="toolbar">
+        <div class="button-group">
+            <button onclick="spreadsheet.undo()"><i class="material-icons">undo</i></button>
+            <button onclick="spreadsheet.redo()"><i class="material-icons">redo</i></button>
+            <button onclick="spreadsheet.addRow()"><i class="material-icons">add</i> Row</button>
+            <button onclick="spreadsheet.addColumn()"><i class="material-icons">add</i> Column</button>
+        </div>
+        <div class="formula-bar">
+            <span id="selected-cell">A1</span>
+            <input type="text" id="formula-input" placeholder="Enter value or formula (e.g., =A1+B1 or =SUM(A1:A5))" />
+        </div>
+        <div class="button-group">
+            <input type="color" id="color-picker" onchange="spreadsheet.changeCellColor(this.value)">
+            <input type="color" id="highlight-color" value="#FFFF00" onchange="spreadsheet.setHighlightColor(this.value)">
+            <button onclick="spreadsheet.mergeAndCenter()"><i class="material-icons">merge_type</i> Merge & Center</button>
+            <button onclick="spreadsheet.undoMerge()"><i class="material-icons">undo</i> Undo Merge</button>
+            <button onclick="spreadsheet.alignLeft()"><i class="material-icons">format_align_left</i></button>
+            <button onclick="spreadsheet.alignCenter()"><i class="material-icons">format_align_center</i></button>
+            <button onclick="spreadsheet.alignRight()"><i class="material-icons">format_align_right</i></button>
+            <button onclick="spreadsheet.toggleBold()"><i class="material-icons">format_bold</i></button>
+            <button onclick="spreadsheet.exportToCSV()"><i class="material-icons">file_download</i> Export CSV</button>
+            <button onclick="spreadsheet.clearSheet()"><i class="material-icons">clear_all</i> Clear All</button>
+        </div>
+    </div>
+    <div class="spreadsheet-container">
+        <div class="spreadsheet-content">
+            <table id="sheet"></table>
+        </div>
+        <div class="scrollbar">
+            <div class="scrollbar-thumb"></div>
+        </div>
+    </div>
+
+    <div class="floating-tab" id="helpTab">
+        <div class="tab-toggle" onclick="toggleHelpTab()">Help</div>
+        <div class="tab-content">
+            <h3>How to Use the Spreadsheet</h3>
+            <ul>
+                <li>Click on a cell to select it and edit its content</li>
+                <li>Use the formula bar to enter values or formulas</li>
+                <li>Drag to select multiple cells</li>
+            </ul>
+            <h3>Formulas</h3>
+            <ul>
+                <li><code>=SUM(A1:A5)</code> - Sum of cells A1 to A5</li>
+                <li><code>=AVERAGE(B1:B10)</code> - Average of cells B1 to B10</li>
+                <li><code>=MAX(C1:C20)</code> - Maximum value in cells C1 to C20</li>
+                <li><code>=MIN(D1:D15)</code> - Minimum value in cells D1 to D15</li>
+                <li><code>=COUNT(E1:E30)</code> - Count of non-empty cells in E1 to E30</li>
+            </ul>
+            <h3>Alignment Options</h3>
+            <ul>
+                <li>Use the alignment buttons in the toolbar to align cell content</li>
+                <li>Left align: Aligns text to the left of the cell</li>
+                <li>Center align: Centers text in the cell</li>
+                <li>Right align: Aligns text to the right of the cell</li>
+            </ul>
+            <h3>Other Features</h3>
+            <ul>
+                <li>Merge cells: Select multiple cells and click "Merge & Center"</li>
+                <li>Change cell color: Select a cell and use the color picker</li>
+                <li>Resize cells: Drag the bottom-right corner of a cell</li>
+                <li>Export to CSV: Click the "Export CSV" button</li>
+                <li>Use the scrollbar on the right to navigate quickly</li>
+                <li>Toggle bold: Select cells and click the bold button</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        class Spreadsheet {
+            constructor(rows = 100, cols = 26) {
+                this.rows = rows;
+                this.cols = cols;
+                this.selectedCell = null;
+                this.sheet = document.getElementById('sheet');
+                this.formulaInput = document.getElementById('formula-input');
+                this.selectedCellDisplay = document.getElementById('selected-cell');
+                this.mergedCells = [];
+                this.highlightColor = '#FFFF00';
+                this.undoStack = [];
+                this.redoStack = [];
+                this.isMouseDown = false;
+                this.startCell = null;
+                this.endCell = null;
+                this.init();
+            }
+
+            init() {
+                this.createSheet();
+                this.setupEventListeners();
+                this.setupScrollbar();
+            }
+
+            createSheet() {
+                const headerRow = document.createElement('tr');
+                headerRow.appendChild(document.createElement('th'));
+                for (let j = 0; j < this.cols; j++) {
+                    const th = document.createElement('th');
+                    th.textContent = this.columnLabel(j);
+                    headerRow.appendChild(th);
+                }
+                this.sheet.appendChild(headerRow);
+
+                for (let i = 0; i < this.rows; i++) {
+                    const row = document.createElement('tr');
+                    const rowHeader = document.createElement('th');
+                    rowHeader.textContent = i + 1;
+                    rowHeader.className = 'row-header';
+                    row.appendChild(rowHeader);
+
+                    for (let j = 0; j < this.cols; j++) {
+                        const td = document.createElement('td');
+                        const input = document.createElement('input');
+                        input.className = 'cell-input';
+                        input.id = `${this.columnLabel(j)}${i + 1}`;
+                        
+                        const display = document.createElement('div');
+                        display.className = 'cell-display';
+                        
+                        const resizeHandle = document.createElement('div');
+                        resizeHandle.className = 'resize-handle';
+                        
+                        td.appendChild(input);
+                        td.appendChild(display);
+                        td.appendChild(resizeHandle);
+                        row.appendChild(td);
+                    }
+                    this.sheet.appendChild(row);
+                }
+            }
+
+            setupEventListeners() {
+                this.sheet.addEventListener('mousedown', (e) => {
+                    if (e.target.classList.contains('resize-handle')) {
+                        this.startResize(e);
+                    } else {
+                        this.isMouseDown = true;
+                        const cell = e.target.closest('td');
+                        if (cell) {
+                            this.startCell = cell;
+                            this.endCell = cell;
+                            this.selectCell(cell);
+                            this.highlightCells();
+                        }
+                    }
+                });
+
+                this.sheet.addEventListener('mousemove', (e) => {
+                    if (this.isMouseDown) {
+                        const currentCell = e.target.closest('td');
+                        if (currentCell && currentCell !== this.endCell) {
+                            this.endCell = currentCell;
+                            this.highlightCells();
+                        }
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    this.isMouseDown = false;
+                });
+
+                this.formulaInput.addEventListener('input', () => {
+                    if (this.selectedCell) {
+                        const input = this.selectedCell.querySelector('.cell-input');
+                        input.value = this.formulaInput.value;
+                        this.handleCellInput(this.selectedCell);
+                    }
+                });
+
+                this.sheet.addEventListener('input', (e) => {
+                    if (e.target.classList.contains('cell-input')) {
+                        this.handleCellInput(e.target.parentElement);
+                    }
+                });
+
+                this.sheet.addEventListener('keydown', (e) => {
+                    if (e.target.classList.contains('cell-input') && e.key === 'Enter') {
+                        e.preventDefault();
+                        this.handleCellInput(e.target.parentElement, true);
+                    }
+                });
+            }
+
+            setupScrollbar() {
+                const scrollbarThumb = document.querySelector('.scrollbar-thumb');
+                const spreadsheetContent = document.querySelector('.spreadsheet-content');
+                let isDragging = false;
+
+                const updateScrollbarThumb = () => {
+                    const contentHeight = this.sheet.offsetHeight;
+                    const viewportHeight = spreadsheetContent.offsetHeight;
+                    const scrollPercentage = spreadsheetContent.scrollTop / (contentHeight - viewportHeight);
+                    const thumbHeight = (viewportHeight / contentHeight) * 100;
+                    const thumbPosition = scrollPercentage * (100 - thumbHeight);
+
+                    scrollbarThumb.style.height = `${thumbHeight}%`;
+                    scrollbarThumb.style.top = `${thumbPosition}%`;
+                };
+
+                spreadsheetContent.addEventListener('scroll', updateScrollbarThumb);
+
+                scrollbarThumb.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    e.preventDefault();
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    const scrollbar = document.querySelector('.scrollbar');
+                    const scrollbarRect = scrollbar.getBoundingClientRect();
+                    const scrollPercentage = (e.clientY - scrollbarRect.top) / scrollbarRect.height;
+                    const contentHeight = this.sheet.offsetHeight;
+                    const viewportHeight = spreadsheetContent.offsetHeight;
+                    spreadsheetContent.scrollTop = scrollPercentage * (contentHeight - viewportHeight);
+                });
+
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                });
+
+                updateScrollbarThumb();
+            }
+
+            selectCell(cell) {
+                if (this.selectedCell) {
+                    this.selectedCell.classList.remove('selected');
+                }
+                this.selectedCell = cell;
+                cell.classList.add('selected');
+                
+                const input = cell.querySelector('.cell-input');
+                this.formulaInput.value = input.value;
+                this.selectedCellDisplay.textContent = input.id;
+                input.focus();
+            }
+
+            handleCellInput(cell, moveToNextRow = false) {
+                const oldValue = cell.querySelector('.cell-display').textContent;
+                const input = cell.querySelector('.cell-input');
+                const display = cell.querySelector('.cell-display');
+                let value = input.value.trim();
+
+                try {
+                    if (value.startsWith('=')) {
+                        const formula = value.slice(1);
+                        const result = this.evaluateFormula(formula);
+                        display.textContent = typeof result === 'number' ? result.toFixed(2) : result;
+                        display.className = 'cell-display formula';
+                    } else {
+                        display.textContent = value;
+                        display.className = 'cell-display ' + (isNaN(value) ? 'text' : 'number');
+                    }
+                } catch (error) {
+                    display.textContent = '#ERROR';
+                    display.className = 'cell-display error';
+                }
+
+                if (oldValue !== display.textContent) {
+                    this.pushToUndoStack({
+                        type: 'cellEdit',
+                        cell: cell,
+                        oldValue: oldValue,
+                        newValue: display.textContent
+                    });
+                }
+
+                if (moveToNextRow) {
+                    const nextRow = cell.parentElement.nextElementSibling;
+                    if (nextRow) {
+                        const nextCell = nextRow.children[cell.cellIndex];
+                        this.selectCell(nextCell);
+                    }
+                }
+            }
+
+            evaluateFormula(formula) {
+                if (formula.toUpperCase().startsWith('SUM')) {
+                    return this.evaluateSum(formula);
+                }
+                if (formula.toUpperCase().startsWith('AVERAGE')) {
+                    return this.evaluateAverage(formula);
+                }
+                if (formula.toUpperCase().startsWith('MAX')) {
+                    return this.evaluateMax(formula);
+                }
+                if (formula.toUpperCase().startsWith('MIN')) {
+                    return this.evaluateMin(formula);
+                }
+                if (formula.toUpperCase().startsWith('COUNT')) {
+                    return this.evaluateCount(formula);
+                }
+
+                const cellRegex = /[A-Z]+[0-9]+/g;
+                formula = formula.replace(cellRegex, (match) => {
+                    const cell = document.getElementById(match);
+                    if (!cell) throw new Error('Invalid cell reference');
+                    
+                    const value = cell.parentElement.querySelector('.cell-display').textContent;
+                    if (value === '') return '0';
+                    if (isNaN(value)) throw new Error('Non-numeric value');
+                    return value;
+                });
+
+                try {
+                    return eval(formula);
+                } catch {
+                    throw new Error('Invalid formula');
+                }
+            }
+
+            evaluateSum(formula) {
+                const range = this.extractRange(formula);
+                const values = this.getCellValuesInRange(range);
+                return values.reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
+            }
+
+            evaluateAverage(formula) {
+                const range = this.extractRange(formula);
+                const values = this.getCellValuesInRange(range);
+                const sum = values.reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
+                return sum / values.length;
+            }
+
+            evaluateMax(formula) {
+                const range = this.extractRange(formula);
+                const values = this.getCellValuesInRange(range);
+                return Math.max(...values.map(val => parseFloat(val) || 0));
+            }
+
+            evaluateMin(formula) {
+                const range = this.extractRange(formula);
+                const values = this.getCellValuesInRange(range);
+                return Math.min(...values.map(val => parseFloat(val) || 0));
+            }
+
+            evaluateCount(formula) {
+                const range = this.extractRange(formula);
+                const values = this.getCellValuesInRange(range);
+                return values.filter(val => val !== '').length;
+            }
+
+            extractRange(formula) {
+                const match = formula.match(/$$(.*?)$$/);
+                if (!match) throw new Error('Invalid range format');
+                return match[1].split(':');
+            }
+
+            getCellValuesInRange(range) {
+                if (range.length !== 2) throw new Error('Invalid range');
+                const [start, end] = range;
+                const startCoord = this.getCellCoordinates(start);
+                const endCoord = this.getCellCoordinates(end);
+                
+                const values = [];
+                for (let row = startCoord.row; row <= endCoord.row; row++) {
+                    for (let col = startCoord.col; col <= endCoord.col; col++) {
+                        const cellId = `${this.columnLabel(col)}${row + 1}`;
+                        const cell = document.getElementById(cellId);
+                        if (!cell) throw new Error('Invalid cell reference');
+                        values.push(cell.parentElement.querySelector('.cell-display').textContent);
+                    }
+                }
+                return values;
+            }
+
+            getCellCoordinates(cellId) {
+                const match = cellId.match(/([A-Z]+)(\d+)/);
+                if (!match) throw new Error('Invalid cell reference');
+                return {
+                    col: this.columnIndex(match[1]),
+                    row: parseInt(match[2]) - 1
+                };
+            }
+
+            columnLabel(index) {
+                let label = '';
+                while (index >= 0) {
+                    label = String.fromCharCode(65 + (index % 26)) + label;
+                    index = Math.floor(index / 26) - 1;
+                }
+                return label;
+            }
+
+            columnIndex(label) {
+                let index = 0;
+                for (let i = 0; i < label.length; i++) {
+                    index = index * 26 + (label.charCodeAt(i) - 64);
+                }
+                return index - 1;
+            }
+
+            addRow() {
+                const row = document.createElement('tr');
+                const rowHeader = document.createElement('th');
+                rowHeader.textContent = ++this.rows;
+                rowHeader.className = 'row-header';
+                row.appendChild(rowHeader);
+
+                for (let j = 0; j < this.cols; j++) {
+                    const td = document.createElement('td');
+                    const input = document.createElement('input');
+                    input.className = 'cell-input';
+                    input.id = `${this.columnLabel(j)}${this.rows}`;
+                    
+                    const display = document.createElement('div');
+                    display.className = 'cell-display';
+                    
+                    const resizeHandle = document.createElement('div');
+                    resizeHandle.className = 'resize-handle';
+                    
+                    td.appendChild(input);
+                    td.appendChild(display);
+                    td.appendChild(resizeHandle);
+                    row.appendChild(td);
+                }
+                this.sheet.appendChild(row);
+
+                this.pushToUndoStack({
+                    type: 'addRow',
+                    row: row
+                });
+            }
+
+            addColumn() {
+                const headerRow = this.sheet.querySelector('tr');
+                const th = document.createElement('th');
+                th.textContent = this.columnLabel(this.cols);
+                headerRow.appendChild(th);
+
+                const addedCells = [];
+                this.sheet.querySelectorAll('tr:not(:first-child)').forEach((row, i) => {
+                    const td = document.createElement('td');
+                    const input = document.createElement('input');
+                    input.className = 'cell-input';
+                    input.id = `${this.columnLabel(this.cols)}${i + 1}`;
+                    
+                    const display = document.createElement('div');
+                    display.className = 'cell-display';
+                    
+                    const resizeHandle = document.createElement('div');
+                    resizeHandle.className = 'resize-handle';
+                    
+                    td.appendChild(input);
+                    td.appendChild(display);
+                    td.appendChild(resizeHandle);
+                    row.appendChild(td);
+                    addedCells.push(td);
+                });
+                this.cols++;
+
+                this.pushToUndoStack({
+                    type: 'addColumn',
+                    cells: addedCells,
+                    headerCell: th
+                });
+            }
+
+            clearSheet() {
+                if (confirm('Are you sure you want to clear all cells?')) {
+                    const oldValues = [];
+                    this.sheet.querySelectorAll('.cell-input').forEach(input => {
+                        const cell = input.parentElement;
+                        const oldValue = cell.querySelector('.cell-display').textContent;
+                        oldValues.push({ cell, oldValue });
+                        input.value = '';
+                        this.handleCellInput(cell);
+                    });
+
+                    this.pushToUndoStack({
+                        type: 'clearSheet',
+                        oldValues: oldValues
+                    });
+                }
+            }
+
+            exportToCSV() {
+                let csv = '';
+                this.sheet.querySelectorAll('tr').forEach((row, i) => {
+                    if (i === 0) return;
+                    const cells = row.querySelectorAll('.cell-display');
+                    const values = Array.from(cells).map(cell => {
+                        let value = cell.textContent;
+                        return value.includes(',') ? `"${value}"` : value;
+                    });
+                    csv += values.join(',') + '\n';
+                });
+
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'spreadsheet.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+
+            changeCellColor(color) {
+                if (this.selectedCell) {
+                    const oldColor = this.selectedCell.style.backgroundColor;
+                    this.selectedCell.style.backgroundColor = color;
+                    this.pushToUndoStack({
+                        type: 'changeColor',
+                        cell: this.selectedCell,
+                        oldColor: oldColor,
+                        newColor: color
+                    });
+                }
+            }
+
+            mergeAndCenter() {
+                if (!this.startCell || !this.endCell) return;
+
+                const startCoord = this.getCellCoordinates(this.startCell.querySelector('.cell-input').id);
+                const endCoord = this.getCellCoordinates(this.endCell.querySelector('.cell-input').id);
+
+                const minRow = Math.min(startCoord.row, endCoord.row);
+                const maxRow = Math.max(startCoord.row, endCoord.row);
+                const minCol = Math.min(startCoord.col, endCoord.col);
+                const maxCol = Math.max(startCoord.col, endCoord.col);
+
+                const mergedCells = [];
+                for (let row = minRow; row <= maxRow; row++) {
+                    for (let col = minCol; col <= maxCol; col++) {
+                        if (row === minRow && col === minCol) continue;
+                        const cellId = `${this.columnLabel(col)}${row + 1}`;
+                        const cell = document.getElementById(cellId).parentElement;
+                        cell.style.display = 'none';
+                        mergedCells.push(cell);
+                    }
+                }
+
+                this.startCell.colSpan = maxCol - minCol + 1;
+                this.startCell.rowSpan = maxRow - minRow + 1;
+
+                this.startCell.style.textAlign = 'center';
+                this.startCell.style.verticalAlign = 'middle';
+
+                this.mergedCells.push({
+                    start: { row: minRow, col: minCol },
+                    end: { row: maxRow, col: maxCol }
+                });
+
+                this.pushToUndoStack({
+                    type: 'merge',
+                    mergedCells: mergedCells,
+                    mainCell: this.startCell,
+                    colSpan: this.startCell.colSpan,
+                    rowSpan: this.startCell.rowSpan
+                });
+            }
+
+            undoMerge() {
+                if (this.mergedCells.length === 0) return;
+
+                const lastMerge = this.mergedCells.pop();
+                const mainCellId = `${this.columnLabel(lastMerge.start.col)}${lastMerge.start.row + 1}`;
+                const mainCell = document.getElementById(mainCellId).parentElement;
+
+                mainCell.colSpan = 1;
+                mainCell.rowSpan = 1;
+                mainCell.style.textAlign = '';
+                mainCell.style.verticalAlign = '';
+
+                for (let row = lastMerge.start.row; row <= lastMerge.end.row; row++) {
+                    for (let col = lastMerge.start.col; col <= lastMerge.end.col; col++) {
+                        if (row === lastMerge.start.row && col === lastMerge.start.col) continue;
+                        const cellId = `${this.columnLabel(col)}${row + 1}`;
+                        const cell = document.getElementById(cellId).parentElement;
+                        cell.style.display = '';
+                    }
+                }
+
+                this.pushToUndoStack({
+                    type: 'undoMerge',
+                    mergedCells: lastMerge
+                });
+            }
+
+            alignLeft() {
+                this.alignCells('left');
+            }
+
+            alignCenter() {
+                this.alignCells('center');
+            }
+
+            alignRight() {
+                this.alignCells('right');
+            }
+
+            alignCells(alignment) {
+                if (!this.startCell || !this.endCell) return;
+
+                const startCoord = this.getCellCoordinates(this.startCell.querySelector('.cell-input').id);
+                const endCoord = this.getCellCoordinates(this.endCell.querySelector('.cell-input').id);
+
+                const minRow = Math.min(startCoord.row, endCoord.row);
+                const maxRow = Math.max(startCoord.row, endCoord.row);
+                const minCol = Math.min(startCoord.col, endCoord.col);
+                const maxCol = Math.max(startCoord.col, endCoord.col);
+
+                const alignedCells = [];
+                for (let row = minRow; row <= maxRow; row++) {
+                    for (let col = minCol; col <= maxCol; col++) {
+                        const cellId = `${this.columnLabel(col)}${row + 1}`;
+                        const cell = document.getElementById(cellId).parentElement;
+                        const oldAlignment = cell.style.textAlign;
+                        cell.style.textAlign = alignment;
+                        alignedCells.push({ cell, oldAlignment });
+                    }
+                }
+
+                this.pushToUndoStack({
+                    type: 'align',
+                    cells: alignedCells,
+                    newAlignment: alignment
+                });
+            }
+
+            toggleBold() {
+                if (!this.startCell || !this.endCell) return;
+
+                const startCoord = this.getCellCoordinates(this.startCell.querySelector('.cell-input').id);
+                const endCoord = this.getCellCoordinates(this.endCell.querySelector('.cell-input').id);
+
+                const minRow = Math.min(startCoord.row, endCoord.row);
+                const maxRow = Math.max(startCoord.row, endCoord.row);
+                const minCol = Math.min(startCoord.col, endCoord.col);
+                const maxCol = Math.max(startCoord.col, endCoord.col);
+
+                const toggledCells = [];
+                for (let row = minRow; row <= maxRow; row++) {
+                    for (let col = minCol; col <= maxCol; col++) {
+                        const cellId = `${this.columnLabel(col)}${row + 1}`;
+                        const cell = document.getElementById(cellId).parentElement;
+                        const display = cell.querySelector('.cell-display');
+                        const oldFontWeight = display.style.fontWeight;
+                        display.style.fontWeight = oldFontWeight === 'bold' ? 'normal' : 'bold';
+                        toggledCells.push({ cell, oldFontWeight });
+                    }
+                }
+
+                this.pushToUndoStack({
+                    type: 'toggleBold',
+                    cells: toggledCells
+                });
+            }
+
+            startResize(e) {
+                const cell = e.target.parentElement;
+                const startX = e.clientX;
+                const startY = e.clientY;
+                const startWidth = cell.offsetWidth;
+                const startHeight = cell.offsetHeight;
+
+                const resize = (e) => {
+                    const newWidth = startWidth + e.clientX - startX;
+                    const newHeight = startHeight + e.clientY - startY;
+                    cell.style.width = `${newWidth}px`;
+                    cell.style.height = `${newHeight}px`;
+                };
+
+                const stopResize = () => {
+                    document.removeEventListener('mousemove', resize);
+                    document.removeEventListener('mouseup', stopResize);
+                };
+
+                document.addEventListener('mousemove', resize);
+                document.addEventListener('mouseup', stopResize);
+            }
+
+            highlightCells() {
+                this.sheet.querySelectorAll('td').forEach(cell => cell.classList.remove('highlighted'));
+
+                if (!this.startCell || !this.endCell) return;
+
+                const startCoord = this.getCellCoordinates(this.startCell.querySelector('.cell-input').id);
+                const endCoord = this.getCellCoordinates(this.endCell.querySelector('.cell-input').id);
+
+                const minRow = Math.min(startCoord.row, endCoord.row);
+                const maxRow = Math.max(startCoord.row, endCoord.row);
+                const minCol = Math.min(startCoord.col, endCoord.col);
+                const maxCol = Math.max(startCoord.col, endCoord.col);
+
+                for (let row = minRow; row <= maxRow; row++) {
+                    for (let col = minCol; col <= maxCol; col++) {
+                        const cellId = `${this.columnLabel(col)}${row + 1}`;
+                        const cell = document.getElementById(cellId).parentElement;
+                        cell.classList.add('highlighted');
+                    }
+                }
+            }
+
+            setHighlightColor(color) {
+                this.highlightColor = color;
+                document.documentElement.style.setProperty('--highlight', color + '4D');
+            }
+
+            pushToUndoStack(action) {
+                this.undoStack.push(action);
+                this.redoStack = [];
+            }
+
+            undo() {
+                if (this.undoStack.length === 0) return;
+
+                const action = this.undoStack.pop();
+                this.redoStack.push(action);
+
+                switch (action.type) {
+                    case 'cellEdit':
+                        action.cell.querySelector('.cell-input').value = action.oldValue;
+                        this.handleCellInput(action.cell);
+                        break;
+                    case 'addRow':
+                        this.sheet.removeChild(action.row);
+                        this.rows--;
+                        break;
+                    case 'addColumn':
+                        action.cells.forEach(cell => cell.parentElement.removeChild(cell));
+                        action.headerCell.parentElement.removeChild(action.headerCell);
+                        this.cols--;
+                        break;
+                    case 'clearSheet':
+                        action.oldValues.forEach(({ cell, oldValue }) => {
+                            cell.querySelector('.cell-input').value = oldValue;
+                            this.handleCellInput(cell);
+                        });
+                        break;
+                    case 'changeColor':
+                        action.cell.style.backgroundColor = action.oldColor;
+                        break;
+                    case 'merge':
+                        action.mainCell.colSpan = 1;
+                        action.mainCell.rowSpan = 1;
+                        action.mainCell.style.textAlign = '';
+                        action.mainCell.style.verticalAlign = '';
+                        action.mergedCells.forEach(cell => cell.style.display = '');
+                        this.mergedCells.pop();
+                        break;
+                    case 'undoMerge':
+                        const mainCellId = `${this.columnLabel(action.mergedCells.start.col)}${action.mergedCells.start.row + 1}`;
+                        const mainCell = document.getElementById(mainCellId).parentElement;
+                        mainCell.colSpan = action.mergedCells.end.col - action.mergedCells.start.col + 1;
+                        mainCell.rowSpan = action.mergedCells.end.row - action.mergedCells.start.row + 1;
+                        mainCell.style.textAlign = 'center';
+                        mainCell.style.verticalAlign = 'middle';
+                        for (let row = action.mergedCells.start.row; row <= action.mergedCells.end.row; row++) {
+                            for (let col = action.mergedCells.start.col; col <= action.mergedCells.end.col; col++) {
+                                if (row === action.mergedCells.start.row && col === action.mergedCells.start.col) continue;
+                                const cellId = `${this.columnLabel(col)}${row + 1}`;
+                                const cell = document.getElementById(cellId).parentElement;
+                                cell.style.display = 'none';
+                            }
+                        }
+                        this.mergedCells.push(action.mergedCells);
+                        break;
+                    case 'align':
+                        action.cells.forEach(({ cell, oldAlignment }) => {
+                            cell.style.textAlign = oldAlignment;
+                        });
+                        break;
+                    case 'toggleBold':
+                        action.cells.forEach(({ cell, oldFontWeight }) => {
+                            cell.querySelector('.cell-display').style.fontWeight = oldFontWeight;
+                        });
+                        break;
+                }
+            }
+
+            redo() {
+                if (this.redoStack.length === 0) return;
+
+                const action = this.redoStack.pop();
+                this.undoStack.push(action);
+
+                switch (action.type) {
+                    case 'cellEdit':
+                        action.cell.querySelector('.cell-input').value = action.newValue;
+                        this.handleCellInput(action.cell);
+                        break;
+                    case 'addRow':
+                        this.sheet.appendChild(action.row);
+                        this.rows++;
+                        break;
+                    case 'addColumn':
+                        const headerRow = this.sheet.querySelector('tr');
+                        headerRow.appendChild(action.headerCell);
+                        action.cells.forEach((cell, i) => {
+                            const row = this.sheet.querySelectorAll('tr')[i + 1];
+                            row.appendChild(cell);
+                        });
+                        this.cols++;
+                        break;
+                    case 'clearSheet':
+                        action.oldValues.forEach(({ cell }) => {
+                            cell.querySelector('.cell-input').value = '';
+                            this.handleCellInput(cell);
+                        });
+                        break;
+                    case 'changeColor':
+                        action.cell.style.backgroundColor = action.newColor;
+                        break;
+                    case 'merge':
+                        action.mainCell.colSpan = action.colSpan;
+                        action.mainCell.rowSpan = action.rowSpan;
+                        action.mainCell.style.textAlign = 'center';
+                        action.mainCell.style.verticalAlign = 'middle';
+                        action.mergedCells.forEach(cell => cell.style.display = 'none');
+                        this.mergedCells.push({
+                            start: this.getCellCoordinates(action.mainCell.querySelector('.cell-input').id),
+                            end: this.getCellCoordinates(action.mergedCells[action.mergedCells.length - 1].querySelector('.cell-input').id)
+                        });
+                        break;
+                    case 'undoMerge':
+                        const mainCellId = `${this.columnLabel(action.mergedCells.start.col)}${action.mergedCells.start.row + 1}`;
+                        const mainCell = document.getElementById(mainCellId).parentElement;
+                        mainCell.colSpan = 1;
+                        mainCell.rowSpan = 1;
+                        mainCell.style.textAlign = '';
+                        mainCell.style.verticalAlign = '';
+                        for (let row = action.mergedCells.start.row; row <= action.mergedCells.end.row; row++) {
+                            for (let col = action.mergedCells.start.col; col <= action.mergedCells.end.col; col++) {
+                                if (row === action.mergedCells.start.row && col === action.mergedCells.start.col) continue;
+                                const cellId = `${this.columnLabel(col)}${row + 1}`;
+                                const cell = document.getElementById(cellId).parentElement;
+                                cell.style.display = '';
+                            }
+                        }
+                        this.mergedCells.pop();
+                        break;
+                    case 'align':
+                        action.cells.forEach(({ cell }) => {
+                            cell.style.textAlign = action.newAlignment;
+                        });
+                        break;
+                    case 'toggleBold':
+                        action.cells.forEach(({ cell }) => {
+                            const display = cell.querySelector('.cell-display');
+                            display.style.fontWeight = display.style.fontWeight === 'bold' ? 'normal' : 'bold';
+                        });
+                        break;
+                }
+            }
+        }
+
+        const spreadsheet = new Spreadsheet();
+
+        function toggleHelpTab() {
+            const helpTab = document.getElementById('helpTab');
+            helpTab.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
