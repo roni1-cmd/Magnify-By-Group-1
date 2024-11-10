@@ -87,7 +87,8 @@
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(2, auto);
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -332,7 +333,7 @@
             }
 
             .feature-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .content-section {
@@ -374,6 +375,7 @@
             <button class="tab-button" onclick="openTab('analyticsTab')">Analytics</button>
             <button class="tab-button" onclick="openTab('billsTab')">Manage Bills</button>
             <button class="tab-button" onclick="openTab('resourcesTab')">Resources</button>
+            <button class="tab-button" onclick="openTab('qcsvTab')">Magnify! Q-CSV</button>
         </div>
 
         <div id="dashboard" class="content-section">
@@ -394,7 +396,7 @@
                     <h3>Analytics</h3>
                     <p>View your financial insights within your reach.</p>
                 </div>
-                <div class="feature-card" onclick="window.location.href='Entrep4.html'">
+                <div class="feature-card" onclick="openTab('billsTab')">
                     <i class="fas fa-file-invoice"></i>
                     <h3>Magnify Remit-It!</h3>
                     <p>Access and pay your bills using Magnify Remit-It!</p>
@@ -419,10 +421,15 @@
                     <h3>Budget Planner</h3>
                     <p>Plan your next finance and track your budget for the next times.</p>
                 </div>
-                <div class="feature-card" onclick="window.location.href='Entrep11.html'">
+                <div class="feature-card" onclick="openTab('resourcesTab')">
                     <i class="fas fa-book-reader"></i>
                     <h3>Financial Resources and Guidance</h3>
                     <p>Access valuable financial resources and expert guidance to improve your financial literacy.</p>
+                </div>
+                <div class="feature-card" onclick="openTab('qcsvTab')">
+                    <i class="fas fa-file-csv"></i>
+                    <h3>Magnify! Q-CSV</h3>
+                    <p>On-the-go spreadsheet that can audit your transactions and be downloaded as Microsoft Excel.</p>
                 </div>
             </div>
         </div>
@@ -452,6 +459,9 @@
             <ul id="transactionList"></ul>
 
             <h2 class="mt-6"><i class="fas fa-wallet"></i> Total Balance: ₱<span id="balance">0</span></h2>
+            <button onclick="openTab('dashboard')" class="button">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
         </div>
 
         <div id="calculatorTab" class="content-section" style="display: none;">
@@ -502,6 +512,9 @@
                     <button id="closeTaxCalculator" class="button danger">Close</button>
                 </div>
             </div>
+            <button onclick="openTab('dashboard')" class="button">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
         </div>
 
         <div id="analyticsTab" class="content-section" style="display: none;">
@@ -517,6 +530,9 @@
             <div class="chart-container">
                 <canvas id="financialChart"></canvas>
             </div>
+            <button onclick="openTab('dashboard')" class="button">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
         </div>
 
         <div id="billsTab" class="content-section" style="display: none;">
@@ -526,6 +542,9 @@
                 <i class="fas fa-credit-card"></i>
                 Pay Your Bills
             </button>
+            <button onclick="openTab('dashboard')" class="button">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
         </div>
 
         <div id="resourcesTab" class="content-section" style="display: none;">
@@ -533,7 +552,22 @@
             <p>Access valuable financial resources and expert guidance to improve your financial literacy.</p>
             <button class="button" style="margin-top: 1rem;" onclick="window.location.href='Entrep11.html'">
                 <i class="fas fa-external-link-alt"></i>
-                Explore Resources
+                Magnify Your Resources
+            </button>
+            <button onclick="openTab('dashboard')" class="button">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
+        </div>
+
+        <div id="qcsvTab" class="content-section" style="display: none;">
+            <h2><i class="fas fa-file-csv"></i> Magnify! Q-CSV</h2>
+            <p>On-the-go spreadsheet that can audit your transactions and migrate everything to your Microsoft Excel.</p>
+            <button class="button" style="margin-top: 1rem;"  onclick="window.location.href='Entrep17.html'">
+                <i class="fas fa-external-link-alt"></i>
+                Magnify Your Audit
+            </button>
+            <button onclick="openTab('dashboard')" class="button">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
             </button>
         </div>
 
@@ -765,10 +799,5 @@
             document.getElementById('addTransaction').addEventListener('click', addTransaction);
         });
     </script>
-
-<script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-    <script src="https://files.bpcontent.cloud/2024/11/02/01/20241102014603-MY6MW47G.js"></script>
-
-
 </body>
 </html>
