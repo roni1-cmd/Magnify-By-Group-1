@@ -98,11 +98,20 @@
             font-weight: 300;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        .main-content {
+            display: flex;
             gap: 2rem;
-            margin-bottom: 2rem;
+        }
+
+        .input-section {
+            flex: 1;
+        }
+
+        .visualization-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .input-group {
@@ -179,6 +188,7 @@
             margin-bottom: 2rem;
             height: 400px;
             transition: transform 0.3s ease;
+            width: 100%;
         }
 
         .chart-container:hover {
@@ -190,6 +200,7 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin: 2rem 0;
+            width: 100%;
         }
 
         .summary-card {
@@ -253,6 +264,8 @@
             margin-top: 2rem;
             border-left: 4px solid #8B5CF6;
             transition: all 0.3s ease;
+            max-width: 600px;
+            width: 100%;
         }
 
         .suggestions:hover {
@@ -297,6 +310,10 @@
                 font-size: 2rem;
             }
 
+            .main-content {
+                flex-direction: column;
+            }
+
             .chart-container {
                 height: 300px;
             }
@@ -333,8 +350,8 @@
             <p class="description">Track your income and expenses to achieve your financial goals</p>
         </div>
 
-        <div class="grid">
-            <div>
+        <div class="main-content">
+            <div class="input-section">
                 <div class="input-group">
                     <label for="monthlyIncome"><i class="fas fa-money-bill-wave"></i> Monthly Income (₱)</label>
                     <input type="number" id="monthlyIncome" placeholder="Enter your monthly income" min="0" step="100">
@@ -344,9 +361,7 @@
                     <label for="savingsGoal"><i class="fas fa-piggy-bank"></i> Monthly Savings Goal (₱)</label>
                     <input type="number" id="savingsGoal" placeholder="Enter your savings goal" min="0" step="100">
                 </div>
-            </div>
 
-            <div>
                 <div class="input-group">
                     <label for="housingExpense"><i class="fas fa-home"></i> Housing (₱)</label>
                     <input type="number" id="housingExpense" placeholder="Rent, mortgage, utilities" min="0" step="100">
@@ -371,43 +386,45 @@
                     <label for="otherExpense"><i class="fas fa-ellipsis-h"></i> Other (₱)</label>
                     <input type="number" id="otherExpense" placeholder="Miscellaneous expenses" min="0" step="100">
                 </div>
+
+                <button class="update-button" id="updateChartBtn">
+                    <i class="fas fa-sync-alt"></i> Update Budget
+                </button>
+            </div>
+
+            <div class="visualization-section">
+                <div class="summary">
+                    <div class="summary-card">
+                        <h3><i class="fas fa-money-bill-wave"></i> Total Income</h3>
+                        <p id="totalIncome">₱0.00</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3><i class="fas fa-credit-card"></i> Total Expenses</h3>
+                        <p id="totalExpenses">₱0.00</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3><i class="fas fa-wallet"></i> Remaining</h3>
+                        <p id="remaining">₱0.00</p>
+                    </div>
+                </div>
+
+                <div class="chart-controls">
+                    <button class="chart-button active" data-type="bar">
+                        <i class="fas fa-chart-bar"></i> Bar Chart
+                    </button>
+                    <button class="chart-button" data-type="line">
+                        <i class="fas fa-chart-line"></i> Line Chart
+                    </button>
+                    <button class="chart-button" data-type="pie">
+                        <i class="fas fa-chart-pie"></i> Pie Chart
+                    </button>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="budgetChart"></canvas>
+                </div>
             </div>
         </div>
-
-        <div class="summary">
-            <div class="summary-card">
-                <h3><i class="fas fa-money-bill-wave"></i> Total Income</h3>
-                <p id="totalIncome">₱0.00</p>
-            </div>
-            <div class="summary-card">
-                <h3><i class="fas fa-credit-card"></i> Total Expenses</h3>
-                <p id="totalExpenses">₱0.00</p>
-            </div>
-            <div class="summary-card">
-                <h3><i class="fas fa-wallet"></i> Remaining</h3>
-                <p id="remaining">₱0.00</p>
-            </div>
-        </div>
-
-        <div class="chart-controls">
-            <button class="chart-button active" data-type="bar">
-                <i class="fas fa-chart-bar"></i> Bar Chart
-            </button>
-            <button class="chart-button" data-type="line">
-                <i class="fas fa-chart-line"></i> Line Chart
-            </button>
-            <button class="chart-button" data-type="pie">
-                <i class="fas fa-chart-pie"></i> Pie Chart
-            </button>
-        </div>
-
-        <div class="chart-container">
-            <canvas id="budgetChart"></canvas>
-        </div>
-
-        <button class="update-button" id="updateChartBtn">
-            <i class="fas fa-sync-alt"></i> Update Budget
-        </button>
 
         <div id="suggestions" class="suggestions"></div>
     </div>
@@ -544,7 +561,7 @@
 
                 budgetChart.update();
 
-                const suggestions = document.getElementById('suggestions');
+                const suggestions = document.querySelector('.suggestions');
                 if (income < totalExpenses) {
                     suggestions.innerHTML = `
                         <h3><i class="fas fa-exclamation-triangle"></i> Budget Alert</h3>
