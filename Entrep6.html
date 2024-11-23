@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magnify! - Your Gateway to Financial Management</title>
-    <link rel="icon" href="logo.png">
+    <link rel="icon" href="/placeholder.svg?height=32&width=32">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
         :root {
-            --gradient-light: #FFC0CB;  /* Light pink */
-            --gradient-medium: #FF69B4; /* Hot pink */
-            --gradient-dark: #C71585;   /* Deep pink */
+            --gradient-light: #FFC0CB;
+            --gradient-medium: #FF69B4;
+            --gradient-dark: #C71585;
             --text: #ffffff;
             --card-bg: rgba(255, 255, 255, 0.1);
             --accent: #FF1493;
@@ -137,7 +137,7 @@
             padding: 1rem;
             border: none;
             border-radius: 12px;
-            background: var(--gradient);
+            background: #C71585;
             color: white;
             font-size: 1.1rem;
             font-weight: 600;
@@ -152,6 +152,22 @@
             transform: translateY(-3px);
         }
 
+        .login-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+        }
+
+        .login-button:hover::after {
+            left: 100%;
+        }
+
         .social-login {
             margin-top: 2rem;
             display: flex;
@@ -163,7 +179,6 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background: var(--icon-color);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -173,12 +188,17 @@
             font-size: 1.2rem;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .social-icon:hover {
-            background: var(--accent);
             transform: translateY(-5px) rotate(360deg);
         }
+
+        .social-icon.facebook { background-color: #3b5998; }
+        .social-icon.twitter { background-color: #1da1f2; }
+        .social-icon.linkedin { background-color: #0077b5; }
+        .social-icon.google { background-color: #db4437; }
 
         .finance-section {
             position: relative;
@@ -259,6 +279,19 @@
             opacity: 0.8;
         }
 
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .error-message.visible {
+            opacity: 1;
+        }
+
         .loading-screen {
             position: fixed;
             inset: 0;
@@ -325,48 +358,6 @@
             text-align: center;
         }
 
-        .error-message {
-            color: var(--error);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .error-message.visible {
-            opacity: 1;
-        }
-
-        .scroll-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: var(--icon-color);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
-            z-index: 100;
-        }
-
-        .scroll-button.visible {
-            opacity: 1;
-        }
-
-        .scroll-button:hover {
-            transform: translateY(-5px);
-            background-color: var(--accent);
-        }
-
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -388,13 +379,13 @@
     <main class="container">
         <section class="login-section">
             <div class="logo-container">
-                <img src="logo.png?height=60&width=60" alt="Magnify Logo" class="logo">
+                <img src="/placeholder.svg?height=60&width=60" alt="Magnify Logo" class="logo">
                 <h1 class="brand-name"><strong>Magnify!</strong></h1>
             </div>
             <form id="loginForm">
                 <div class="input-group">
-                    <input type="email" id="email" placeholder="Email" required>
-                    <i class="fas fa-envelope"></i>
+                    <input type="text" id="username" placeholder="Username or Email" required>
+                    <i class="fas fa-user"></i>
                 </div>
                 <div class="input-group">
                     <input type="password" id="password" placeholder="Password" required>
@@ -404,10 +395,10 @@
                 <div id="errorMessage" class="error-message"></div>
             </form>
             <div class="social-login">
-                <a href="#" class="social-icon"><i class="fab fa-google"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <div class="social-icon google" onclick="changePlatform('google')"><i class="fab fa-google"></i></div>
+                <div class="social-icon facebook" onclick="changePlatform('facebook')"><i class="fab fa-facebook-f"></i></div>
+                <div class="social-icon twitter" onclick="changePlatform('twitter')"><i class="fab fa-twitter"></i></div>
+                <div class="social-icon linkedin" onclick="changePlatform('linkedin')"><i class="fab fa-linkedin-in"></i></div>
             </div>
         </section>
         <section class="finance-section">
@@ -463,32 +454,64 @@
         </div>
     </div>
 
-    <button class="scroll-button" id="scrollButton">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
     <script>
+        let currentPlatform = 'email';
+
+        function changePlatform(platform) {
+            currentPlatform = platform;
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const socialIcons = document.querySelectorAll('.social-icon');
+
+            socialIcons.forEach(icon => icon.classList.remove('active'));
+            document.querySelector(`.social-icon.${platform}`).classList.add('active');
+
+            switch(platform) {
+                case 'google':
+                    usernameInput.placeholder = 'Google Email';
+                    passwordInput.placeholder = 'Google Password';
+                    break;
+                case 'facebook':
+                    usernameInput.placeholder = 'Facebook Email or Phone';
+                    passwordInput.placeholder = 'Facebook Password';
+                    break;
+                case 'twitter':
+                    usernameInput.placeholder = 'Twitter Username or Email';
+                    passwordInput.placeholder = 'Twitter Password';
+                    break;
+                case 'linkedin':
+                    usernameInput.placeholder = 'LinkedIn Email';
+                    passwordInput.placeholder = 'LinkedIn Password';
+                    break;
+                default:
+                    usernameInput.placeholder = 'Username or Email';
+                    passwordInput.placeholder = 'Password';
+            }
+
+            // Animate input fields
+            usernameInput.classList.add('animate');
+            passwordInput.classList.add('animate');
+            setTimeout(() => {
+                usernameInput.classList.remove('animate');
+                passwordInput.classList.remove('animate');
+            }, 500);
+        }
+
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
 
-            // Check if email is a Gmail account
-            if (!email.endsWith('@gmail.com')) {
-                errorMessage.textContent = 'Please use a Gmail account.';
+            // Validate credentials based on the current platform
+            if (!isValidCredentials(username, password, currentPlatform)) {
+                errorMessage.textContent = `Invalid ${currentPlatform} credentials. Please try again.`;
                 errorMessage.classList.add('visible');
+                shakeForm();
                 return;
             }
 
-            // Check if password is at least 8 characters long
-            if (password.length < 8) {
-                errorMessage.textContent = 'Password must be at least 8 characters long.';
-                errorMessage.classList.add('visible');
-                return;
-            }
-
-            // If all checks pass, proceed with login
+            // If credentials are valid, proceed with login
             errorMessage.classList.remove('visible');
             const loadingScreen = document.getElementById('loadingScreen');
             loadingScreen.classList.add('active');
@@ -517,9 +540,32 @@
             
             setTimeout(() => {
                 clearInterval(textInterval);
+                loadingScreen.classList.remove('active');
                 window.location.href = 'Entrep.html';
             }, 5000);
         });
+
+        function isValidCredentials(username, password, platform) {
+            // This is a mock validation. In a real application, you would check these against a backend.
+            switch(platform) {
+                case 'google':
+                    return username.includes('@gmail.com') && password.length >= 8;
+                case 'facebook':
+                    return username.includes('@') && password.length >= 6;
+                case 'twitter':
+                    return (username.startsWith('@') || username.includes('@')) && password.length >= 6;
+                case 'linkedin':
+                    return username.includes('@') && password.length >= 6;
+                default:
+                    return username.length > 0 && password.length >= 8;
+            }
+        }
+
+        function shakeForm() {
+            const form = document.getElementById('loginForm');
+            form.classList.add('shake');
+            setTimeout(() => form.classList.remove('shake'), 500);
+        }
 
         // Enhanced input animations
         document.querySelectorAll('.input-group input').forEach(input => {
@@ -559,23 +605,26 @@
             });
         });
 
-        // Scroll button functionality
-        const scrollButton = document.getElementById('scrollButton');
-
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                scrollButton.classList.add('visible');
-            } else {
-                scrollButton.classList.remove('visible');
-            }
-        });
-
-        scrollButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+        // Particle animation in the background
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } },
+                modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </body>
 </html>
+
