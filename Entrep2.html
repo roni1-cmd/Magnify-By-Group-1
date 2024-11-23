@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         :root {
             --gradient-start: #8E2DE2;
@@ -439,6 +440,29 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        #downloadButton {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        #downloadButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(156, 39, 176, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -624,6 +648,11 @@
                 Thank you for using Magnify Remit-It!
             </p>
 
+            <button id="downloadButton">
+                <i class="fas fa-download"></i>
+                Download Invoice
+            </button>
+
             <button class="return-button" id="returnHomeButton">
                 <i class="fas fa-home"></i>
                 Return to Homepage
@@ -720,6 +749,16 @@
             if (event.target === modal) {
                 modal.style.display = 'none';
             }
+        };
+
+        // Download invoice as image
+        document.getElementById('downloadButton').onclick = function() {
+            html2canvas(document.querySelector(".modal-content")).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'invoice.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
         };
 
         // Add interactive particle background
