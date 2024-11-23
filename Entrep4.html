@@ -20,94 +20,159 @@
             --danger: #F44336;
             --warning: #FFC107;
             --info: #2196F3;
-            --background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --background: #F3E5F5;
+            --text: #333333;
+            --text-light: #757575;
+            --card: #FFFFFF;
+            --card-hover: #FCE4EC;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--background);
-            min-height: 100vh;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        .logo-container {
-            margin-bottom: 2rem;
+        /*#particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }*/
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
             position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
-            width: 250px;
-            height: auto;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .bills-portal {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            width: 100%;
-            max-width: 800px;
-            box-shadow: var(--card-shadow);
+            font-size: 1.8rem;
+            font-weight: 700;
             position: relative;
-            overflow: hidden;
+            cursor: pointer;
         }
 
-        .portal-header {
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .logo:hover::after {
+            width: 100%;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        main {
+            padding: 3rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
             text-align: center;
             margin-bottom: 3rem;
-            position: relative;
+            animation: fadeIn 1s ease-out;
         }
 
-        .portal-header h2 {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
             font-size: 2.5rem;
-            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
-            -webkit-background-clip: text;
-            color: transparent;
             margin-bottom: 1rem;
+            color: var(--primary);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .portal-header p {
-            color: #666;
+        .hero p {
             font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .bills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            perspective: 1000px;
         }
 
-        .bill-option {
-            background: white;
+        .bill-card {
+            background-color: var(--card);
             border-radius: 15px;
             padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid transparent;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            position: relative;
         }
 
-        .bill-option::before {
+        .bill-card:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            background-color: var(--card-hover);
+        }
+
+        .bill-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -117,237 +182,227 @@
             background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             opacity: 0;
             transition: opacity 0.3s ease;
-            z-index: 1;
+            border-radius: 15px;
+            z-index: -1;
         }
 
-        .bill-option:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .bill-option:hover::before {
-            opacity: 0.05;
-        }
-
-        .bill-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 2;
+        .bill-card:hover::before {
+            opacity: 0.1;
         }
 
         .bill-icon {
-            width: 50px;
-            height: 50px;
-            padding: 10px;
-            border-radius: 12px;
-            margin-right: 1rem;
-            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            transition: all 0.4s ease;
+            display: inline-block;
         }
 
-        .bill-icon i {
-            font-size: 1.5rem;
-            color: white;
+        .bill-card:hover .bill-icon {
+            transform: scale(1.2) rotate(10deg);
+            color: var(--gradient-start);
         }
 
         .bill-title {
-            flex-grow: 1;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            transition: color 0.3s ease;
         }
 
-        .bill-title h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.25rem;
-            color: #2d3748;
+        .bill-card:hover .bill-title {
+            color: var(--gradient-start);
         }
 
-        .bill-title p {
-            font-size: 0.875rem;
-            color: #718096;
+        .bill-description {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
         }
 
-        .payment-button {
+        .pay-button {
             background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             color: white;
             border: none;
-            padding: 1rem;
-            border-radius: 12px;
-            width: 100%;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            width: 100%;
             position: relative;
             overflow: hidden;
-            z-index: 2;
         }
 
-        .payment-button::after {
+        .pay-button::before {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             width: 300%;
             height: 300%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
             transform: translate(-50%, -50%) scale(0);
             transition: transform 0.5s ease;
         }
 
-        .payment-button:hover::after {
+        .pay-button:hover::before {
             transform: translate(-50%, -50%) scale(1);
         }
 
-        .payment-button:active {
-            transform: scale(0.98);
-        }
-
-        .back-button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .back-button:hover {
-            background: var(--primary-dark);
+        .pay-button:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .help-tab {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
-            background: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 30px;
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
             z-index: 1000;
+            overflow: hidden;
+            width: 60px;
+            height: 60px;
         }
 
         .help-tab:hover {
-            width: 200px;
-            background: var(--primary);
-            color: white;
+            width: auto;
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
         }
 
-        .help-tab span {
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .help-tab:hover span {
+        .help-tab img {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.5rem;
             display: none;
         }
 
-        .help-tab::after {
-            content: 'Sell Something? Click here!';
-            opacity: 0;
-            position: absolute;
+        .help-tab:hover img {
+            display: inline-block;
+        }
+
+        .help-tab i {
+            font-size: 1.5rem;
+        }
+
+        .help-tab span {
+            display: none;
+            margin-left: 0.5rem;
             white-space: nowrap;
-            transition: opacity 0.3s ease;
         }
 
-        .help-tab:hover::after {
-            opacity: 1;
+        .help-tab:hover span {
+            display: inline-block;
         }
 
-        .sell-section {
+
+        .modal {
+            display: none;
             position: fixed;
-            bottom: 5rem;
-            right: 2rem;
-            background: white;
-            padding: 1.5rem;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease-out;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--card);
+            margin: 15% auto;
+            padding: 2rem;
             border-radius: 15px;
-            box-shadow: var(--card-shadow);
-            transform: translateY(20px);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 999;
-            max-width: 300px;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
         }
 
-        .sell-section.active {
-            transform: translateY(0);
-            opacity: 1;
-            visibility: visible;
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
         }
 
-        .sell-section h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .sell-section p {
-            color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-        }
-
-        .sell-button {
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
+        .close {
+            color: var(--text-light);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
         }
 
-        .sell-button:hover {
-            background: var(--success-dark);
-            transform: translateY(-2px);
+        .close:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
         }
 
         .notification {
             position: fixed;
-            top: 2rem;
-            right: 2rem;
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            transform: translateX(120%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1001;
+            animation: slideInRight 0.3s ease-out;
         }
 
-        .notification.show {
-            transform: translateX(0);
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         @media (max-width: 768px) {
-            body {
+            .container {
                 padding: 1rem;
             }
 
-            .bills-portal {
-                padding: 1.5rem;
+            .header-content {
+                flex-direction: column;
+                text-align: center;
             }
 
-            .portal-header h2 {
+            nav ul {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0.5rem;
+            }
+
+            .hero h1 {
                 font-size: 2rem;
             }
 
@@ -359,236 +414,153 @@
                 bottom: 1rem;
                 right: 1rem;
             }
-
-            .sell-section {
-                bottom: 4rem;
-                right: 1rem;
-            }
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
         }
     </style>
 </head>
 <body>
-    <div class="logo-container">
-        <img src="logo.png" alt="Magnify Logo" class="logo">
-    </div>
+   
 
-    <div class="bills-portal">
-        <div class="portal-header">
-            <h2>Magnify- Remit-It!</h2>
-            <p>Quick and secure way to manage all your payments</p>
+    <header>
+        <div class="container header-content">
+            <div class="logo">Magnify!</div>
+            <nav>
+                <ul>
+                    <li><a href="Entrep.html">Home</a></li>
+                    <li><a href="#bills">Bills</a></li>
+                    <li><a href="#" onclick="openModal('aboutModal')">About</a></li>
+                    <li><a href="#" onclick="openModal('helpModal')">Contact</a></li>
+                </ul>
+            </nav>
         </div>
+    </header>
 
-        <div class="bills-grid">
-            <div class="bill-option" onclick="handlePayment('Utility')">
-                <div class="bill-header">
-                    <div class="bill-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <div class="bill-title">
-                        <h3>Utility Bill</h3>
-                        <p>Electricity, water, and gas payments</p>
-                    </div>
-                </div>
-                <button class="payment-button">
-                    Pay Now
-                </button>
-            </div>
+    <main>
+        <div class="container">
+            <section class="hero">
+                <h1>Welcome to Magnify! Bills Payment Portal</h1>
+                <p>Experience a quick, secure, and convenient way to manage all your payments in one place.</p>
+            </section>
 
-            <div class="bill-option" onclick="handlePayment('Internet')">
-                <div class="bill-header">
-                    <div class="bill-icon">
-                        <i class="fas fa-wifi"></i>
-                    </div>
-                    <div class="bill-title">
-                        <h3>Internet Bill</h3>
-                        <p>Broadband and fiber services</p>
-                    </div>
+            <section id="bills" class="bills-grid">
+                <div class="bill-card" onclick="handlePayment('Utility')">
+                    <div class="bill-icon"><i class="fas fa-bolt"></i></div>
+                    <h3 class="bill-title">Utility Bill</h3>
+                    <p class="bill-description">Pay for electricity, water, and gas services</p>
+                    <button class="pay-button">Pay Now</button>
                 </div>
-                <button class="payment-button">
-                    Pay Now
-                </button>
-            </div>
 
-            <div class="bill-option" onclick="handlePayment('Phone')">
-                <div class="bill-header">
-                    <div class="bill-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="bill-title">
-                        <h3>Phone Bill</h3>
-                        <p>Mobile and landline services</p>
-                    </div>
+                <div class="bill-card" onclick="handlePayment('Internet')">
+                    <div class="bill-icon"><i class="fas fa-wifi"></i></div>
+                    <h3 class="bill-title">Internet Bill</h3>
+                    <p class="bill-description">Settle your broadband and fiber services</p>
+                    <button class="pay-button">Pay Now</button>
                 </div>
-                <button class="payment-button">
-                    Pay Now
-                </button>
-            </div>
 
-            <div class="bill-option" onclick="handlePayment('Credit')">
-                <div class="bill-header">
-                    <div class="bill-icon">
-                        <i class="fas fa-credit-card"></i>
-                    </div>
-                    <div class="bill-title">
-                        <h3>Credit Card Bill</h3>
-                        <p>Credit card payments and services</p>
-                    </div>
+                <div class="bill-card" onclick="handlePayment('Phone')">
+                    <div class="bill-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3 class="bill-title">Phone Bill</h3>
+                    <p class="bill-description">Pay for mobile and landline services</p>
+                    <button class="pay-button">Pay Now</button>
                 </div>
-                <button class="payment-button">
-                    Pay Now
-                </button>
-            </div>
+
+                <div class="bill-card" onclick="handlePayment('Credit')">
+                    <div class="bill-icon"><i class="fas fa-credit-card"></i></div>
+                    <h3 class="bill-title">Credit Card Bill</h3>
+                    <p class="bill-description">Manage your credit card payments</p>
+                    <button class="pay-button">Pay Now</button>
+                </div>
+            </section>
         </div>
+    </main>
 
-        <button class="back-button" onclick="goBack()">
-            <i class="fas fa-arrow-left"></i> Back to Home
-        </button>
+    <div class="help-tab" onclick="window.location.href='https://magnifybygroup1.mystrikingly.com/'">
+        <i class="fas fa-shopping-cart"></i>
+        <img src="logo.png" alt="Magnify logo">
+        <span>Visit Our Store!</span>
     </div>
 
-    <div class="help-tab" onclick="toggleSellSection()">
-        <span>?</span>
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('helpModal')">&times;</span>
+            <h2>Contact Us</h2>
+            <p>For any inquiries or assistance, please contact our web developer:</p>
+            <p><strong>Ron Asnahon</strong></p>
+            <p>Phone: 09696156121</p>
+            <p>Email: ron.asnahon@magnify.com</p>
+        </div>
     </div>
 
-    <div class="sell-section" id="sellSection">
-        <h3>Sell Your Products with Us!</h3>
-        <p>Want to expand your business? Join our marketplace and reach more customers!</p>
-        <button class="sell-button" onclick="redirectToSell()">
-            Learn More
-        </button>
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('aboutModal')">&times;</span>
+            <h2>About Magnify Remit-It</h2>
+            <h3>Why Pay on Time?</h3>
+            <ul>
+                <li>Avoid late fees and penalties</li>
+                <li>Maintain a good credit score</li>
+                <li>Ensure uninterrupted services</li>
+                <li>Better financial management</li>
+            </ul>
+            <h3>Why Choose Magnify Remit-It?</h3>
+            <ul>
+                <li>Quick and easy bill payments</li>
+                <li>Secure transactions</li>
+                <li>Convenient all-in-one platform</li>
+                <li>24/7 accessibility</li>
+                <li>Automated reminders</li>
+            </ul>
+        </div>
     </div>
 
-    <div class="notification" id="notification">
-        <i class="fas fa-info-circle"></i>
-        <span id="notificationText"></span>
-    </div>
+    <div id="notification" class="notification"></div>
+
+    
 
     <script>
+       
+
         function handlePayment(billType) {
-            // Store the bill type and show notification
-            localStorage.setItem("billType", billType);
-            showNotification(`Magnifying your way to ${billType} bill payment...`);
-            
-            // Redirect after a short delay
+            showNotification(`Processing ${billType} bill payment...`);
             setTimeout(() => {
-                window.location.href = "Entrep2.html";
+                window.location.href = "payment.html?type=" + billType;
             }, 1500);
         }
 
-        function goBack() {
-            // Add exit animation
-            document.querySelector('.bills-portal').style.opacity = '0';
-            document.querySelector('.bills-portal').style.transform = 'scale(0.95)';
-            
-            setTimeout(() => {
-                window.history.back();
-            }, 300);
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
         }
 
-        function toggleSellSection() {
-            const sellSection = document.getElementById('sellSection');
-            sellSection.classList.toggle('active');
-        }
-
-        function redirectToSell() {
-            showNotification('Magnifying your way to Marketplace...');
-            setTimeout(() => {
-                window.location.href = "https://magnifybygroup1.mystrikingly.com/";
-            }, 1500);
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
 
         function showNotification(message) {
             const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notificationText');
-            
-            notificationText.textContent = message;
-            notification.classList.add('show');
-            
+            notification.textContent = message;
+            notification.style.display = 'block';
             setTimeout(() => {
-                notification.classList.remove('show');
+                notification.style.display = 'none';
             }, 3000);
         }
 
-        // Add hover effect to bill options
-        document.querySelectorAll('.bill-option').forEach(option => {
-            option.addEventListener('mouseover', () => {
-                option.querySelector('.bill-icon').style.animation = 'pulse 1s infinite';
-            });
-            
-            option.addEventListener('mouseout', () => {
-                option.querySelector('.bill-icon').style.animation = '';
-            });
-        });
-
-        // Add floating animation to logo
-        document.querySelector('.logo').style.animation = 'float 3s ease-in-out infinite';
-
-        // Handle escape key to close sell section
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                document.getElementById('sellSection').classList.remove('active');
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
             }
-        });
+        }
 
-        // Add touch support for mobile devices
-        let touchStartY = 0;
-        document.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-        });
-
-        document.addEventListener('touchmove', (e) => {
-            const touchY = e.touches[0].clientY;
-            const diff = touchStartY - touchY;
-            
-            if (diff > 50) { // Swipe up
-                document.getElementById('sellSection').classList.add('active');
-            } else if (diff < -50) { // Swipe down
-                document.getElementById('sellSection').classList.remove('active');
-            }
-        });
-
-        // Add interactive particle background
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: "#ffffff" },
-                shape: { type: "circle" },
-                opacity: { value: 0.5, random: false },
-                size: { value: 3, random: true },
-                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
-                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
-                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
-            },
-            retina_detect: true
+        // Add hover animations to bill cards
+        const billCards = document.querySelectorAll('.bill-card');
+        billCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.querySelector('.bill-icon').style.transform = 'scale(1.2) rotate(10deg)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.querySelector('.bill-icon').style.transform = 'scale(1) rotate(0deg)';
+            });
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </body>
 </html>
+
