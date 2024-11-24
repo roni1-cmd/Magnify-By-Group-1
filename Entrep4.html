@@ -41,16 +41,6 @@
             overflow-x: hidden;
         }
 
-        /*#particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }*/
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -263,51 +253,62 @@
             background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
             color: white;
             padding: 0.5rem;
-            border-radius: 50%;
+            border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1rem;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
             z-index: 1000;
-            overflow: hidden;
             width: 60px;
             height: 60px;
+            overflow: hidden;
         }
 
         .help-tab:hover {
-            width: auto;
-            border-radius: 30px;
-            padding: 0.5rem 1rem;
+            width: 200px;
         }
 
         .help-tab img {
             width: 24px;
             height: 24px;
             margin-right: 0.5rem;
-            display: none;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
         .help-tab:hover img {
-            display: inline-block;
+            opacity: 1;
+            transform: scale(1);
         }
 
         .help-tab i {
             font-size: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            position: absolute;
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .help-tab:hover i {
+            transform: scale(0);
+            opacity: 0;
         }
 
         .help-tab span {
-            display: none;
-            margin-left: 0.5rem;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
             white-space: nowrap;
         }
 
         .help-tab:hover span {
-            display: inline-block;
+            opacity: 1;
+            transform: translateX(0);
         }
-
 
         .modal {
             display: none;
@@ -360,7 +361,8 @@
 
         .close:hover {
             color: var(--primary);
-            transform: rotate(90deg);
+            
+transform: rotate(90deg);
         }
 
         .notification {
@@ -380,6 +382,59 @@
         @keyframes slideInRight {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
+        }
+
+        .loading-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-cart {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-cart::before {
+            content: '\f07a';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            font-size: 3rem;
+            color: var(--primary);
+        }
+
+        .loading-cart::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 5px solid transparent;
+            border-top-color: var(--gradient-start);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
@@ -418,8 +473,6 @@
     </style>
 </head>
 <body>
-   
-
     <header>
         <div class="container header-content">
             <div class="logo">Magnify!</div>
@@ -444,36 +497,50 @@
             <section id="bills" class="bills-grid">
                 <div class="bill-card" onclick="handlePayment('Utility')">
                     <div class="bill-icon"><i class="fas fa-bolt"></i></div>
-                    <h3 class="bill-title">Utility Bill</h3>
-                    <p class="bill-description">Pay for electricity, water, and gas services</p>
+                    <h3 class="bill-title">Utilities</h3>
+                    <p class="bill-description">Pay for electricity, water, and gas services.</p>
                     <button class="pay-button">Pay Now</button>
                 </div>
 
                 <div class="bill-card" onclick="handlePayment('Internet')">
                     <div class="bill-icon"><i class="fas fa-wifi"></i></div>
-                    <h3 class="bill-title">Internet Bill</h3>
-                    <p class="bill-description">Settle your broadband and fiber services</p>
+                    <h3 class="bill-title">Internet</h3>
+                    <p class="bill-description">Settle your broadband and fiber services.</p>
                     <button class="pay-button">Pay Now</button>
                 </div>
 
                 <div class="bill-card" onclick="handlePayment('Phone')">
                     <div class="bill-icon"><i class="fas fa-mobile-alt"></i></div>
                     <h3 class="bill-title">Phone Bill</h3>
-                    <p class="bill-description">Pay for mobile and landline services</p>
+                    <p class="bill-description">Pay for mobile and landline services.</p>
                     <button class="pay-button">Pay Now</button>
                 </div>
 
                 <div class="bill-card" onclick="handlePayment('Credit')">
                     <div class="bill-icon"><i class="fas fa-credit-card"></i></div>
-                    <h3 class="bill-title">Credit Card Bill</h3>
-                    <p class="bill-description">Manage your credit card payments</p>
+                    <h3 class="bill-title">Credit Cards</h3>
+                    <p class="bill-description">Manage your credit card payments.</p>
+                    <button class="pay-button">Pay Now</button>
+                </div>
+
+                <div class="bill-card" onclick="handlePayment('Healthcare')">
+                    <div class="bill-icon"><i class="fas fa-heartbeat"></i></div>
+                    <h3 class="bill-title">Healthcare</h3>
+                    <p class="bill-description">Manage your healthcare and insurance payments.</p>
+                    <button class="pay-button">Pay Now</button>
+                </div>
+
+                <div class="bill-card" onclick="handlePayment('Housing')">
+                    <div class="bill-icon"><i class="fas fa-home"></i></div>
+                    <h3 class="bill-title">Housing and Rental</h3>
+                    <p class="bill-description">Pay your rent or mortgage and avoid late payments.</p>
                     <button class="pay-button">Pay Now</button>
                 </div>
             </section>
         </div>
     </main>
 
-    <div class="help-tab" onclick="window.location.href='https://magnifybygroup1.mystrikingly.com/'">
+    <div class="help-tab" onclick="visitStore()">
         <i class="fas fa-shopping-cart"></i>
         <img src="logo.png" alt="Magnify logo">
         <span>Visit Our Store!</span>
@@ -514,11 +581,12 @@
 
     <div id="notification" class="notification"></div>
 
-    
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-cart"></div>
+        <p class="loading-text">Loading our store...</p>
+    </div>
 
     <script>
-       
-
         function handlePayment(billType) {
             showNotification(`Processing ${billType} bill payment...`);
             setTimeout(() => {
@@ -540,6 +608,15 @@
             notification.style.display = 'block';
             setTimeout(() => {
                 notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function visitStore() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.style.display = 'flex';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                window.location.href = 'https://magnifybygroup1.mystrikingly.com/';
             }, 3000);
         }
 
