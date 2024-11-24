@@ -82,18 +82,10 @@
         }
 
         @keyframes float {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-            25% {
-                transform: translate(100px, 50px) rotate(90deg);
-            }
-            50% {
-                transform: translate(50px, 100px) rotate(180deg);
-            }
-            75% {
-                transform: translate(-50px, 50px) rotate(270deg);
-            }
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 50px) rotate(90deg); }
+            50% { transform: translate(50px, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
         }
 
         .page-header {
@@ -117,10 +109,13 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             padding: 2rem;
             width: 100%;
-            max-width: 600px;
+            max-width: 800px;
             position: relative;
             z-index: 1;
             overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
         }
 
         .container::before {
@@ -133,8 +128,21 @@
             background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
         }
 
+        .form-section {
+            flex: 1 1 300px;
+        }
+
+        .summary-section {
+            flex: 1 1 300px;
+            background: var(--background);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
         .form-header {
-            text-align: center;
+            text-align: left;
             margin-bottom: 2rem;
         }
 
@@ -190,7 +198,7 @@
 
         .payment-methods {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
@@ -227,14 +235,8 @@
         }
 
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .confirm-button {
@@ -302,9 +304,7 @@
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         .modal {
@@ -328,19 +328,15 @@
             padding: 2rem;
             width: 100%;
             max-width: 500px;
+            max-height: 80vh;
             position: relative;
             animation: slideUp 0.3s ease;
+            overflow-y: auto;
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .modal-header {
@@ -427,18 +423,35 @@
             z-index: 1;
         }
 
-        @media (max-width: 640px) {
-            .page-header h1 {
-                font-size: 2rem;
-            }
+        .summary-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
 
-            .container {
-                padding: 1.5rem;
-            }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
 
-            .payment-methods {
-                grid-template-columns: 1fr;
-            }
+        .summary-label {
+            color: var(--text-light);
+        }
+
+        .summary-value {
+            font-weight: 600;
+        }
+
+        .summary-total {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--primary-light);
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
         }
 
         #downloadButton {
@@ -463,6 +476,16 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 6px rgba(156, 39, 176, 0.1);
         }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .summary-section {
+                order: -1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -471,132 +494,167 @@
         <div class="shape"></div>
     </div>
 
-    <header class="page-header">
+    
+<header class="page-header">
         <h1>Magnify! Payment Portal</h1>
         <p>Fast, secure, and convenient bill payments</p>
     </header>
 
     <main class="container">
-        <div class="form-header">
-            <h2>Pay Your Essentials Using Magnify Remit-It!</h2>
-            <p>Complete your payment in just a few steps</p>
-        </div>
-
-        <form id="paymentForm" onsubmit="handlePayment(event)">
-            <div class="form-group">
-                <label for="billType">Bill Type</label>
-                <div class="input-wrapper">
-                    <input type="text" id="billType" class="form-control" placeholder="e.g., Electricity" required>
-                    <i class="fas fa-file-invoice"></i>
-                </div>
+        <section class="form-section">
+            <div class="form-header">
+                <h2>Pay Your Essentials Using Magnify Remit-It!</h2>
+                <p>Complete your payment in just a few steps</p>
             </div>
 
-            <div class="form-group">
-                <label for="billDetails">Bill Code</label>
-                <div class="input-wrapper">
-                    <input type="text" id="billDetails" class="form-control" placeholder="Enter your bill code" required>
-                    <i class="fas fa-barcode"></i>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Select Payment Mode</label>
-                <div class="payment-methods">
-                    <div class="payment-method" data-method="PNB">
-                        <i class="fas fa-university"></i>
-                        <div>PNB</div>
-                    </div>
-                    <div class="payment-method" data-method="BPI">
-                        <i class="fas fa-university"></i>
-                        <div>BPI</div>
-                    </div>
-                    <div class="payment-method" data-method="BillEase">
-                        <i class="fas fa-credit-card"></i>
-                        <div>BillEase</div>
-                    </div>
-                    <div class="payment-method" data-method="GCash">
-                        <i class="fas fa-wallet"></i>
-                        <div>GCash</div>
-                    </div>
-                    <div class="payment-method" data-method="GooglePay">
-                        <i class="fab fa-google-pay"></i>
-                        <div>Google Pay</div>
-                    </div>
-                    <div class="payment-method" data-method="ApplePay">
-                        <i class="fab fa-apple-pay"></i>
-                        <div>Apple Pay</div>
+            <form id="paymentForm" onsubmit="handlePayment(event)">
+                <div class="form-group">
+                    <label for="billType">Bill Type</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="billType" class="form-control" placeholder="e.g., Electricity" required>
+                        <i class="fas fa-file-invoice"></i>
                     </div>
                 </div>
-            </div>
 
-            <div id="additionalDetails" class="additional-details">
-                <div id="cardDetailsSection">
-                    <div class="form-group">
-                        <label for="cardNumber">Card Number</label>
-                        <div class="input-wrapper">
-                            <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456">
+                <div class="form-group">
+                    <label for="billDetails">Bill Code</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="billDetails" class="form-control" placeholder="Enter your bill code" required>
+                        <i class="fas fa-barcode"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="amount" class="form-control" placeholder="Enter amount" required>
+                        <i class="fas fa-peso-sign"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Payment Mode</label>
+                    <div class="payment-methods">
+                        <div class="payment-method" data-method="PNB">
+                            <i class="fas fa-university"></i>
+                            <div>PNB</div>
+                        </div>
+                        <div class="payment-method" data-method="BPI">
+                            <i class="fas fa-university"></i>
+                            <div>BPI</div>
+                        </div>
+                        <div class="payment-method" data-method="BillEase">
                             <i class="fas fa-credit-card"></i>
+                            <div>BillEase</div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="cardholderName">Cardholder Name</label>
-                        <div class="input-wrapper">
-                            <input type="text" id="cardholderName" class="form-control" placeholder="John Doe">
-                            <i class="fas fa-user"></i>
+                        <div class="payment-method" data-method="GCash">
+                            <i class="fas fa-wallet"></i>
+                            <div>GCash</div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="expDate">Expiration Date</label>
-                        <div class="input-wrapper">
-                            <input type="text" id="expDate" class="form-control" placeholder="MM/YY">
-                            <i class="fas fa-calendar"></i>
+                        <div class="payment-method" data-method="GooglePay">
+                            <i class="fab fa-google-pay"></i>
+                            <div>Google Pay</div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="securityCode">Security Code (CCV)</label>
-                        <div class="input-wrapper">
-                            <input type="text" id="securityCode" class="form-control" placeholder="123">
-                            <i class="fas fa-lock"></i>
+                        <div class="payment-method" data-method="ApplePay">
+                            <i class="fab fa-apple-pay"></i>
+                            <div>Apple Pay</div>
                         </div>
                     </div>
                 </div>
 
-                <div id="gcashSection">
-                    <div class="form-group">
-                        <label for="gcashNumber">GCash Number</label>
-                        <div class="input-wrapper">
-                            <input type="text" id="gcashNumber" class="form-control" placeholder="09XX XXX XXXX">
-                            <i class="fas fa-phone"></i>
+                <div id="additionalDetails" class="additional-details">
+                    <div id="cardDetailsSection">
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardholderName">Cardholder Name</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="cardholderName" class="form-control" placeholder="John Doe">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="expDate">Expiration Date</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="expDate" class="form-control" placeholder="MM/YY">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="securityCode">Security Code (CCV)</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="securityCode" class="form-control" placeholder="123">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="gcashSection">
+                        <div class="form-group">
+                            <label for="gcashNumber">GCash Number</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="gcashNumber" class="form-control" placeholder="09XX XXX XXXX">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="googlePaySection">
+                        <div class="form-group">
+                            <label for="googlePayDetails">Google Pay Details</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="googlePayDetails" class="form-control" placeholder="Enter your Google Pay details">
+                                <i class="fab fa-google"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="applePaySection">
+                        <div class="form-group">
+                            <label for="applePayDetails">Apple Pay Details</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="applePayDetails" class="form-control" placeholder="Enter your Apple Pay details">
+                                <i class="fab fa-apple"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="googlePaySection">
-                    <div class="form-group">
-                        <label for="googlePayDetails">Google Pay Details</label>
-                        <div class="input-wrapper">
-                            <input type="text" id="googlePayDetails" class="form-control" placeholder="Enter your Google Pay details">
-                            <i class="fab fa-google"></i>
-                        </div>
-                    </div>
-                </div>
+                <button type="submit" class="confirm-button">
+                    <i class="fas fa-lock"></i>
+                    Confirm Payment
+                </button>
+            </form>
+        </section>
 
-                <div id="applePaySection">
-                    <div class="form-group">
-                        <label for="applePayDetails">Apple Pay Details</label>
-                        <div class="input-wrapper">
-                            <input type="text" id="applePayDetails" class="form-control" placeholder="Enter your Apple Pay details">
-                            <i class="fab fa-apple"></i>
-                        </div>
-                    </div>
-                </div>
+        <section class="summary-section">
+            <h3 class="summary-title">Payment Summary</h3>
+            <div class="summary-item">
+                <span class="summary-label">Bill Type:</span>
+                <span class="summary-value" id="summaryBillType">-</span>
             </div>
-
-            <button type="submit" class="confirm-button">
-                <i class="fas fa-lock"></i>
-                Confirm Payment
-            </button>
-        </form>
+            <div class="summary-item">
+                <span class="summary-label">Bill Code:</span>
+                <span class="summary-value" id="summaryBillCode">-</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Amount:</span>
+                <span class="summary-value" id="summaryAmount">-</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Payment Method:</span>
+                <span class="summary-value" id="summaryPaymentMethod">-</span>
+            </div>
+            <div class="summary-total">
+                <span>Total:</span>
+                <span id="summaryTotal">-</span>
+            </div>
+        </section>
     </main>
 
     <div class="loading-screen" id="loadingScreen">
@@ -629,6 +687,10 @@
                 <div class="receipt-row">
                     <span class="receipt-label">Bill Code</span>
                     <span class="receipt-value" id="receiptBillDetails"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Amount</span>
+                    <span class="receipt-value" id="receiptAmount"></span>
                 </div>
                 <div class="receipt-row">
                     <span class="receipt-label">Payment Method</span>
@@ -673,22 +735,43 @@
         const googlePaySection = document.getElementById('googlePaySection');
         const applePaySection = document.getElementById('applePaySection');
 
+        // Summary elements
+        const summaryBillType = document.getElementById('summaryBillType');
+        const summaryBillCode = document.getElementById('summaryBillCode');
+        const summaryAmount = document.getElementById('summaryAmount');
+        const summaryPaymentMethod = document.getElementById('summaryPaymentMethod');
+        const summaryTotal = document.getElementById('summaryTotal');
+
+        // Form elements
+        const billTypeInput = document.getElementById('billType');
+        const billDetailsInput = document.getElementById('billDetails');
+        const amountInput = document.getElementById('amount');
+
+        // Update summary in real-time
+        function updateSummary() {
+            summaryBillType.textContent = billTypeInput.value || '-';
+            summaryBillCode.textContent = billDetailsInput.value || '-';
+            summaryAmount.textContent = amountInput.value ? `₱${amountInput.value}` : '-';
+            summaryTotal.textContent = amountInput.value ? `₱${amountInput.value}` : '-';
+        }
+
+        billTypeInput.addEventListener('input', updateSummary);
+        billDetailsInput.addEventListener('input', updateSummary);
+        amountInput.addEventListener('input', updateSummary);
+
         paymentMethods.forEach(method => {
             method.addEventListener('click', () => {
-                // Remove selected class from all methods
                 paymentMethods.forEach(m => m.classList.remove('selected'));
-                // Add selected class to clicked method
                 method.classList.add('selected');
 
                 const paymentMode = method.dataset.method;
+                summaryPaymentMethod.textContent = paymentMode;
 
-                // Hide all sections
                 cardDetailsSection.style.display = 'none';
                 gcashSection.style.display = 'none';
                 googlePaySection.style.display = 'none';
                 applePaySection.style.display = 'none';
 
-                // Show relevant section
                 additionalDetails.style.display = 'block';
                 if (['PNB', 'BPI', 'BillEase'].includes(paymentMode)) {
                     cardDetailsSection.style.display = 'block';
@@ -709,26 +792,24 @@
             const loadingScreen = document.getElementById('loadingScreen');
             const receiptModal = document.getElementById('receiptModal');
             
-            // Show loading screen
             loadingScreen.style.display = 'flex';
             
-            // Simulate payment processing
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
                 
-                // Update receipt details
                 const billType = document.getElementById('billType').value;
                 const billDetails = document.getElementById('billDetails').value;
+                const amount = document.getElementById('amount').value;
                 const selectedMethod = document.querySelector('.payment-method.selected');
                 const paymentMode = selectedMethod ? selectedMethod.dataset.method : '';
 
                 document.getElementById('receiptBillType').textContent = billType;
                 document.getElementById('receiptBillDetails').textContent = billDetails;
+                document.getElementById('receiptAmount').textContent = `₱${amount}`;
                 document.getElementById('receiptPaymentMode').textContent = paymentMode;
                 document.getElementById('transactionId').textContent = 'TXN' + Math.random().toString(36).substr(2, 9).toUpperCase();
                 document.getElementById('transactionDate').textContent = new Date().toLocaleString();
 
-                // Show receipt modal
                 receiptModal.style.display = 'flex';
             }, 3000);
         }
@@ -760,26 +841,7 @@
                 link.click();
             });
         };
-
-        // Add interactive particle background
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: "#ffffff" },
-                shape: { type: "circle" },
-                opacity: { value: 0.5, random: false },
-                size: { value: 3, random: true },
-                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
-                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
-                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
-            },
-            retina_detect: true
-        });
     </script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </body>
 </html>
+
