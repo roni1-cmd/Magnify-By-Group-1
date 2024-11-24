@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Magnify!</title>
+    <title>Financial Dashboard - Magnify!</title>
     <link rel="icon" href="logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1.5rem 2rem;
+            padding: 1rem 2rem;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -46,14 +46,14 @@
         }
 
         .logo {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--white);
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         .header-content h1 {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: var(--white);
             font-weight: 600;
         }
@@ -62,156 +62,58 @@
             color: var(--white);
             opacity: 0.9;
             font-weight: 300;
+            font-size: 0.9rem;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 2rem;
-            border-radius: 24px;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease;
-        }
-
-        .container:hover {
-            transform: translateY(-5px) rotateX(5deg);
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .card {
-            margin-bottom: 1.5rem;
-            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            cursor: pointer;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: var(--secondary-gradient);
-            opacity: 0;
-            transform: rotate(30deg);
-            transition: transform 0.5s ease, opacity 0.3s ease;
-        }
-
-        .card:hover::before {
-            opacity: 0.1;
-            transform: rotate(0deg);
         }
 
         .card:hover {
-            transform: translateX(5px) scale(1.02);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
 
-        .card:hover .icon {
-            color: var(--white);
-            transform: rotate(360deg) scale(1.2);
+        .welcome-balance-container {
+            grid-column: 1 / 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .icon {
-            font-size: 1.75rem;
-            margin-right: 1rem;
-            color: #8E2DE2;
-            transition: all 0.6s ease;
-            z-index: 1;
-        }
-
-        .name-input {
-            margin: 1.5rem 0;
-            position: relative;
-        }
-
-        .name-input input {
-            width: 100%;
-            padding: 1rem 2.5rem;
-            font-size: 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease;
-        }
-
-        .name-input i {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #8E2DE2;
-        }
-
-        .name-input input:focus {
-            border-color: #8E2DE2;
-            box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.1);
-            outline: none;
-        }
-
-        .button {
-            width: 100%;
-            padding: 1rem;
-            margin-top: 1rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        .welcome-card {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .button i {
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-        }
-
-        .button:hover i {
-            transform: translateX(3px);
-        }
-
-        .primary-button {
-            background: var(--primary-gradient);
-            color: var(--white);
-        }
-
-        .secondary-button {
-            background: var(--white);
+        .welcome-card i {
+            font-size: 2.5rem;
             color: #8E2DE2;
-            border: 2px solid #8E2DE2;
-        }
-
-        .secondary-button:hover {
-            background: var(--primary-gradient);
-            color: var(--white);
-            border: none;
         }
 
         .balance-card {
             background: var(--primary-gradient);
             color: var(--white);
-            padding: 2rem;
-            border-radius: 16px;
-            margin: 2rem 0;
             position: relative;
             overflow: hidden;
+            padding: 1.5rem;
+            border-radius: 16px;
+            flex-grow: 1;
         }
 
         .balance-card::before {
@@ -230,151 +132,45 @@
             to { transform: rotate(360deg); }
         }
 
-        .toast {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            color: var(--white);
-            font-size: 0.9rem;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .toast.success {
-            background: var(--success-color);
-        }
-
-        .toast.error {
-            background: var(--error-color);
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .floating-action {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            display: flex;
-            gap: 1rem;
-            z-index: 100;
-        }
-
-        .action-button {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--primary-gradient);
-            color: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .action-button:hover {
-            transform: translateY(-5px) rotate(15deg);
-        }
-
-        .profile-stats {
+        .stat-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 1rem;
-            margin: 2rem 0;
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1rem;
-            border-radius: 12px;
+        .stat-item {
             text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: var(--secondary-gradient);
-            opacity: 0;
-            transform: rotate(30deg);
-            transition: transform 0.5s ease, opacity 0.3s ease;
-        }
-
-        .stat-card:hover::before {
-            opacity: 0.1;
-            transform: rotate(0deg);
-        }
-
-        .stat-card:hover {
+        .stat-item:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
         .stat-value {
             font-size: 1.5rem;
             font-weight: bold;
             margin: 0.5rem 0;
-            position: relative;
-            z-index: 1;
         }
 
         .stat-label {
             font-size: 0.9rem;
             opacity: 0.8;
-            position: relative;
-            z-index: 1;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-top: 1rem;
-        }
-
-        .progress {
-            width: 0;
-            height: 100%;
-            background: var(--primary-gradient);
-            transition: width 0.5s ease;
-        }
-
-        .goals-section {
-            margin-top: 2rem;
+        .goals-list {
+            display: grid;
+            gap: 1rem;
         }
 
         .goal-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
             padding: 1rem;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 12px;
@@ -386,13 +182,9 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .goal-info {
-            flex: 1;
-        }
-
         .goal-progress {
-            width: 100px;
-            height: 100px;
+            width: 60px;
+            height: 60px;
             position: relative;
         }
 
@@ -425,8 +217,289 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #8E2DE2;
+            box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.1);
+            outline: none;
+        }
+
+        .button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .primary-button {
+            background: var(--primary-gradient);
+            color: var(--white);
+        }
+
+        .secondary-button {
+            background: var(--white);
+            color: #8E2DE2;
+            border: 2px solid #8E2DE2;
+        }
+
+        .secondary-button:hover {
+            background: var(--primary-gradient);
+            color: var(--white);
+            border: none;
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .action-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .action-button:hover {
+            transform: translateY(-5px) rotate(15deg);
+        }
+
+        .toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 0.9rem;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.success {
+            background: var(--success-color);
+        }
+
+        .toast.error {
+            background: var(--error-color);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .floating-popup {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            width: 300px;
+            display: none;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .floating-popup.show {
+            display: block;
+            animation: float-in 0.3s ease;
+        }
+
+        @keyframes float-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notification-item {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        .notification-item .amount {
+            font-weight: 600;
+            color: #333;
+            display: block;
+        }
+
+        .notification-item .due-days {
+            font-size: 0.8rem;
+            color: #e74c3c;
+        }
+
+        .view-all {
+            display: block;
+            text-align: center;
+            margin-top: 0.5rem;
+            color: #8E2DE2;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .settings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .settings-table th,
+        .settings-table td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .settings-table th {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .settings-table td {
+            color: #718096;
+        }
+
+        .action-link {
+            color: #8E2DE2;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .action-link:hover {
+            text-decoration: underline;
+        }
+
+        .notification-tabs {
+            display: flex;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            color: #8E2DE2;
+            border-bottom: 2px solid #8E2DE2;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .pay-now-btn, .alert-action-btn {
+            background: #8E2DE2;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pay-now-btn:hover, .alert-action-btn:hover {
+            background: #7517D1;
+        }
+
+        .notification-item.alert {
+            grid-template-columns: auto 1fr auto;
+        }
+
+        .notification-item.alert i {
+            font-size: 1.2rem;
+            color: #8E2DE2;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-balance-container {
+                grid-column: 1;
+            }
         }
     </style>
 </head>
@@ -434,73 +507,74 @@
     <div class="header">
         <div class="logo">Magnify!</div>
         <div class="header-content">
-            <h1>Your Gateway to Financial Management</h1>
-            <p>One family, one community at a time.</p>
+            <h1>Your Gateway to Financial Management.</h1>
+            <p>One family. One Community at a time.</p>
         </div>
     </div>
 
-    <div class="container fade-in">
-        <div class="card">
-            <i class="fas fa-user-circle icon"></i>
-            <div>
-                <label>Welcome back,</label>
-                <p id="username" style="font-size: 1.25rem; font-weight: 600; margin: 0;">Magnify User</p>
+    <div class="main-container">
+        <div class="welcome-balance-container">
+            <div class="card welcome-card">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                    <h2>Welcome back,</h2>
+                    <p id="username" style="font-size: 1.25rem; font-weight: 600;">Magnify User</p>
+                </div>
+            </div>
+            <div class="card balance-card">
+                <h3>Total Balance</h3>
+                <p id="balance" style="font-size: 2rem; margin: 0.5rem 0;">₱0.00</p>
+                <p style="margin: 0; opacity: 0.8;">Last updated: <span id="lastUpdated"></span></p>
+            </div>
+            <div class="card" style="margin-top: 1rem;">
+                <h3>Quick Actions</h3>
+                <div class="input-group">
+                    <input type="text" id="newName" placeholder="Update your display name">
+                </div>
+                <button class="button primary-button" id="changeNameButton">
+                    <i class="fas fa-check"></i>
+                    Update Name
+                </button>
+                <button class="button primary-button" id="depositButton" style="margin-top: 1rem;">
+                    <i class="fas fa-plus"></i>
+                    Make a Deposit
+                </button>
+                <button class="button secondary-button" id="logoutButton" style="margin-top: 1rem;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Log Out
+                </button>
             </div>
         </div>
 
-        <div class="balance-card fade-in">
-            <i class="fas fa-wallet" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-            <h3 style="margin: 0;">Total Balance</h3>
-            <p id="balance" style="font-size: 2rem; margin: 0.5rem 0;">₱0.00</p>
-            <p style="margin: 0; opacity: 0.8;">Last updated: <span id="lastUpdated"></span></p>
-            <div class="progress-bar">
-                <div class="progress" id="balanceProgress"></div>
+        <div>
+            <div class="card">
+                <h3>Quick Stats</h3>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="stat-value" id="investmentValue">0%</div>
+                        <div class="stat-label">Investments</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-exchange-alt"></i>
+                        <div class="stat-value" id="transactionSpeed">0 sec</div>
+                        <div class="stat-label">Avg. Transaction</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-piggy-bank"></i>
+                        <div class="stat-value" id="savingsGoals">0</div>
+                        <div class="stat-label">Savings Goals</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 1rem;">
+                <h3>Financial Goals</h3>
+                <div id="goalsList" class="goals-list">
+                    <!-- Goals will be dynamically added here -->
+                </div>
             </div>
         </div>
-
-        <div class="profile-stats">
-            <div class="stat-card fade-in">
-                <i class="fas fa-chart-line icon"></i>
-                <div class="stat-value" id="investmentValue">0%</div>
-                <div class="stat-label">Investments</div>
-            </div>
-            <div class="stat-card fade-in">
-                <i class="fas fa-exchange-alt icon"></i>
-                <div class="stat-value" id="transactionSpeed">0 sec</div>
-                <div class="stat-label">Avg. Transaction Speed</div>
-            </div>
-            <div class="stat-card fade-in">
-                <i class="fas fa-piggy-bank icon"></i>
-                <div class="stat-value" id="savingsGoals">0</div>
-                <div class="stat-label">Savings Goals</div>
-            </div>
-        </div>
-
-        <div class="goals-section">
-            <h3>Your Financial Goals</h3>
-            <div id="goalsList">
-                <!-- Goals will be dynamically added here -->
-            </div>
-        </div>
-
-        <div class="name-input fade-in">
-            <i class="fas fa-edit"></i>
-            <input type="text" id="newName" placeholder="Update your display name">
-        </div>
-        <button class="button primary-button fade-in" id="changeNameButton">
-            <i class="fas fa-check"></i>
-            Update Name
-        </button>
-
-        <button class="button primary-button fade-in" id="depositButton">
-            <i class="fas fa-plus"></i>
-            Make a Deposit
-        </button>
-
-        <button class="button secondary-button fade-in" id="logoutButton">
-            <i class="fas fa-sign-out-alt"></i>
-            Log Out
-        </button>
     </div>
 
     <div class="floating-action">
@@ -513,6 +587,134 @@
         <div class="action-button" id="settingsButton" title="Settings">
             <i class="fas fa-cog"></i>
         </div>
+    </div>
+
+    <div id="notificationPopup" class="floating-popup">
+    <h4>Notifications</h4>
+    <div class="notification-tabs">
+        <button class="tab-button active" data-tab="payments">Payments</button>
+        <button class="tab-button" data-tab="alerts">Alerts</button>
+    </div>
+    <div id="paymentsTab" class="tab-content active">
+        <div class="notification-item">
+            <div>
+                <strong>Mortgage Payment</strong>
+                <p>Due: December 28, 2024</p>
+            </div>
+            <div>
+                <span class="amount">₱15,000</span>
+                <span class="due-days">3 days left</span>
+            </div>
+            <button class="pay-now-btn">Pay Now</button>
+        </div>
+        <div class="notification-item">
+            <div>
+                <strong>Credit Card Bill</strong>
+                <p>Due: December 30, 2024</p>
+            </div>
+            <div>
+                <span class="amount">₱5,000</span>
+                <span class="due-days">5 days left</span>
+            </div>
+            <button class="pay-now-btn">Pay Now</button>
+        </div>
+        <div class="notification-item">
+            <div>
+                <strong>Utility Bill</strong>
+                <p>Due: December 1, 2024</p>
+            </div>
+            <div>
+                <span class="amount">₱2,500</span>
+                <span class="due-days">7 days left</span>
+            </div>
+            <button class="pay-now-btn">Pay Now</button>
+        </div>
+        <div class="notification-item">
+            <div>
+                <strong>Car Insurance</strong>
+                <p>Due: January 5, 2025</p>
+            </div>
+            <div>
+                <span class="amount">₱3,200</span>
+                <span class="due-days">11 days left</span>
+            </div>
+            <button class="pay-now-btn">Pay Now</button>
+        </div>
+    </div>
+    <div id="alertsTab" class="tab-content">
+        <div class="notification-item alert">
+            <i class="fas fa-exclamation-circle"></i>
+            <div>
+                <strong>Unusual Activity Detected</strong>
+                <p>We noticed a large transaction on your account. Please verify.</p>
+            </div>
+            <button class="alert-action-btn">Review</button>
+        </div>
+        <div class="notification-item alert">
+            <i class="fas fa-bell"></i>
+            <div>
+                <strong>New Feature Available</strong>
+                <p>Try our new budget planner tool!</p>
+            </div>
+            <button class="alert-action-btn">Explore</button>
+        </div>
+        <div class="notification-item alert">
+            <i class="fas fa-piggy-bank"></i>
+            <div>
+                <strong>Savings Goal Reached</strong>
+                <p>Congratulations! You've reached your Emergency Fund goal.</p>
+            </div>
+            <button class="alert-action-btn">View</button>
+        </div>
+    </div>
+    <a href="#" class="view-all">View All Notifications</a>
+</div>
+
+    <div id="settingsPopup" class="floating-popup">
+        <h4>Settings</h4>
+        <table class="settings-table">
+            <tr>
+                <th>Setting</th>
+                <th>Value</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>Language</td>
+                <td>English (US)</td>
+                <td><a href="#" class="action-link">Change</a></td>
+            </tr>
+            <tr>
+                <td>Currency</td>
+                <td>Philippine Pesos (₱)</td>
+                <td><a href="#" class="action-link">Change</a></td>
+            </tr>
+            <tr>
+                <td>Notifications</td>
+                <td>Enabled</td>
+                <td><a href="#" class="action-link">Disable</a></td>
+            </tr>
+            <tr>
+                <td>Two-Factor Auth</td>
+                <td>Disabled</td>
+                <td><a href="#" class="action-link">Enable</a></td>
+            </tr>
+            <tr>
+                <td>Dark Mode</td>
+                <td>Off</td>
+                <td><a href="#" class="action-link">Turn On</a></td>
+            </tr>
+            <tr>
+                <td>Account Type</td>
+                <td>Basic</td>
+                <td><a href="#" class="action-link">Upgrade</a></td>
+            </tr>
+            <tr>
+                <td>Linked Accounts</td>
+                <td>2 Banks</td>
+                <td><a href="#" class="action-link">Manage</a></td>
+            </tr>
+        </table>
+        <a href="#" class="view-all">Manage Settings</a>
     </div>
 
     <div id="successToast" class="toast success">
@@ -545,14 +747,12 @@
                 setTimeout(() => {
                     toast.classList.remove('show');
                 }, 3000);
-            } else {
-                console.error(`Toast element with id "${type}Toast" not found`);
             }
         }
 
         function updateBalance() {
             let currentBalance = 0;
-            const targetBalance = 10000; // You can change this to any default value
+            const targetBalance = 10000;
             const duration = 2000;
             const steps = 60;
             const increment = targetBalance / steps;
@@ -565,9 +765,6 @@
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     });
-                
-                const progress = (currentBalance / targetBalance) * 100;
-                document.getElementById('balanceProgress').style.width = `${progress}%`;
                 
                 if (currentBalance < targetBalance) {
                     setTimeout(step, interval);
@@ -598,8 +795,8 @@
             let currentSpeed = 0;
             let currentGoals = 0;
 
-            const targetInvestment = 15; // 15%
-            const targetSpeed = 2.5; // 2.5 seconds
+            const targetInvestment = 15;
+            const targetSpeed = 2.5;
             const targetGoals = 3;
 
             const duration = 2000;
@@ -647,6 +844,37 @@
             document.getElementById('goalsList').appendChild(goalItem);
         }
 
+        function togglePopup(popupId) {
+            const popup = document.getElementById(popupId);
+            const otherPopupId = popupId === 'notificationPopup' ? 'settingsPopup' : 'notificationPopup';
+            const otherPopup = document.getElementById(otherPopupId);
+
+            if (popup.classList.contains('show')) {
+                popup.classList.remove('show');
+            } else {
+                popup.classList.add('show');
+                otherPopup.classList.remove('show');
+            }
+        }
+
+        function initNotificationTabs() {
+            const tabs = document.querySelectorAll('.tab-button');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.getAttribute('data-tab');
+                    const tabContent = document.getElementById(`${tabName}Tab`);
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    tabContent.classList.add('active');
+                });
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('logoutButton').addEventListener('click', function() {
                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
@@ -664,11 +892,24 @@
             });
 
             document.getElementById('notificationButton').addEventListener('click', () => {
-                showToast('success', 'No new notifications');
+                togglePopup('notificationPopup');
             });
 
             document.getElementById('settingsButton').addEventListener('click', () => {
-                showToast('success', 'Settings panel coming soon!');
+                togglePopup('settingsPopup');
+            });
+
+            document.addEventListener('click', (event) => {
+                const notificationPopup = document.getElementById('notificationPopup');
+                const settingsPopup = document.getElementById('settingsPopup');
+                const notificationButton = document.getElementById('notificationButton');
+                const settingsButton = document.getElementById('settingsButton');
+
+                if (!notificationPopup.contains(event.target) && event.target !== notificationButton &&
+                    !settingsPopup.contains(event.target) && event.target !== settingsButton) {
+                    notificationPopup.classList.remove('show');
+                    settingsPopup.classList.remove('show');
+                }
             });
 
             document.getElementById('changeNameButton').addEventListener('click', function() {
@@ -695,15 +936,6 @@
                 }, 1000);
             });
 
-            document.querySelectorAll('.card, .stat-card').forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-5px) scale(1.02)';
-                });
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) scale(1)';
-                });
-            });
-
             document.addEventListener('keydown', function(e) {
                 if (e.ctrlKey && e.key === 's') {
                     e.preventDefault();
@@ -719,20 +951,14 @@
             updateLastUpdated();
             updateStats();
             
-            // Create sample goals
             createGoal('Emergency Fund', 5000, 10000);
             createGoal('New Car', 15000, 50000);
             createGoal('Vacation', 2000, 5000);
-
-            document.querySelectorAll('.fade-in').forEach((el, i) => {
-                setTimeout(() => {
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                }, i * 100);
-            });
+            initNotificationTabs();
         });
 
         setInterval(updateLastUpdated, 60000);
     </script>
 </body>
 </html>
+
