@@ -5,212 +5,254 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magnify! Budget Planner</title>
     <link rel="icon" href="logo.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #8B5CF6, #EC4899);
-            --secondary-gradient: linear-gradient(135deg, #A78BFA, #F472B6);
-            --background-gradient: linear-gradient(135deg, #C4B5FD, #F9A8D4);
-            --card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
-            --text-color: #1e293b;
-            --error-color: #ef4444;
-            --success-color: #22c55e;
+            --gradient-start: #8E2DE2;
+            --gradient-end: #FF69B4;
+            --primary: #9C27B0;
+            --primary-light: #BA68C8;
+            --primary-dark: #7B1FA2;
+            --accent: #FF4081;
+            --success: #4CAF50;
+            --danger: #F44336;
+            --warning: #FFC107;
+            --background: #F3E5F5;
+            --text: #333333;
+            --text-light: #757575;
+            --card: #FFFFFF;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background: var(--background-gradient);
-            color: var(--text-color);
             min-height: 100vh;
-            padding: 2rem;
-            line-height: 1.6;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            left: -150px;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: -100px;
+            right: -100px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 50px) rotate(90deg); }
+            50% { transform: translate(50px, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: var(--card);
             border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             padding: 2rem;
-            box-shadow: 
-                0 10px 15px -3px rgba(0, 0, 0, 0.1),
-                0 4px 6px -2px rgba(0, 0, 0, 0.05),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease;
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
         }
 
-        .container:hover {
-            transform: translateY(-5px) scale(1.01);
-        }
-
-        @keyframes slideUp {
-            0% {
-                opacity: 0;
-                transform: translateY(20px) scale(0.98);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
         }
 
         .header {
             text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
+            margin-bottom: 2rem;
         }
 
         .header h1 {
             font-size: 2.5rem;
-            font-weight: 600;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
         }
 
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: var(--primary-gradient);
-            border-radius: 2px;
-        }
-
-        .description {
-            color: #64748b;
+        .header p {
+            color: var(--text-light);
             font-size: 1.1rem;
-            font-weight: 300;
         }
 
         .main-content {
             display: flex;
             gap: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .input-section {
+        .input-section, .visualization-section {
             flex: 1;
-        }
-
-        .visualization-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
         .input-group {
             margin-bottom: 1.5rem;
-            position: relative;
         }
 
         .input-group label {
             display: block;
             font-weight: 500;
-            margin-bottom: 0.75rem;
-            color: var(--text-color);
-            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            transition: color 0.3s ease;
         }
 
         .input-group input {
             width: 100%;
-            padding: 1rem 1.25rem;
-            border: 2px solid rgba(139, 92, 246, 0.1);
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid var(--primary-light);
             border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--background);
         }
 
         .input-group input:focus {
             outline: none;
-            border-color: #8B5CF6;
-            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(156, 39, 176, 0.1);
+        }
+
+        .input-group input:focus + i {
+            color: var(--primary);
+        }
+
+        .update-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .update-button:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(156, 39, 176, 0.1);
         }
 
         .chart-controls {
             display: flex;
             gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
+            margin-bottom: 1rem;
         }
 
         .chart-button {
-            padding: 0.75rem 1.5rem;
-            border: none;
+            background: var(--background);
+            border: 2px solid var(--primary-light);
+            color: var(--text);
+            padding: 0.5rem 1rem;
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--text-color);
+            font-size: 0.875rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .chart-button i {
-            font-size: 1.1rem;
         }
 
         .chart-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        }
-
-        .chart-button.active {
-            background: var(--primary-gradient);
+            background: var(--primary-light);
             color: white;
         }
 
-        .chart-container {
-            background: var(--card-gradient);
-            padding: 1.5rem;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 2rem;
-            height: 400px;
-            transition: transform 0.3s ease;
-            width: 100%;
+        .chart-button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
 
-        .chart-container:hover {
-            transform: translateY(-5px);
+        .chart-container {
+            background: var(--background);
+            border-radius: 20px;
+            padding: 1.5rem;
+            height: 400px;
+            margin-bottom: 2rem;
         }
 
         .summary {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-            width: 100%;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
         .summary-card {
-            background: var(--card-gradient);
-            padding: 1.5rem;
+            background: var(--background);
             border-radius: 20px;
+            padding: 1.5rem;
             text-align: center;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
         .summary-card:hover {
@@ -219,61 +261,28 @@
         }
 
         .summary-card h3 {
-            font-size: 1.25rem;
+            font-size: 1rem;
             font-weight: 600;
+            color: var(--text-light);
             margin-bottom: 0.5rem;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .summary-card p {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--text-color);
-        }
-
-        .update-button {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .update-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        }
-
-        .update-button:active {
-            transform: translateY(1px);
+            color: var(--text);
         }
 
         .suggestions {
-            background: var(--card-gradient);
-            padding: 2rem;
+            background: var(--background);
             border-radius: 20px;
+            padding: 1.5rem;
             margin-top: 2rem;
-            border-left: 4px solid #8B5CF6;
-            transition: all 0.3s ease;
-            max-width: 600px;
-            width: 100%;
-        }
-
-        .suggestions:hover {
-            transform: translateX(5px);
+            border-left: 4px solid var(--primary);
         }
 
         .suggestions h3 {
-            color: #8B5CF6;
+            color: var(--primary);
             margin-bottom: 1rem;
             font-size: 1.25rem;
             font-weight: 600;
@@ -281,152 +290,164 @@
 
         .suggestions ul {
             list-style-type: none;
-            margin-top: 1rem;
+            padding-left: 1.5rem;
         }
 
         .suggestions li {
             margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
             position: relative;
         }
 
         .suggestions li::before {
             content: '→';
             position: absolute;
-            left: 0;
-            color: #8B5CF6;
+            left: -1.5rem;
+            color: var(--primary);
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-
-            .container {
-                padding: 1.5rem;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
             .main-content {
                 flex-direction: column;
             }
 
-            .chart-container {
-                height: 300px;
+            .input-section, .visualization-section {
+                width: 100%;
             }
+        }
+
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin: -0.75rem 0 0 -0.75rem;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s ease-in-out infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        .update-button.loading {
-            background: var(--secondary-gradient);
-            pointer-events: none;
-        }
-
-        .update-button.loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 50%;
-            left: 50%;
-            margin: -10px 0 0 -10px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
     </style>
 </head>
 <body>
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-wallet"></i> Magnify! Budget Planner</h1>
-            <p class="description">Track your income and expenses to achieve your financial goals</p>
-        </div>
+        <header class="header">
+            <h1><i class="fas fa-chart-pie"></i> Magnify! Budget Planner</h1>
+            <p>Take control of your finances with our advanced budgeting tool</p>
+        </header>
 
-        <div class="main-content">
-            <div class="input-section">
+        <main class="main-content">
+            <section class="input-section">
                 <div class="input-group">
-                    <label for="monthlyIncome"><i class="fas fa-money-bill-wave"></i> Monthly Income (₱)</label>
-                    <input type="number" id="monthlyIncome" placeholder="Enter your monthly income" min="0" step="100">
+                    <label for="monthlyIncome">Monthly Income (₱)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="monthlyIncome" placeholder="Enter your monthly income" min="0" step="100">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
                 </div>
 
                 <div class="input-group">
-                    <label for="savingsGoal"><i class="fas fa-piggy-bank"></i> Monthly Savings Goal (₱)</label>
-                    <input type="number" id="savingsGoal" placeholder="Enter your savings goal" min="0" step="100">
+                    <label for="savingsGoal">Monthly Savings Goal (₱)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="savingsGoal" placeholder="Enter your savings goal" min="0" step="100">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
                 </div>
 
                 <div class="input-group">
-                    <label for="housingExpense"><i class="fas fa-home"></i> Housing (₱)</label>
-                    <input type="number" id="housingExpense" placeholder="Rent, mortgage, utilities" min="0" step="100">
+                    <label for="housingExpense">Housing (₱)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="housingExpense" placeholder="Rent, mortgage, utilities" min="0" step="100">
+                        <i class="fas fa-home"></i>
+                    </div>
                 </div>
 
                 <div class="input-group">
-                    <label for="foodExpense"><i class="fas fa-utensils"></i> Food (₱)</label>
-                    <input type="number" id="foodExpense" placeholder="Groceries, dining" min="0" step="100">
+                    <label for="foodExpense">Food (₱)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="foodExpense" placeholder="Groceries, dining out" min="0" step="100">
+                        <i class="fas fa-utensils"></i>
+                    </div>
                 </div>
 
                 <div class="input-group">
-                    <label for="transportExpense"><i class="fas fa-car"></i> Transport (₱)</label>
-                    <input type="number" id="transportExpense" placeholder="Fuel, maintenance, fares" min="0" step="100">
+                    <label for="transportExpense">Transportation (₱)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="transportExpense" placeholder="Fuel, public transport, maintenance" min="0" step="100">
+                        <i class="fas fa-car"></i>
+                    </div>
                 </div>
 
                 <div class="input-group">
-                    <label for="entertainmentExpense"><i class="fas fa-film"></i> Entertainment (₱)</label>
-                    <input type="number" id="entertainmentExpense" placeholder="Movies, hobbies, activities" min="0" step="100">
+                    <label for="entertainmentExpense">Entertainment (₱)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="entertainmentExpense" placeholder="Movies, hobbies, subscriptions" min="0" step="100">
+                        <i class="fas fa-film"></i>
+                    </div>
                 </div>
 
                 <div class="input-group">
-                    <label for="otherExpense"><i class="fas fa-ellipsis-h"></i> Other (₱)</label>
-                    <input type="number" id="otherExpense" placeholder="Miscellaneous expenses" min="0" step="100">
+                    <label for="otherExpense">Other Expenses (₱)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="otherExpense" placeholder="Miscellaneous expenses" min="0" step="100">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
                 </div>
 
-                <button class="update-button" id="updateChartBtn">
+                <button id="updateChartBtn" class="update-button">
                     <i class="fas fa-sync-alt"></i> Update Budget
                 </button>
-            </div>
+            </section>
 
-            <div class="visualization-section">
+            <section class="visualization-section">
                 <div class="summary">
                     <div class="summary-card">
-                        <h3><i class="fas fa-money-bill-wave"></i> Total Income</h3>
+                        <h3><i class="fas fa-wallet"></i> Total Income</h3>
                         <p id="totalIncome">₱0.00</p>
                     </div>
                     <div class="summary-card">
-                        <h3><i class="fas fa-credit-card"></i> Total Expenses</h3>
+                        <h3><i class="fas fa-receipt"></i> Total Expenses</h3>
                         <p id="totalExpenses">₱0.00</p>
                     </div>
                     <div class="summary-card">
-                        <h3><i class="fas fa-wallet"></i> Remaining</h3>
+                        <h3><i class="fas fa-piggy-bank"></i> Remaining</h3>
                         <p id="remaining">₱0.00</p>
                     </div>
                 </div>
 
                 <div class="chart-controls">
                     <button class="chart-button active" data-type="bar">
-                        <i class="fas fa-chart-bar"></i> Bar Chart
-                    </button>
-                    <button class="chart-button" data-type="line">
-                        <i class="fas fa-chart-line"></i> Line Chart
+                        <i class="fas fa-chart-bar"></i> Bar
                     </button>
                     <button class="chart-button" data-type="pie">
-                        <i class="fas fa-chart-pie"></i> Pie Chart
+                        <i class="fas fa-chart-pie"></i> Pie
+                    </button>
+                    <button class="chart-button" data-type="line">
+                        <i class="fas fa-chart-line"></i> Line
                     </button>
                 </div>
-
-                <div class="chart-container">
+<div class="chart-container">
                     <canvas id="budgetChart"></canvas>
                 </div>
-            </div>
-        </div>
+            </section>
+        </main>
 
-        <div id="suggestions" class="suggestions"></div>
+        <section id="suggestions" class="suggestions"></section>
     </div>
 
     <script>
@@ -467,26 +488,19 @@
                             ],
                             borderWidth: 2
                         }]
-                    }
-                },
-                line: {
-                    type: 'line',
-                    data: {
-                        labels: ['Income', 'Expenses', 'Savings Goal'],
-                        datasets: [{
-                            label: 'Budget Overview',
-                            data: [0, 0, 0],
-                            borderColor: '#8B5CF6',
-                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
                     }
                 },
                 pie: {
                     type: 'pie',
                     data: {
-                        labels: ['Housing', 'Food', 'Transport', 'Entertainment', 'Other'],
+                        labels: ['Housing', 'Food', 'Transportation', 'Entertainment', 'Other'],
                         datasets: [{
                             data: [0, 0, 0, 0, 0],
                             backgroundColor: [
@@ -506,12 +520,34 @@
                             borderWidth: 2
                         }]
                     }
+                },
+                line: {
+                    type: 'line',
+                    data: {
+                        labels: ['Income', 'Expenses', 'Savings Goal'],
+                        datasets: [{
+                            label: 'Budget Overview',
+                            data: [0, 0, 0],
+                            borderColor: 'rgb(139, 92, 246)',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
                 }
             };
 
             budgetChart = new Chart(ctx, {
                 ...chartConfig[type],
                 options: {
+                    ...chartConfig[type].options,
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
@@ -561,15 +597,16 @@
 
                 budgetChart.update();
 
-                const suggestions = document.querySelector('.suggestions');
+                const suggestions = document.getElementById('suggestions');
                 if (income < totalExpenses) {
                     suggestions.innerHTML = `
                         <h3><i class="fas fa-exclamation-triangle"></i> Budget Alert</h3>
                         <p>Your expenses (${formatPeso(totalExpenses)}) exceed your income (${formatPeso(income)}). Consider these tips:</p>
                         <ul>
                             <li>Review your monthly expenses and identify non-essential items</li>
-                            <li>Create a detailed spending plan</li>
-                            <li>Look for additional income opportunities</li>
+                            <li>Look for ways to reduce your largest expense categories</li>
+                            <li>Consider additional income sources or part-time work</li>
+                            <li>Negotiate better rates for recurring bills (e.g., utilities, subscriptions)</li>
                         </ul>
                     `;
                 } else if (income - totalExpenses < savingsGoal) {
@@ -577,9 +614,10 @@
                         <h3><i class="fas fa-piggy-bank"></i> Savings Goal Alert</h3>
                         <p>You're ${formatPeso(savingsGoal - (income - totalExpenses))} short of your savings goal. Try these strategies:</p>
                         <ul>
-                            <li>Look for expenses you can reduce</li>
-                            <li>Set up automatic savings transfers</li>
-                            <li>Find ways to increase your income</li>
+                            <li>Analyze your expenses and look for areas to cut back</li>
+                            <li>Set up automatic transfers to your savings account</li>
+                            <li>Look for ways to increase your income</li>
+                            <li>Consider adjusting your savings goal to a more achievable target</li>
                         </ul>
                     `;
                 } else {
@@ -588,15 +626,15 @@
                         <p>You're on track with your budget! You can save ${formatPeso(income - totalExpenses)} this month.</p>
                         <ul>
                             <li>Consider increasing your savings goal</li>
-                            <li>Look into investment opportunities</li>
-                            <li>Build an emergency fund if you haven't already</li>
+                            <li>Look into investment opportunities for long-term growth</li>
+                            <li>Build or expand your emergency fund</li>
+                            <li>Set specific financial goals for the future (e.g., vacation, major purchase)</li>
                         </ul>
                     `;
                 }
 
                 updateBtn.classList.remove('loading');
                 updateBtn.disabled = false;
-                updateBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Budget';
             }, 800);
         }
 
@@ -615,7 +653,6 @@
 
             document.getElementById('updateChartBtn').addEventListener('click', updateChart);
 
-            // Auto-update on input changes
             const inputs = document.querySelectorAll('input[type="number"]');
             inputs.forEach(input => {
                 input.addEventListener('input', () => {
@@ -630,3 +667,4 @@
     </script>
 </body>
 </html>
+
