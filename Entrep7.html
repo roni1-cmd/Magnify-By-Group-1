@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magnify! Calendar</title>
-    <link rel="icon" href="logo.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📅</text></svg>">
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -97,7 +96,7 @@
 
         #calendar {
             background: white;
-            padding: 2rem;
+            padding: 1rem;
             border-radius: 1.5rem;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
                         0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -386,6 +385,18 @@
             background: rgba(255, 105, 180, 0.1);
         }
 
+        .fc .fc-daygrid-day-frame {
+            min-height: 120px;
+        }
+
+        .fc .fc-daygrid-day-events {
+            margin-bottom: 0;
+        }
+
+        .fc .fc-daygrid-event {
+            margin-top: 0.2em;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
@@ -400,7 +411,7 @@
             }
 
             #calendar {
-                padding: 1rem;
+                padding: 0.5rem;
             }
 
             .action-button {
@@ -449,6 +460,59 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            #calendar {
+                box-shadow: none;
+            }
+
+            .floating-button,
+            .modal,
+            .print-save-buttons {
+                display: none !important;
+            }
+        }
+
+        .print-save-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Add a class for image saving */
+        .saving-image {
+            background: white !important;
+        }
+
+        .saving-image .floating-button,
+        .saving-image .modal,
+        .saving-image .print-save-buttons {
+            display: none !important;
+        }
+
+        @media print, .saving-image {
+            #calendar {
+                background: white !important;
+            }
+            .fc-scrollgrid, .fc-scrollgrid-sync-table {
+                border-collapse: separate !important;
+            }
+            .fc-daygrid-day-frame {
+                background-color: white !important;
+                border: 1px solid #ddd !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -463,6 +527,15 @@
         </div>
         
         <div id="calendar"></div>
+
+        <div class="print-save-buttons">
+            <button class="button button-primary" onclick="printCalendar()">
+                <i class="fas fa-print"></i> Print Calendar
+            </button>
+            <button class="button button-secondary" onclick="saveAsImage()">
+                <i class="fas fa-file-image"></i> Save as Image
+            </button>
+        </div>
 
         <div class="floating-button">
             <button class="action-button" onclick="openAddEventModal()" title="Add New Event">
@@ -531,6 +604,8 @@
         </div>
     </div>
 
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script>
         let calendar;
         let currentEvent = null;
@@ -568,6 +643,7 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
+                height: 'auto',
                 dateClick: function(info) {
                     openAddEventModal(info.dateStr);
                 },
@@ -796,6 +872,60 @@
                 closeModal(event.target.id);
             }
         }
+
+        function printCalendar() {
+            window.print();
+        }
+
+        function saveAsImage() {
+    const calendarEl = document.getElementById('calendar');
+    const containerEl = document.querySelector('.container');
+    
+    // Add saving-image class to hide unnecessary elements
+    document.body.classList.add('saving-image');
+    
+    html2canvas(containerEl, {
+        scale: 3, // Increase resolution further
+        backgroundColor: '#ffffff', // Ensure white background
+        logging: false, // Disable logging
+        useCORS: true, // Enable CORS for better rendering
+        allowTaint: true, // Allow tainted canvas
+        onclone: (clonedDoc) => {
+            // Adjust styles in the cloned document for better rendering
+            const style = clonedDoc.createElement('style');
+            style.innerHTML = `
+                .fc-scrollgrid-sync-table {
+                    border-collapse: separate;
+                }
+                .fc-daygrid-day-frame {
+                    background-color: white;
+                    border: 1px solid #ddd;
+                }
+                .fc-daygrid-day-top {
+                    padding: 5px;
+                }
+                .fc-daygrid-day-number {
+                    font-weight: bold;
+                }
+                .fc-event {
+                    margin: 2px 0;
+                    padding: 2px;
+                    border-radius: 3px;
+                }
+            `;
+            clonedDoc.head.appendChild(style);
+        }
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'magnify_calendar.png';
+        link.href = canvas.toDataURL('image/png', 1.0); // Use maximum quality
+        link.click();
+        
+        // Remove saving-image class
+        document.body.classList.remove('saving-image');
+    });
+}
     </script>
 </body>
 </html>
+
