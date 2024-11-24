@@ -336,12 +336,12 @@
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-            width: 300px;
+            padding: 1.5rem;
+            width: 400px;
             display: none;
             z-index: 1000;
             transition: all 0.3s ease;
-            max-height: 400px;
+            max-height: 80vh;
             overflow-y: auto;
         }
 
@@ -365,9 +365,9 @@
             display: grid;
             grid-template-columns: 1fr auto auto;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
             border-bottom: 1px solid #e2e8f0;
         }
 
@@ -377,19 +377,21 @@
 
         .notification-item p {
             margin: 0;
-            font-size: 0.8rem;
-            color: #777;
+            font-size: 0.9rem;
+            color: #555;
         }
 
         .notification-item .amount {
             font-weight: 600;
             color: #333;
             display: block;
+            font-size: 1.1rem;
         }
 
         .notification-item .due-days {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: #e74c3c;
+            font-weight: 500;
         }
 
         .view-all {
@@ -408,34 +410,41 @@
 
         .settings-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0 0.75rem;
         }
 
         .settings-table th,
         .settings-table td {
-            padding: 0.5rem;
+            padding: 0.75rem;
             text-align: left;
-            border-bottom: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+            border-radius: 4px;
         }
 
         .settings-table th {
             font-weight: 600;
-            color: #4a5568;
+            color: #2d3748;
+            background-color: #edf2f7;
         }
 
         .settings-table td {
-            color: #718096;
+            color: #4a5568;
         }
 
         .action-link {
             color: #8E2DE2;
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background-color: #f3ebff;
+            transition: all 0.3s ease;
         }
 
         .action-link:hover {
-            text-decoration: underline;
+            background-color: #e9d8ff;
         }
 
         .notification-tabs {
@@ -590,85 +599,126 @@
     </div>
 
     <div id="notificationPopup" class="floating-popup">
-    <h4>Notifications</h4>
-    <div class="notification-tabs">
-        <button class="tab-button active" data-tab="payments">Payments</button>
-        <button class="tab-button" data-tab="alerts">Alerts</button>
+        <h4>Notifications</h4>
+        <div class="notification-tabs">
+            <button class="tab-button active" data-tab="payments">Payments</button>
+            <button class="tab-button" data-tab="alerts">Alerts</button>
+            <button class="tab-button" data-tab="updates">Updates</button>
+        </div>
+        <div id="paymentsTab" class="tab-content active">
+            <div class="notification-item">
+                <div>
+                    <strong>Mortgage Payment</strong>
+                    <p>Due: December 28, 2024</p>
+                    <p>Account: Primary Checking (****1234)</p>
+                </div>
+                <div>
+                    <span class="amount">₱15,000</span>
+                    <span class="due-days">30 Days Left</span>
+                    <p>Recurring: Monthly</p>
+                </div>
+                <button class="pay-now-btn">Pay Now</button>
+            </div>
+            <div class="notification-item">
+                <div>
+                    <strong>Credit Card Bill</strong>
+                    <p>Due: December 30, 2024</p>
+                    <p>Card: Platinum Rewards (****5678)</p>
+                </div>
+                <div>
+                    <span class="amount">₱5,000</span>
+                    <span class="due-days">32 Days Left</span>
+                    <p>Minimum Due: ₱1,000</p>
+                </div>
+                <button class="pay-now-btn">Pay Now</button>
+            </div>
+            <div class="notification-item">
+                <div>
+                    <strong>Utility Bill</strong>
+                    <p>Due: December 1, 2024</p>
+                    <p>Provider: Metropolitan Cebu Water District</p>
+                </div>
+                <div>
+                    <span class="amount">₱2,500</span>
+                    <span class="due-days">3 Days Left</span>
+                    <p>Usage: 25 cubic meters</p>
+                </div>
+                <button class="pay-now-btn">Pay Now</button>
+            </div>
+            <div class="notification-item">
+                <div>
+                    <strong>Car Insurance</strong>
+                    <p>Due: January 5, 2025</p>
+                    <p>Policy: Comprehensive (No. INS12345)</p>
+                </div>
+                <div>
+                    <span class="amount">₱3,200</span>
+                    <span class="due-days">38 Days Left</span>
+                    <p>Coverage: 1 Year</p>
+                </div>
+                <button class="pay-now-btn">Pay Now</button>
+            </div>
+        </div>
+        <div id="alertsTab" class="tab-content">
+            <div class="notification-item alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <div>
+                    <strong>Unusual Activity Detected</strong>
+                    <p>We noticed a large transaction of ₱10,395 on your account on Nov 23, 2024.</p>
+                    <p>Location: Online Purchase, Lazada</p>
+                </div>
+                <button class="alert-action-btn">Review</button>
+            </div>
+            <div class="notification-item alert">
+                <i class="fas fa-bell"></i>
+                <div>
+                    <strong>New Feature Available</strong>
+                    <p>Try our new budget planner tool! Set categories, track expenses, and reach your financial goals faster.</p>
+                    <p>Compatible with: Mobile and Web</p>
+                </div>
+                <button class="alert-action-btn">Explore</button>
+            </div>
+            <div class="notification-item alert">
+                <i class="fas fa-piggy-bank"></i>
+                <div>
+                    <strong>Savings Goal Reached</strong>
+                    <p>Congratulations! You've reached your Emergency Fund goal of ₱100,000.</p>
+                    <p>Time taken: 6 months</p>
+                </div>
+                <button class="alert-action-btn">View</button>
+            </div>
+            <div class="notification-item alert">
+                <i class="fas fa-chart-line"></i>
+                <div>
+                    <strong>Investment Opportunity</strong>
+                    <p>Based on your risk profile, we've identified a new mutual fund that aligns with your goals.</p>
+                    <p>Potential Return: 8-12% p.a.</p>
+                </div>
+                <button class="alert-action-btn">Learn More</button>
+            </div>
+        </div>
+        <div id="updatesTab" class="tab-content">
+            <div class="notification-item">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>App Update Available</strong>
+                    <p>Version 2.5 is now available with enhanced security features and bug fixes.</p>
+                    <p>Size: 25MB</p>
+                </div>
+                <button class="alert-action-btn">Update</button>
+            </div>
+            <div class="notification-item">
+                <i class="fas fa-gift"></i>
+                <div>
+                    <strong>Special Offer</strong>
+                    <p>Earn 5% cashback on all grocery purchases this weekend!</p>
+                    <p>Valid: Nov 27-28, 2024</p>
+                </div>
+                <button class="alert-action-btn">Activate</button>
+            </div>
+        </div>
+        <a href="#" class="view-all">View All Notifications</a>
     </div>
-    <div id="paymentsTab" class="tab-content active">
-        <div class="notification-item">
-            <div>
-                <strong>Mortgage Payment</strong>
-                <p>Due: December 28, 2024</p>
-            </div>
-            <div>
-                <span class="amount">₱15,000</span>
-                <span class="due-days">30 Days Left</span>
-            </div>
-            <button class="pay-now-btn">Pay Now</button>
-        </div>
-        <div class="notification-item">
-            <div>
-                <strong>Credit Card Bill</strong>
-                <p>Due: December 30, 2024</p>
-            </div>
-            <div>
-                <span class="amount">₱5,000</span>
-                <span class="due-days">32 Days Left</span>
-            </div>
-            <button class="pay-now-btn">Pay Now</button>
-        </div>
-        <div class="notification-item">
-            <div>
-                <strong>Utility Bill</strong>
-                <p>Due: December 1, 2024</p>
-            </div>
-            <div>
-                <span class="amount">₱2,500</span>
-                <span class="due-days">3 Days Left</span>
-            </div>
-            <button class="pay-now-btn">Pay Now</button>
-        </div>
-        <div class="notification-item">
-            <div>
-                <strong>Car Insurance</strong>
-                <p>Due: January 5, 2025</p>
-            </div>
-            <div>
-                <span class="amount">₱3,200</span>
-                <span class="due-days">38 Days Left</span>
-            </div>
-            <button class="pay-now-btn">Pay Now</button>
-        </div>
-    </div>
-    <div id="alertsTab" class="tab-content">
-        <div class="notification-item alert">
-            <i class="fas fa-exclamation-circle"></i>
-            <div>
-                <strong>Unusual Activity Detected</strong>
-                <p>We noticed a large transaction on your account. Please verify.</p>
-            </div>
-            <button class="alert-action-btn">Review</button>
-        </div>
-        <div class="notification-item alert">
-            <i class="fas fa-bell"></i>
-            <div>
-                <strong>New Feature Available</strong>
-                <p>Try our new budget planner tool!</p>
-            </div>
-            <button class="alert-action-btn">Explore</button>
-        </div>
-        <div class="notification-item alert">
-            <i class="fas fa-piggy-bank"></i>
-            <div>
-                <strong>Savings Goal Reached</strong>
-                <p>Congratulations! You've reached your Emergency Fund goal.</p>
-            </div>
-            <button class="alert-action-btn">View</button>
-        </div>
-    </div>
-    <a href="#" class="view-all">View All Notifications</a>
-</div>
 
     <div id="settingsPopup" class="floating-popup">
         <h4>Settings</h4>
@@ -690,8 +740,8 @@
             </tr>
             <tr>
                 <td>Notifications</td>
-                <td>Enabled</td>
-                <td><a href="#" class="action-link">Disable</a></td>
+                <td>Enabled (Email, Push)</td>
+                <td><a href="#" class="action-link">Manage</a></td>
             </tr>
             <tr>
                 <td>Two-Factor Authentication</td>
@@ -710,11 +760,26 @@
             </tr>
             <tr>
                 <td>Linked Accounts</td>
-                <td>2 Banks</td>
+                <td>2 Banks, 1 Investment</td>
                 <td><a href="#" class="action-link">Manage</a></td>
             </tr>
+            <tr>
+                <td>Budget Categories</td>
+                <td>8 Active Categories</td>
+                <td><a href="#" class="action-link">Customize</a></td>
+            </tr>
+            <tr>
+                <td>Savings Goals</td>
+                <td>3 Active Goals</td>
+                <td><a href="#" class="action-link">View/Edit</a></td>
+            </tr>
+            <tr>
+                <td>Bill Reminders</td>
+                <td>5 Days Before Due</td>
+                <td><a href="#" class="action-link">Adjust</a></td>
+            </tr>
         </table>
-        <a href="#" class="view-all">Manage Settings</a>
+        <a href="#" class="view-all">Manage All Settings</a>
     </div>
 
     <div id="successToast" class="toast success">
@@ -924,6 +989,7 @@
                     showToast('success', 'Name updated successfully!');
                 } else {
                     showToast('error', 'Please enter a new name');
+                
                 }
             });
 
@@ -961,4 +1027,3 @@
     </script>
 </body>
 </html>
-
