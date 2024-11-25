@@ -102,6 +102,19 @@
             padding: 0.5rem 1rem;
             border-radius: 20px;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav ul li a i {
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        nav ul li a span {
+            font-size: 0.8rem;
         }
 
         nav ul li a:hover {
@@ -361,8 +374,7 @@
 
         .close:hover {
             color: var(--primary);
-            
-transform: rotate(90deg);
+            transform: rotate(90deg);
         }
 
         .notification {
@@ -437,6 +449,134 @@ transform: rotate(90deg);
             100% { transform: rotate(360deg); }
         }
 
+        /* Enhanced styles for notification tab */
+        .notification-tab {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 1rem;
+            border-radius: 10px 0 0 10px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-tab:hover {
+            padding-right: 1.5rem;
+        }
+
+        .notification-tab i {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+
+        .notification-count {
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .notification-panel {
+            position: fixed;
+            top
+: 0;
+            right: -400px;
+            width: 400px;
+            height: 100%;
+            background-color: var(--card);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1001;
+            overflow-y: auto;
+        }
+
+        .notification-panel.open {
+            right: 0;
+        }
+
+        .notification-header {
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-list {
+            padding: 1rem;
+        }
+
+        .notification-item {
+            background-color: var(--background);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-message {
+            color: var(--text-light);
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .notification-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.5rem;
+        }
+
+        .notification-action {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            margin-left: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .notification-action:hover {
+            color: var(--primary-dark);
+        }
+
+        .notification-badge {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 20px;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -469,6 +609,10 @@ transform: rotate(90deg);
                 bottom: 1rem;
                 right: 1rem;
             }
+
+            .notification-panel {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -478,10 +622,22 @@ transform: rotate(90deg);
             <div class="logo">Magnify!</div>
             <nav>
                 <ul>
-                    <li><a href="Entrep.html">Home</a></li>
-                    <li><a href="#bills">Bills</a></li>
-                    <li><a href="#" onclick="openModal('aboutModal')">About</a></li>
-                    <li><a href="#" onclick="openModal('helpModal')">Contact</a></li>
+                    <li><a href="Entrep.html" title="Home">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a></li>
+                    <li><a href="#bills" title="Bills">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span>Bills</span>
+                    </a></li>
+                    <li><a href="#" onclick="openModal('aboutModal')" title="About">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About</span>
+                    </a></li>
+                    <li><a href="#" onclick="openModal('helpModal')" title="Contact">
+                        <i class="fas fa-envelope"></i>
+                        <span>Contact</span>
+                    </a></li>
                 </ul>
             </nav>
         </div>
@@ -586,6 +742,22 @@ transform: rotate(90deg);
         <p class="loading-text">Magnifying your way to our store...</p>
     </div>
 
+    <!-- Enhanced notification tab and panel -->
+    <div class="notification-tab" onclick="toggleNotificationPanel()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-count">5</span>
+    </div>
+
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <span class="close" onclick="toggleNotificationPanel()">&times;</span>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Notification items will be dynamically added here -->
+        </div>
+    </div>
+
     <script>
         function handlePayment(billType) {
             showNotification(`Processing ${billType} bill payment...`);
@@ -637,7 +809,98 @@ transform: rotate(90deg);
                 card.querySelector('.bill-icon').style.transform = 'scale(1) rotate(0deg)';
             });
         });
+
+        // Enhanced functions for notification panel
+        function toggleNotificationPanel() {
+            const panel = document.getElementById('notificationPanel');
+            panel.classList.toggle('open');
+            updateNotificationCount();
+        }
+
+        function addNotification(title, message, time, type = 'info', actions = []) {
+            const notificationList = document.getElementById('notificationList');
+            const notificationItem = document.createElement('div');
+            notificationItem.className = 'notification-item';
+            notificationItem.innerHTML = `
+                <div class="notification-title">
+                    ${title}
+                    <span class="notification-badge">${type}</span>
+                </div>
+                <div class="notification-message">${message}</div>
+                <div class="notification-time">${time}</div>
+                <div class="notification-actions">
+                    ${actions.map(action => `
+                        <button class="notification-action" onclick="handleNotificationAction('${action}', this)">${action}</button>
+                    `).join('')}
+                    <button class="notification-action" onclick="markAsRead(this)">Mark as Read</button>
+                    <button class="notification-action" onclick="deleteNotification(this)">Delete</button>
+                </div>
+            `;
+            notificationList.prepend(notificationItem);
+            updateNotificationCount();
+        }
+
+        function markAsRead(button) {
+            const notificationItem = button.closest('.notification-item');
+            notificationItem.style.opacity = '0.6';
+            button.disabled = true;
+            updateNotificationCount();
+        }
+
+        function deleteNotification(button) {
+            const notificationItem = button.closest('.notification-item');
+            notificationItem.remove();
+            updateNotificationCount();
+        }
+
+        function updateNotificationCount() {
+            const count = document.querySelectorAll('.notification-item:not([style*="opacity: 0.6"])').length;
+            document.querySelector('.notification-count').textContent = count;
+        }
+
+        function handleNotificationAction(action, button) {
+            const notificationItem = button.closest('.notification-item');
+            const title = notificationItem.querySelector('.notification-title').textContent.trim();
+            console.log(`Action "${action}" triggered for notification: ${title}`);
+            // Implement specific actions here
+            if (action === 'Pay Now') {
+                showNotification(`Processing payment for ${title}...`);
+            } else if (action === 'View Details') {
+                showNotification(`Viewing details for ${title}...`);
+            }
+        }
+
+        // Example notifications (you can replace these with real data)
+        addNotification('Meralco Bill Due', 'Your electricity bill of ₱3,500.00 is due in 3 days. Avoid late fees by paying now!', '2 hours ago', 'warning', ['Pay Now', 'View Details']);
+        addNotification('PLDT Payment Successful', 'Your internet bill payment of ₱1,999.00 was successful.', '1 day ago', 'success', ['View Receipt']);
+        addNotification('Globe Promo Alert', 'Double your data for only ₱50! Limited time offer.', '3 days ago', 'info', ['Avail Now', 'Learn More']);
+        addNotification('BPI Credit Card Statement', 'Your credit card statement of ₱15,750.25 is now available.', '1 week ago', 'info', ['View Statement', 'Pay Now']);
+        addNotification('PhilHealth Contribution', 'Your PhilHealth contribution of ₱900.00 for this quarter is due next week.', '2 weeks ago', 'warning', ['Pay Now', 'Set Reminder']);
+
+        // Interactive features
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('notification-action')) {
+                    this.classList.toggle('expanded');
+                }
+            });
+        });
+
+        // Update notification count on page load
+        updateNotificationCount();
+
+        // Simulating real-time notifications
+        setInterval(() => {
+            const randomBill = ['Meralco', 'PLDT', 'Globe', 'Maynilad', 'BPI Credit Card'][Math.floor(Math.random() * 5)];
+            const randomAmount = Math.floor(Math.random() * 5000) + 500;
+            addNotification(
+                `${randomBill} Bill Generated`,
+                `Your ${randomBill} bill of ₱${randomAmount.toFixed(2)} has been generated. Due date: ${new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString()}`,
+                'Just now',
+                'info',
+                ['View Bill', 'Pay Now']
+            );
+        }, 60000); // Add a new notification every minute
     </script>
 </body>
 </html>
-
