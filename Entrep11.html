@@ -13,6 +13,8 @@
             --primary-dark: #4b0082;
             --success: #ff69b4;
             --success-dark: #ff1493;
+            --warning: #ffa500;
+            --danger: #ff4500;
             --background: #f8f9fa;
             --text: #333;
             --text-light: #666;
@@ -35,7 +37,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 1rem;
         }
@@ -117,15 +119,19 @@
             color: var(--text);
             text-decoration: none;
             transition: var(--transition);
+            display: block;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
         }
 
         .sidebar a:hover {
             color: var(--primary);
+            background-color: var(--background);
         }
 
         .resources-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 2rem;
         }
 
@@ -338,7 +344,7 @@
             position: fixed;
             top: 80px;
             right: 20px;
-            width: 300px;
+            width: 400px;
             background: white;
             border-radius: 1rem;
             box-shadow: var(--card-shadow);
@@ -367,7 +373,7 @@
 
         .notification-content {
             padding: 1rem;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
         }
 
@@ -399,6 +405,26 @@
             font-size: 0.8rem;
             color: var(--text-light);
             margin-top: 0.5rem;
+        }
+
+        .notification-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.5rem;
+        }
+
+        .notification-action {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+            transition: var(--transition);
+        }
+
+        .notification-action:hover {
+            color: var(--primary-dark);
         }
 
         .modal {
@@ -436,13 +462,27 @@
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            padding: 0 10px;
+            line-height: 1;
         }
 
         .close:hover,
         .close:focus {
             color: #000;
             text-decoration: none;
+        }
+
+        .notification-toggle {
+            background: none;
+            border: none;
+            color: white;
             cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .notification-toggle:hover {
+            transform: scale(1.1);
         }
 
         @keyframes fadeInUp {
@@ -490,11 +530,12 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">Magnify!</div>
+                <div class="logo">Magnify! Financial Resource and Guidance</div>
                 <nav class="nav-menu">
                     <a href="#" class="nav-item" onclick="navigateTo('Entrep.html')">
                         <i class="fas fa-home"></i>
-                        <span>Home</span>
+                        <span>Home</
+span>
                     </a>
                     <a href="#" class="nav-item" id="resources-link">
                         <i class="fas fa-book"></i>
@@ -510,7 +551,7 @@
                     </a>
                     <div class="notification-icon" id="notification-icon">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-count">0</span>
+                        <span class="notification-count">7</span>
                     </div>
                 </nav>
             </div>
@@ -526,6 +567,27 @@
                     <li><a href="#">Saving Strategies</a></li>
                     <li><a href="#">Investment 101</a></li>
                     <li><a href="#">Debt Management</a></li>
+                    <li><a href="#">Financial Goal Setting</a></li>
+                    <li><a href="#">Emergency Fund Planning</a></li>
+                    <li><a href="#">Retirement Planning</a></li>
+                    <li><a href="#">Tax Planning</a></li>
+                    <li><a href="#">Insurance Basics</a></li>
+                    <li><a href="#">Credit Score Management</a></li>
+                    <li><a href="#">Personal Finance Tools</a></li>
+                    <li><a href="#">Financial Calculators</a></li>
+                    <li><a href="#">Money-Saving Tips</a></li>
+                    <li><a href="#">Financial Literacy Resources</a></li>
+                    <li><a href="#">Budgeting Templates</a></li>
+                    <li><a href="#">Stock Market Basics</a></li>
+                    <li><a href="#">Real Estate Investing</a></li>
+                    <li><a href="#">Cryptocurrency Guide</a></li>
+                    <li><a href="#">Side Hustle Ideas</a></li>
+                    <li><a href="#">Student Loan Management</a></li>
+                    <li><a href="#">Negotiating Salary</a></li>
+                    <li><a href="#">Financial Books Recommendations</a></li>
+                    <li><a href="#">Frugal Living Tips</a></li>
+                    <li><a href="#">Understanding Credit Cards</a></li>
+                    <li><a href="#">Estate Planning Basics</a></li>
                 </ul>
             </div>
 
@@ -606,6 +668,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="resource-card" data-url="https://www.bsp.gov.ph/Pages/InclusiveFinance/FinancialEducation.aspx">
+                        <div class="resource-card-content">
+                            <div class="resource-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="resource-info">
+                                <div class="resource-title">BSP Financial Education</div>
+                                <div class="resource-description">Financial education resources from Bangko Sentral ng Pilipinas</div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>
@@ -626,7 +699,7 @@
     <div class="notification-panel" id="notification-panel">
         <div class="notification-header">
             <h3>Notifications</h3>
-            <button class="notification-toggle" aria-label="Close notifications">
+            <button class="notification-toggle" id="notification-close" aria-label="Close notifications">
                 <i class="fas fa-times"></i>
             </button>
         </div>
@@ -688,9 +761,14 @@
         const notificationPanel = document.getElementById('notification-panel');
         const notificationContent = document.getElementById('notification-content');
         const notificationCount = document.querySelector('.notification-count');
+        const notificationClose = document.getElementById('notification-close');
 
         notificationIcon.addEventListener('click', () => {
             notificationPanel.classList.toggle('active');
+        });
+
+        notificationClose.addEventListener('click', () => {
+            notificationPanel.classList.remove('active');
         });
 
         document.addEventListener('click', (event) => {
@@ -699,22 +777,69 @@
             }
         });
 
-        let notifications = [];
-
-        function addNotification(title, message) {
-            const notification = {
-                id: Date.now(),
-                title,
-                message,
-                timestamp: new Date()
-            };
-            notifications.unshift(notification);
-            updateNotificationCount();
-            renderNotifications();
-        }
+        let notifications = [
+            {
+                id: 1,
+                title: 'New Course Available',
+                message: 'Check out our latest course on Advanced Budgeting Techniques! Learn how to optimize your budget and save more.',
+                type: 'info',
+                timestamp: new Date(Date.now() - 15 * 60000),
+                read: false
+            },
+            {
+                id: 2,
+                title: 'Budget Review Reminder',
+                message: 'It\'s time for your monthly budget review. Don\'t forget to analyze your spending and adjust your goals.',
+                type: 'warning',
+                timestamp: new Date(Date.now() - 2 * 3600000),
+                read: false
+            },
+            {
+                id: 3,
+                title: 'Savings Goal Achieved',
+                message: 'Congratulations! You\'ve reached your savings goal of $1000. Keep up the great work!',
+                type: 'success',
+                timestamp: new Date(Date.now() - 1 * 86400000),
+                read: false
+            },
+            {
+                id: 4,
+                title: 'New Financial Tool',
+                message: 'We\'ve added a new retirement calculator to help you plan for your future. Try it out now!',
+                type: 'info',
+                timestamp: new Date(Date.now() - 3 * 86400000),
+                read: false
+            },
+            {
+                id: 5,
+                title: 'Upcoming Webinar',
+                message: 'Join our free webinar on "Investing for Beginners" next Tuesday at 7 PM. Register now!',
+                type: 'info',
+                timestamp: new Date(Date.now() - 5 * 86400000),
+                read: false
+            },
+            {
+                id: 6,
+                title: 'Credit Score Update',
+                message: 'Your credit score has improved by 20 points! View your updated report and see what factors contributed to the increase.',
+                type: 'success',
+                timestamp: new Date(Date.now() - 7 * 86400000),
+                read: false
+            },
+            {
+                id: 7,
+                title: 'Budget Overspending Alert',
+                message: 'You\'ve exceeded your entertainment budget by 15%. Review your spending and make adjustments to stay on track.',
+                type: 'danger',
+                timestamp: new Date(Date.now() - 10 * 86400000),
+                read: false
+            }
+        ];
 
         function updateNotificationCount() {
-            notificationCount.textContent = notifications.length;
+            const unreadCount = notifications.filter(n => !n.read).length;
+            notificationCount.textContent = unreadCount;
+            notificationCount.style.display = unreadCount > 0 ? 'flex' : 'none';
         }
 
         function renderNotifications() {
@@ -722,12 +847,43 @@
             notifications.forEach(notification => {
                 const notificationItem = document.createElement('div');
                 notificationItem.classList.add('notification-item');
+                if (!notification.read) {
+                    notificationItem.classList.add('unread');
+                }
                 notificationItem.innerHTML = `
                     <div class="notification-title">${notification.title}</div>
                     <div class="notification-message">${notification.message}</div>
                     <div class="notification-time">${formatTimestamp(notification.timestamp)}</div>
+                    <div class="notification-actions">
+                        <button class="notification-action mark-read" data-id="${notification.id}">
+                            ${notification.read ? 'Mark as Unread' : 'Mark as Read'}
+                        </button>
+                        <button class="notification-action delete" data-id="${notification.id}">Delete</button>
+                    </div>
                 `;
                 notificationContent.appendChild(notificationItem);
+            });
+
+            // Add event listeners for mark as read/unread and delete buttons
+            document.querySelectorAll('.notification-action.mark-read').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.dataset.id);
+                    const notification = notifications.find(n => n.id === id);
+                    if (notification) {
+                        notification.read = !notification.read;
+                        updateNotificationCount();
+                        renderNotifications();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.notification-action.delete').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.dataset.id);
+                    notifications = notifications.filter(n => n.id !== id);
+                    updateNotificationCount();
+                    renderNotifications();
+                });
             });
         }
 
@@ -745,14 +901,9 @@
             }
         }
 
-        // Example usage of notifications
-        setTimeout(() => {
-            addNotification('New Course Available', 'Check out our latest course on Advanced Budgeting Techniques!');
-        }, 3000);
-
-        setTimeout(() => {
-            addNotification('Reminder', 'Don\'t forget to review your monthly budget!');
-        }, 7000);
+        // Initialize notifications
+        updateNotificationCount();
+        renderNotifications();
 
         // Modal functionality
         const modals = {
@@ -766,7 +917,8 @@
             const modal = modals[linkId];
             const closeBtn = modal.querySelector('.close');
 
-            link.onclick = function() {
+            link.onclick = function(e) {
+                e.preventDefault();
                 modal.style.display = "block";
                 setTimeout(() => {
                     modal.classList.add('active');
@@ -790,43 +942,6 @@
                 modal.style.display = "none";
             }, 300);
         }
-
-        // Interactive elements
-        document.querySelectorAll('.resource-section').forEach(section => {
-            section.addEventListener('mouseover', () => {
-                section.style.transform = 'scale(1.02)';
-            });
-            section.addEventListener('mouseout', () => {
-                section.style.transform = 'scale(1)';
-            });
-        });
-
-        const ctaButton = document.querySelector('.cta-button');
-        ctaButton.addEventListener('mouseover', () => {
-            ctaButton.style.transform = 'scale(1.1) rotate(2deg)';
-        });
-        ctaButton.addEventListener('mouseout', () => {
-            ctaButton.style.transform = 'scale(1) rotate(0deg)';
-        });
-
-        // Chatbot button animation
-        const chatbotButton = document.querySelector('.chatbot-button');
-        chatbotButton.addEventListener('mouseover', () => {
-            chatbotButton.style.animation = 'none';
-        });
-        chatbotButton.addEventListener('mouseout', () => {
-            chatbotButton.style.animation = 'pulse 2s infinite';
-        });
-
-        // Add smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
     </script>
 </body>
 </html>
