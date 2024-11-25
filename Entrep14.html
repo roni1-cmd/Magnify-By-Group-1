@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magnify! Monthly Expense and Income Visualizer</title>
-    <link rel="icon" href="logo.png">
+    <link rel="icon" href="/placeholder.svg?height=32&width=32">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #8E2DE2, #4A00E0);
-            --secondary-gradient: linear-gradient(135deg, #FF69B4, #FF1493);
-            --background-gradient: linear-gradient(135deg, #9C27B0, #E91E63);
-            --card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
-            --text-color: #333;
-            --text-light: #6b7280;
+            --primary-color: #8A2BE2; /* Purple */
+            --secondary-color: #FF69B4; /* Pink */
+            --accent-color: #FF1493; /* Deep Pink */
+            --background-color: #f0f2f5;
+            --text-color: #8A2BE2; /* Purple */
+            --text-light: #9370DB; /* Medium Purple */
             --border-color: #e5e7eb;
+            --card-bg: #FFFFFF;
             --success-color: #10B981;
             --danger-color: #EF4444;
             --warning-color: #F59E0B;
@@ -30,327 +31,392 @@
         }
 
         body {
-            background: var(--background-gradient);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem;
             line-height: 1.5;
+            min-height: 100vh;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 1rem;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-item {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-item:hover {
+            color: var(--accent-color);
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .main-content {
             display: grid;
             grid-template-columns: 1fr 350px;
             gap: 2rem;
+            margin-top: 2rem;
         }
 
-        .main-content, .transaction-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 1.5rem;
-            padding: 2rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            animation: slideIn 0.5s ease;
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.75rem;
-        }
-
-        .header p {
-            color: var(--text-light);
-            font-size: 1.1rem;
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
         }
 
         .summary-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
         }
 
         .summary-card {
-            background: var(--card-gradient);
-            padding: 1.5rem;
-            border-radius: 1rem;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
             text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .summary-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: var(--primary-gradient);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            transform: rotate(45deg);
-            z-index: 1;
-        }
-
-        .summary-card:hover::before {
-            opacity: 0.1;
         }
 
         .summary-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        .summary-value {
-            font-size: 1.75rem;
+        .summary-card-title {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-card-value {
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-top: 0.75rem;
-            position: relative;
-            z-index: 2;
+            color: var(--primary-color);
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
         }
 
         .input-group label {
-            font-weight: 600;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
         .input-group input,
         .input-group select {
-            padding: 0.875rem;
-            border: 2px solid var(--border-color);
-            border-radius: 0.75rem;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
             font-size: 1rem;
-            transition: all 0.2s;
-            background: rgba(255, 255, 255, 0.9);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
         }
 
         .input-group input:focus,
         .input-group select:focus {
             outline: none;
-            border-color: #8E2DE2;
-            box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.1);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
         }
 
-        .action-button {
-            padding: 1rem 2rem;
+        .btn {
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 0.75rem;
-            background: var(--primary-gradient);
-            color: white;
+            border-radius: 4px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
         }
 
-        .action-button:hover {
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(142, 45, 226, 0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         .chart-controls {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
             justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .chart-button {
-            padding: 0.75rem 1.25rem;
+        .chart-btn {
+            padding: 0.5rem 1rem;
             border: none;
-            border-radius: 0.5rem;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--text-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
+            transition: all 0.3s ease;
+            background-color: var(--card-bg);
+            color: var(--text-color);
         }
 
-        .chart-button:hover,
-        .chart-button.active {
-            background: var(--primary-gradient);
+        .chart-btn:hover {
+            background-color: var(--primary-color);
             color: white;
         }
 
-        .chart-container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            margin-bottom: 2rem;
-            height: 400px;
-            position: relative;
-        }
-
-        .transaction-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .transaction-header h2 {
-            font-size: 1.5rem;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .chart-btn.active {
+            background-color: var(--primary-color);
+            color: white;
         }
 
         .transaction-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            max-height: 600px;
+            max-height: 400px;
             overflow-y: auto;
-            padding-right: 0.5rem;
         }
 
         .transaction-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.25rem;
-            border-radius: 0.75rem;
-            transition: all 0.2s;
-            position: relative;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
         }
 
         .transaction-item:hover {
-            transform: translateX(4px);
-            background: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateX(5px);
         }
 
         .transaction-month {
             font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
         .transaction-details {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
         }
 
-        .transaction-amount {
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .amount-income {
+        .income {
             color: var(--success-color);
         }
 
-        .amount-expense {
+        .expense {
             color: var(--danger-color);
         }
 
-        .delete-button {
-            padding: 0.5rem;
-            background: none;
-            border: none;
-            color: var(--danger-color);
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.2s;
-            position: absolute;
-            right: 0.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            border-radius: 0.5rem;
+        .notification-panel {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            width: 300px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
         }
 
-        .transaction-item:hover .delete-button {
-            opacity: 1;
-        }
-
-        .delete-button:hover {
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 2rem;
+        .notification-header {
             padding: 1rem;
-            font-size: 0.875rem;
-            opacity: 0.9;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            
-            body {
-                padding: 1rem;
-            }
+        .notification-list {
+            max-height: 400px;
+            overflow-y: auto;
         }
 
-        @media (max-width: 640px) {
-            .form-grid {
+        .notification-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-item:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-content {
+            flex-grow: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .notification-message {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .notification-dismiss {
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .notification-dismiss:hover {
+            color: var(--danger-color);
+            transform: scale(1.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close {
+            color: var(--text-light);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
                 grid-template-columns: 1fr;
             }
 
@@ -358,497 +424,401 @@
                 grid-template-columns: 1fr;
             }
 
-            .header h1 {
-                font-size: 2rem;
+            .form-grid {
+                grid-template-columns: 1fr;
             }
-        }
-
-        .loading {
-            display: inline-block;
-            width: 1.5rem;
-            height: 1.5rem;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        [data-tooltip] {
-            position: relative;
-        }
-
-        [data-tooltip]:before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0.5rem 1rem;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
-
-        [data-tooltip]:hover:before {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(-0.5rem);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="main-content">
-            <div class="header">
-                <h1>
-                    <i class="fas fa-chart-line"></i>
-                    Magnify! Visualizer
-                </h1>
-                <p>Visualize your income and expenses with our interactive financial tracker.</p>
-            </div>
-
-            <div class="summary-cards">
-                <div class="summary-card" data-tooltip="Total income across all months">
-                    <div>
-                        <i class="fas fa-wallet"></i>
-                        Total Income
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Magnify! Annual Visualizer</div>
+                <nav class="nav-menu">
+                    <a href="Entrep.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+                    <a href="#" class="nav-item" id="reportsLink"><i class="fas fa-chart-bar"></i> Reports</a>
+                    <a href="#" class="nav-item" id="transactionsLink"><i class="fas fa-exchange-alt"></i> Transactions</a>
+                    <div class="notification-icon" id="notificationIcon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">5</span>
                     </div>
-                    <div id="totalIncome" class="summary-value">₱0.00</div>
-                </div>
-                <div class="summary-card" data-tooltip="Total expenses across all months">
-                    <div>
-                        <i class="fas fa-receipt"></i>
-                        Total Expenses
-                    </div>
-                    <div id="totalExpenses" class="summary-value">₱0.00</div>
-                </div>
-                <div class="summary-card" data-tooltip="Net savings (Income - Expenses)">
-                    <div>
-                        <i class="fas fa-piggy-bank"></i>
-                        Net Savings
-                    </div>
-                    <div id="netSavings" class="summary-value">₱0.00</div>
-                </div>
-            </div>
-
-            <form id="dataForm" class="form-grid">
-                <div class="input-group">
-                    <label>
-                        <i class="fas fa-calendar"></i>
-                        Month
-                    </label>
-                    <select id="month" required>
-                        <option value="January">January</option>
-                        <option value="February">February</option>
-                        <option value="March">March</option>
-                        <option value="April">April</option>
-                        <option value="May">May</option>
-                        <option value="June">June</option>
-                        <option value="July">July</option>
-                        <option value="August">August</option>
-                        <option value="September">September</option>
-                        <option value="October">October</option>
-                        <option value="November">November</option>
-                        <option value="December">December</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>
-                        <i class="fas fa-money-bill-wave"></i>
-                        Income (₱)
-                    </label>
-                    <input type="number" id="income" placeholder="Enter your income" required min="0">
-                </div>
-
-                <div class="input-group">
-                    <label>
-                        <i class="fas fa-shopping-cart"></i>
-                        Expenses (₱)
-                    </label>
-                    <input type="number" id="expenses" placeholder="Enter your expenses" required min="0">
-                </div>
-
-                <div class="input-group">
-                    <label>
-                        <i class="fas fa-chart-bar"></i>
-                        Visualization Type
-                    </label>
-                    <select id="graphType">
-                        <option value="bar">Bar Chart</option>
-                        <option value="line">Line Chart</option>
-                        <option value="pie">Pie Chart</option>
-                    </select>
-                </div>
-            </form>
-
-            <button type="button" id="addDataBtn" class="action-button">
-                <i class="fas fa-plus"></i>
-                Track My Finance
-            </button>
-
-            <div class="chart-controls">
-                <button class="chart-button active" data-type="bar" data-tooltip="View as bar chart">
-                    <i class="fas fa-chart-bar"></i>
-                    Bar
-                </button>
-                <button class="chart-button" data-type="line" data-tooltip="View as line chart">
-                    <i class="fas fa-chart-line"></i>
-                    Line
-                </button>
-                <button class="chart-button" data-type="pie" data-tooltip="View as pie chart">
-                    <i class="fas fa-chart-pie"></i>
-                    Pie
-                </button>
-            </div>
-
-            <div class="chart-container">
-                <canvas id="dataChart"></canvas>
+                </nav>
             </div>
         </div>
+    </header>
 
-        <div class="transaction-panel">
-            <div class="transaction-header">
-                <h2>
-                    <i class="fas fa-history"></i>
-                    Annual Transactions
-                </h2>
-                <button class="chart-button" onclick="clearTransactions()" data-tooltip="Clear all transactions">
-                    <i class="fas fa-trash"></i>
-                    Clear All
-                </button>
+    <div class="container">
+        <div class="main-content">
+            <div class="content-left">
+                <div class="card">
+                    <h2 class="card-title">Financial Summary</h2>
+                    <div class="summary-cards">
+                        <div class="summary-card">
+                            <div class="summary-card-title">Total Income</div>
+                            <div id="totalIncome" class="summary-card-value">₱0.00</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-card-title">Total Expenses</div>
+                            <div id="totalExpenses" class="summary-card-value">₱0.00</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-card-title">Net Savings</div>
+                            <div id="netSavings" class="summary-card-value">₱0.00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Add New Transaction</h2>
+                    <form id="transactionForm" class="form-grid">
+                        <div class="input-group">
+                
+<label for="month">Month</label>
+                            <select id="month" required>
+                                <option value="">Select Month</option>
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="March">March</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="August">August</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="income">Income (₱)</label>
+                            <input type="number" id="income" required min="0" step="0.01">
+                        </div>
+                        <div class="input-group">
+                            <label for="expenses">Expenses (₱)</label>
+                            <input type="number" id="expenses" required min="0" step="0.01">
+                        </div>
+                        <div class="input-group">
+                            <label for="category">Category</label>
+                            <select id="category" required>
+                                <option value="">Select Category</option>
+                                <option value="Salary">Salary</option>
+                                <option value="Investments">Investments</option>
+                                <option value="Food">Food</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </form>
+                    <button id="addTransactionBtn" class="btn btn-primary" style="margin-top: 1rem;">Add Transaction</button>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Financial Visualization</h2>
+                    <div class="chart-controls">
+                        <button class="chart-btn active" data-type="bar">Bar</button>
+                        <button class="chart-btn" data-type="line">Line</button>
+                        <button class="chart-btn" data-type="pie">Pie</button>
+                    </div>
+                    <canvas id="financialChart"></canvas>
+                </div>
             </div>
-            <div id="logContainer" class="transaction-list"></div>
+
+            <div class="content-right">
+                <div class="card">
+                    <h2 class="card-title">Recent Transactions</h2>
+                    <div id="transactionList" class="transaction-list">
+                        <!-- Transactions will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <footer class="footer">
-        <p>© Magnify! By Group 1 LLC | 2024 All rights reserved</p>
+    <div id="notificationPanel" class="notification-panel">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button id="closeNotifications" class="btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="notificationList" class="notification-list">
+            <!-- Notifications will be dynamically added here -->
+        </div>
+    </div>
+
+    <div id="reportsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Financial Reports</h2>
+            <div id="reportsContent">
+                <!-- Reports content will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Transaction Details</h2>
+            <div id="transactionDetails">
+                <!-- Transaction details will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Magnify! Financial Visualizer. All rights reserved.</p>
     </footer>
 
     <script>
-        const ctx = document.getElementById('dataChart').getContext('2d');
-        let chartInstance;
-        let incomeData = [];
-        let expenseData = [];
-        let labels = [];
+        // Initialize variables
         let transactions = [];
+        let chart;
 
-        function loadSavedData() {
-            const savedData = localStorage.getItem('magnifyData');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                incomeData = data.incomeData;
-                expenseData = data.expenseData;
-                labels = data.labels;
-                transactions = data.transactions;
-                updateChart('bar');
-                updateTransactionLog();
-                updateSummary();
+        // DOM elements
+        const transactionForm = document.getElementById('transactionForm');
+        const addTransactionBtn = document.getElementById('addTransactionBtn');
+        const transactionList = document.getElementById('transactionList');
+        const totalIncomeElement = document.getElementById('totalIncome');
+        const totalExpensesElement = document.getElementById('totalExpenses');
+        const netSavingsElement = document.getElementById('netSavings');
+        const chartButtons = document.querySelectorAll('.chart-btn');
+        const notificationIcon = document.getElementById('notificationIcon');
+        const notificationPanel = document.getElementById('notificationPanel');
+        const closeNotifications = document.getElementById('closeNotifications');
+        const notificationList = document.getElementById('notificationList');
+        const reportsLink = document.getElementById('reportsLink');
+        const transactionsLink = document.getElementById('transactionsLink');
+        const reportsModal = document.getElementById('reportsModal');
+        const transactionModal = document.getElementById('transactionModal');
+
+        // Event listeners
+        addTransactionBtn.addEventListener('click', addTransaction);
+        chartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                chartButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                updateChart(button.dataset.type);
+            });
+        });
+        notificationIcon.addEventListener('click', toggleNotificationPanel);
+        closeNotifications.addEventListener('click', toggleNotificationPanel);
+        reportsLink.addEventListener('click', showReportsModal);
+        transactionsLink.addEventListener('click', showTransactionHistory);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == reportsModal || event.target == transactionModal) {
+                reportsModal.style.display = "none";
+                transactionModal.style.display = "none";
             }
         }
 
-        function saveData() {
-            const data = {
-                incomeData,
-                expenseData,
-                labels,
-                transactions
-            };
-            localStorage.setItem('magnifyData', JSON.stringify(data));
-        }
+        // Close button for modals
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.onclick = function() {
+                reportsModal.style.display = "none";
+                transactionModal.style.display = "none";
+            }
+        });
 
-        function formatCurrency(value) {
-            return new Intl.NumberFormat('en-PH', {
-                style: 'currency',
-                currency: 'PHP'
-            }).format(value);
-        }
-
-        function updateSummary() {
-            const totalIncome = incomeData.reduce((a, b) => a + b, 0);
-            const totalExpenses = expenseData.reduce((a, b) => a + b, 0);
-            const netSavings = totalIncome - totalExpenses;
-
-            animateValue('totalIncome', totalIncome);
-            animateValue('totalExpenses', totalExpenses);
-            animateValue('netSavings', netSavings);
-        }
-
-        function animateValue(elementId, value) {
-            const element = document.getElementById(elementId);
-            const duration = 1000;
-            const start = parseFloat(element.textContent.replace(/[^0-9.-]+/g, "")) || 0;
-            const increment = (value - start) / (duration / 16);
-            let current = start;
-
-            const animate = () => {
-                current += increment;
-                const shouldStop = 
-                    (increment > 0 && current >= value) || 
-                    (increment < 0 && current <= value);
-
-                if (shouldStop) {
-                    current = value;
-                    element.textContent = formatCurrency(current);
-                } else {
-                    element.textContent = formatCurrency(current);
-                    requestAnimationFrame(animate);
-                }
-            };
-
-            animate();
-        }
-
-        document.getElementById('addDataBtn').addEventListener('click', function() {
+        // Functions
+        function addTransaction() {
             const month = document.getElementById('month').value;
             const income = parseFloat(document.getElementById('income').value);
             const expenses = parseFloat(document.getElementById('expenses').value);
+            const category = document.getElementById('category').value;
 
-            if (!month || isNaN(income) || isNaN(expenses)) {
-                alert('Please fill in all fields with valid numbers');
+            if (!month || isNaN(income) || isNaN(expenses) || !category) {
+                alert('Please fill in all fields with valid information.');
                 return;
             }
 
-            if (labels.includes(month)) {
-                alert('Data for this month already exists');
-                return;
+            const transaction = { month, income, expenses, category, date: new Date() };
+            transactions.push(transaction);
+
+            updateTransactionList();
+            updateFinancialSummary();
+            updateChart();
+            addNotification(`New ${category} transaction added for ${month}`);
+
+            // Reset form
+            transactionForm.reset();
+        }
+
+        function updateTransactionList() {
+            transactionList.innerHTML = '';
+            transactions.slice().reverse().forEach((transaction, index) => {
+                const transactionItem = document.createElement('div');
+                transactionItem.classList.add('transaction-item');
+                transactionItem.innerHTML = `
+                    <div class="transaction-month">${transaction.month} - ${transaction.category}</div>
+                    <div class="transaction-details">
+                        <span class="income">Income: ₱${transaction.income.toFixed(2)}</span>
+                        <span class="expense">Expenses: ₱${transaction.expenses.toFixed(2)}</span>
+                    </div>
+                    <div class="transaction-date">${transaction.date.toLocaleString()}</div>
+                `;
+                transactionItem.addEventListener('click', () => showTransactionDetails(index));
+                transactionList.appendChild(transactionItem);
+            });
+        }
+
+        function updateFinancialSummary() {
+            const totalIncome = transactions.reduce((sum, transaction) => sum + transaction.income, 0);
+            const totalExpenses = transactions.reduce((sum, transaction) => sum + transaction.expenses, 0);
+            const netSavings = totalIncome - totalExpenses;
+
+            totalIncomeElement.textContent = `₱${totalIncome.toFixed(2)}`;
+            totalExpensesElement.textContent = `₱${totalExpenses.toFixed(2)}`;
+            netSavingsElement.textContent = `₱${netSavings.toFixed(2)}`;
+        }
+
+        function updateChart(type = 'bar') {
+            const ctx = document.getElementById('financialChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
             }
 
-            this.innerHTML = '<span class="loading"></span> Processing...';
-            this.disabled = true;
+            const labels = transactions.map(transaction => transaction.month);
+            const incomeData = transactions.map(transaction => transaction.income);
+            const expensesData = transactions.map(transaction => transaction.expenses);
 
-            setTimeout(() => {
-                incomeData.push(income);
-                expenseData.push(expenses);
-                labels.push(month);
-                transactions.push({ month, income, expenses });
-
-                updateChart(document.getElementById('graphType').value);
-                updateTransactionLog();
-                updateSummary();
-                saveData();
-
-                document.getElementById('income').value = '';
-                document.getElementById('expenses').value = '';
-                this.innerHTML = '<i class="fas fa-plus"></i> Track My Finance';
-                this.disabled = false;
-
-                const toast = document.createElement('div');
-                toast.style.position = 'fixed';
-                toast.style.bottom = '20px';
-                toast.style.right = '20px';
-                toast.style.background = 'var(--success-color)';
-                toast.style.color = 'white';
-                toast.style.padding = '1rem';
-                toast.style.borderRadius = '0.5rem';
-                toast.style.animation = 'slideIn 0.3s ease';
-                toast.innerHTML = '<i class="fas fa-check"></i> Finance Magnified Successfully!';
-                document.body.appendChild(toast);
-                setTimeout(() => toast.remove(), 3000);
-            }, 800);
-        });
-
-        function createChart(type) {
-            const config = {
+            const chartConfig = {
                 type: type,
                 data: {
-                    labels: type === 'pie' ? ['Total Income', 'Total Expenses'] : labels,
-                    datasets: type === 'pie' ? [{
-                        data: [
-                            incomeData.reduce((a, b) => a + b, 0),
-                            expenseData.reduce((a, b) => a + b, 0)
-                        ],
-                        backgroundColor: [
-                            'rgba(16, 185, 129, 0.6)',
-                            'rgba(239, 68, 68, 0.6)'
-                        ],
-                        borderColor: [
-                            'rgba(16, 185, 129, 1)',
-                            'rgba(239, 68, 68, 1)'
-                        ],
-                        borderWidth: 2
-                    }] : [
+                    labels: labels,
+                    datasets: [
                         {
                             label: 'Income',
                             data: incomeData,
-                            backgroundColor: 'rgba(16, 185, 129, 0.6)',
-                            borderColor: 'rgba(16, 185, 129, 1)',
-                            borderWidth: 2,
-                            tension: 0.4
+                            backgroundColor: 'rgba(255, 105, 180, 0.6)', // Pink
+                            borderColor: 'rgba(255, 105, 180, 1)',
+                            borderWidth: 1
                         },
                         {
                             label: 'Expenses',
-                            data: expenseData,
-                            backgroundColor: 'rgba(239, 68, 68, 0.6)',
-                            borderColor: 'rgba(239, 68, 68, 1)',
-                            borderWidth: 2,
-                            tension: 0.4
+                            data: expensesData,
+                            backgroundColor: 'rgba(138, 43, 226, 0.6)', // Purple
+                            borderColor: 'rgba(138, 43, 226, 1)',
+                            borderWidth: 1
                         }
                     ]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        duration: 1000,
-                        easing: 'easeInOutQuart'
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                font: {
-                                    size: 12,
-                                    family: 'Poppins'
-                                }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 12,
-                            titleFont: {
-                                size: 14,
-                                family: 'Poppins'
-                            },
-                            bodyFont: {
-                                size: 13,
-                                family: 'Poppins'
-                            },
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    label += formatCurrency(context.raw);
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: type !== 'pie' ? {
+                    scales: {
                         y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: value => formatCurrency(value),
-                                font: {
-                                    family: 'Poppins'
-                                }
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                font: {
-                                    family: 'Poppins'
-                                }
-                            }
+                            beginAtZero: true
                         }
-                    } : undefined
+                    }
                 }
             };
 
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
-
-            chartInstance = new Chart(ctx, config);
+            chart = new Chart(ctx, chartConfig);
         }
 
-        function updateChart(type) {
-            createChart(type);
-            document.querySelectorAll('.chart-button').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.type === type);
+        function toggleNotificationPanel() {
+            notificationPanel.style.display = notificationPanel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function addNotification(message) {
+            const notificationItem = document.createElement('div');
+            notificationItem.classList.add('notification-item');
+            notificationItem.innerHTML = `
+                <div class="notification-content">
+                    <div class="notification-title">New Transaction</div>
+                    <div class="notification-message">${message}</div>
+                    <div class="notification-time">${new Date().toLocaleString()}</div>
+                </div>
+                <div class="notification-dismiss">&times;</div>
+            `;
+            notificationList.insertBefore(notificationItem, notificationList.firstChild);
+
+            // Update notification count
+            updateNotificationCount();
+
+            // Add event listener for dismissing notification
+            const dismissBtn = notificationItem.querySelector('.notification-dismiss');
+            dismissBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationItem.remove();
+                updateNotificationCount();
             });
         }
 
-        function updateTransactionLog() {
-            const logContainer = document.getElementById('logContainer');
-            logContainer.innerHTML = '';
-
-            transactions.forEach((transaction, index) => {
-                const transactionDiv = document.createElement('div');
-                transactionDiv.className = 'transaction-item';
-                transactionDiv.innerHTML = `
-                    <div class="transaction-month">
-                        <i class="fas fa-calendar-day"></i>
-                        ${transaction.month}
-                    </div>
-                    <div class="transaction-details">
-                        <span class="transaction-amount amount-income">
-                            <i class="fas fa-arrow-up"></i>
-                            ${formatCurrency(transaction.income)}
-                        </span>
-                        <span class="transaction-amount amount-expense">
-                            <i class="fas fa-arrow-down"></i>
-                            ${formatCurrency(transaction.expenses)}
-                        </span>
-                        <button class="delete-button" onclick="deleteTransaction(${index})" data-tooltip="Delete transaction">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `;
-                logContainer.appendChild(transactionDiv);
-            });
+        function updateNotificationCount() {
+            const notificationCount = document.querySelector('.notification-count');
+            const count = notificationList.children.length;
+            notificationCount.textContent = count;
+            notificationCount.style.display = count > 0 ? 'flex' : 'none';
         }
 
-        function deleteTransaction(index) {
-            if (confirm('Are you sure you want to delete this transaction?')) {
-                transactions.splice(index, 1);
-                incomeData.splice(index, 1);
-                expenseData.splice(index, 1);
-                labels.splice(index, 1);
-                updateTransactionLog();
-                updateChart(document.getElementById('graphType').value);
-                updateSummary();
-                saveData();
-            }
+        function showReportsModal() {
+            const reportsContent = document.getElementById('reportsContent');
+            reportsContent.innerHTML = `
+                <h3>Financial Overview</h3>
+                <p>Total Transactions: ${transactions.length}</p>
+                <p>Total Income: ₱${transactions.reduce((sum, t) => sum + t.income, 0).toFixed(2)}</p>
+                <p>Total Expenses: ₱${transactions.reduce((sum, t) => sum + t.expenses, 0).toFixed(2)}</p>
+                <p>Net Savings: ₱${(transactions.reduce((sum, t) => sum + t.income - t.expenses, 0)).toFixed(2)}</p>
+                <h3>Category Breakdown</h3>
+                <ul>
+                    ${Object.entries(transactions.reduce((acc, t) => {
+                        acc[t.category] = (acc[t.category] || 0) + t.expenses;
+                        return acc;
+                    }, {})).map(([category, total]) => `<li>${category}: ₱${total.toFixed(2)}</li>`).join('')}
+                </ul>
+            `;
+            reportsModal.style.display = "block";
         }
 
-        function clearTransactions() {
-            if (confirm('Are you sure you want to clear all transactions? This action cannot be undone.')) {
-                transactions = [];
-                incomeData = [];
-                expenseData = [];
-                labels = [];
-                updateTransactionLog();
-                updateChart(document.getElementById('graphType').value);
-                updateSummary();
-                saveData();
-            }
+        function showTransactionHistory() {
+            const transactionDetails = document.getElementById('transactionDetails');
+            transactionDetails.innerHTML = `
+                <h3>Transaction History</h3>
+                <ul>
+                    ${transactions.map(t => `
+                        <li>
+                            <strong>${t.month} - ${t.category}</strong><br>
+                            Income: ₱${t.income.toFixed(2)}<br>
+                            Expenses: ₱${t.expenses.toFixed(2)}<br>
+                            Date: ${t.date.toLocaleString()}
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            transactionModal.style.display = "block";
         }
 
-        document.querySelectorAll('.chart-button').forEach(button => {
-            button.addEventListener('click', () => {
-                if (button.dataset.type) {
-                    updateChart(button.dataset.type);
-                }
-            });
-        });
+        function showTransactionDetails(index) {
+            const transaction = transactions[transactions.length - 1 - index];
+            const transactionDetails = document.getElementById('transactionDetails');
+            transactionDetails.innerHTML = `
+                <h3>Transaction Details</h3>
+                <p><strong>Month:</strong> ${transaction.month}</p>
+                <p><strong>Category:</strong> ${transaction.category}</p>
+                <p><strong>Income:</strong> ₱${transaction.income.toFixed(2)}</p>
+                <p><strong>Expenses:</strong> ₱${transaction.expenses.toFixed(2)}</p>
+                <p><strong>Net:</strong> ₱${(transaction.income - transaction.expenses).toFixed(2)}</p>
+                <p><strong>Date:</strong> ${transaction.date.toLocaleString()}</p>
+            `;
+            transactionModal.style.display = "block";
+        }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadSavedData();
-            if (!chartInstance) {
-                createChart('bar');
-            }
-        });
+        // Initialize chart and add sample data
+        updateChart();
+        addNotification("Welcome to Magnify! Start tracking your finances today.");
+        addNotification("New feature: You can now categorize your transactions!");
+        addNotification("Tip: Regular budget reviews can help you save more.");
+        addNotification("Don't forget to check your reports for insights!");
+        addNotification("New chart types available. Try them out!");
     </script>
 </body>
 </html>
+
