@@ -37,7 +37,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1800px;
             margin: 0 auto;
             padding: 1rem;
         }
@@ -90,7 +90,7 @@
 
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 3fr;
+            grid-template-columns: 1fr 5fr;
             gap: 2rem;
             margin-top: 2rem;
         }
@@ -141,6 +141,9 @@
             padding: 2rem;
             box-shadow: var(--card-shadow);
             transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .resource-section:hover {
@@ -170,6 +173,13 @@
 
         .resource-section:hover h2::after {
             width: 100px;
+        }
+
+        .resource-cards-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .resource-card {
@@ -504,6 +514,12 @@
             }
         }
 
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr 3fr;
+            }
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -530,12 +546,12 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">Magnify! Financial Resource and Guidance</div>
+                
+<div class="logo">Magnify! Financial Resource and Guidance</div>
                 <nav class="nav-menu">
                     <a href="#" class="nav-item" onclick="navigateTo('Entrep.html')">
                         <i class="fas fa-home"></i>
-                        <span>Home</
-span>
+                        <span>Home</span>
                     </a>
                     <a href="#" class="nav-item" id="resources-link">
                         <i class="fas fa-book"></i>
@@ -594,25 +610,38 @@ span>
             <div class="resources-grid">
                 <section class="resource-section">
                     <h2>Budgeting and Financial Literacy</h2>
-                    <div class="resource-card" data-url="https://www.umkc.edu/financial-wellness/resources/budgeting.html">
-                        <div class="resource-card-content">
-                            <div class="resource-icon">
-                                <i class="fas fa-book-open"></i>
-                            </div>
-                            <div class="resource-info">
-                                <div class="resource-title">UMKC Financial Wellness</div>
-                                <div class="resource-description">Comprehensive budgeting resources and tools</div>
+                    <div class="resource-cards-container">
+                        <div class="resource-card" data-url="https://www.umkc.edu/financial-wellness/resources/budgeting.html">
+                            <div class="resource-card-content">
+                                <div class="resource-icon">
+                                    <i class="fas fa-book-open"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">UMKC Financial Wellness</div>
+                                    <div class="resource-description">Comprehensive budgeting resources and tools</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="resource-card" data-url="https://bettermoneyhabits.bankofamerica.com/en/saving-budgeting/creating-a-budget">
-                        <div class="resource-card-content">
-                            <div class="resource-icon">
-                                <i class="fas fa-calculator"></i>
+                        <div class="resource-card" data-url="https://bettermoneyhabits.bankofamerica.com/en/saving-budgeting/creating-a-budget">
+                            <div class="resource-card-content">
+                                <div class="resource-icon">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">Better Money Habits</div>
+                                    <div class="resource-description">Learn the basics of creating a budget</div>
+                                </div>
                             </div>
-                            <div class="resource-info">
-                                <div class="resource-title">Better Money Habits</div>
-                                <div class="resource-description">Learn the basics of creating a budget</div>
+                        </div>
+                        <div class="resource-card" data-url="https://www.nerdwallet.com/article/finance/how-to-budget">
+                            <div class="resource-card-content">
+                                <div class="resource-icon">
+                                    <i class="fas fa-piggy-bank"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">NerdWallet Budgeting Guide</div>
+                                    <div class="resource-description">Step-by-step guide to creating and maintaining a budget</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -620,25 +649,38 @@ span>
 
                 <section class="resource-section">
                     <h2>Personal Finance Training</h2>
-                    <div class="resource-card" data-url="https://www.coursera.org/courses?query=personal%20finance">
-                        <div class="resource-card-content">
-                            <div class="resource-icon">
-                                <i class="fas fa-laptop"></i>
-                            </div>
-                            <div class="resource-info">
-                                <div class="resource-title">Coursera Courses</div>
-                                <div class="resource-description">Online personal finance courses</div>
+                    <div class="resource-cards-container">
+                        <div class="resource-card" data-url="https://www.coursera.org/courses?query=personal%20finance">
+                            <div class="resource-card-content">
+                                <div class="resource-icon">
+                                    <i class="fas fa-laptop"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">Coursera Courses</div>
+                                    <div class="resource-description">Online personal finance courses</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="resource-card" data-url="https://www.udemy.com/topic/personal-finance/">
-                        <div class="resource-card-content">
-                            <div class="resource-icon">
-                                <i class="fas fa-chalkboard-teacher"></i>
+                        <div class="resource-card" data-url="https://www.udemy.com/topic/personal-finance/">
+                            <div class="resource-card-content">
+                                <div class="resource-icon">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">Udemy Courses</div>
+                                    <div class="resource-description">Learn finance and budgeting skills</div>
+                                </div>
                             </div>
-                            <div class="resource-info">
-                                <div class="resource-title">Udemy Courses</div>
-                                <div class="resource-description">Learn finance and budgeting skills</div>
+                        </div>
+                        <div class="resource-card" data-url="https://www.edx.org/learn/personal-finance">
+                            <div class="resource-card-content">
+                                <div class="resource-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">edX Financial Courses</div>
+                                    <div class="resource-description">University-level personal finance education</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -646,36 +688,49 @@ span>
 
                 <section class="resource-section">
                     <h2>Philippine Budgeting Resources</h2>
-                    <div class="resource-card" data-url="https://dfi.wa.gov/financial-education/information/budgeting">
-                        <div class="resource-card-content">
-                            <div class="resource-icon">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
-                            <div class="resource-info">
-                                <div class="resource-title">DFI - Budgeting Information</div>
-                                <div class="resource-description">Comprehensive budgeting information</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="resource-card" data-url="https://www.dbm.gov.ph/wp-content/uploads/2012/03/PGB-B2.pdf">
-                        <div class="resource-card-content">
-                            <div class="resource-icon">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <div class="resource-info">
-                                <div class="resource-title">DBM - Budgeting Guidelines PDF</div>
-                                <div class="resource-description">Official budgeting guidelines document</div>
+                    <div class="resource-cards-container">
+                        <div class="resource-card" data-url="https://dfi.wa.gov/financial-education/information/budgeting">
+                            <div class="resource-card-content">
+                                <div class="resource-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">DFI - Budgeting Information</div>
+                                    <div class="resource-description">Comprehensive budgeting information</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="resource-card" data-url="https://www.bsp.gov.ph/Pages/InclusiveFinance/FinancialEducation.aspx">
-                        <div class="resource-card-content">
-                            <div class="resource-icon">
-                                <i class="fas fa-university"></i>
+                        <div class="resource-card" data-url="https://www.dbm.gov.ph/wp-content/uploads/2012/03/PGB-B2.pdf">
+                            <div class="resource-card-content">
+                                <div class="resource-icon">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">DBM - Budgeting Guidelines PDF</div>
+                                    <div class="resource-description">Official budgeting guidelines document</div>
+                                </div>
                             </div>
-                            <div class="resource-info">
-                                <div class="resource-title">BSP Financial Education</div>
-                                <div class="resource-description">Financial education resources from Bangko Sentral ng Pilipinas</div>
+                        </div>
+                        <div class="resource-card" data-url="https://www.bsp.gov.ph/Pages/InclusiveFinance/FinancialEducation.aspx">
+                            <div class="resource-card-content">
+                                <div class="resource-icon">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">BSP Financial Education</div>
+                                    <div class="resource-description">Financial education resources from Bangko Sentral ng Pilipinas</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-card" data-url="https://www.sec.gov.ph/financial-literacy/">
+                            <div class="resource-card-content">
+                                <div class="resource-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">SEC Financial Literacy Programs</div>
+                                    <div class="resource-description">Financial literacy initiatives by the Securities and Exchange Commission</div>
+                                </div>
                             </div>
                         </div>
                     </div>
