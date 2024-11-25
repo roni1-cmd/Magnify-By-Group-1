@@ -80,12 +80,28 @@
             gap: 0.5rem;
             padding: 0.5rem 1rem;
             border-radius: 4px;
+            position: relative;
         }
 
-        .nav-item:hover {
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover::after,
+        .nav-item.active::after {
+            width: 100%;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
             color: var(--accent-color);
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
         }
 
         .notification-icon {
@@ -415,6 +431,20 @@
             transform: scale(1.1);
         }
 
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -436,9 +466,9 @@
             <div class="header-content">
                 <div class="logo">Magnify! Annual Visualizer</div>
                 <nav class="nav-menu">
-                    <a href="Entrep.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
-                    <a href="#" class="nav-item" id="reportsLink"><i class="fas fa-chart-bar"></i> Reports</a>
-                    <a href="#" class="nav-item" id="transactionsLink"><i class="fas fa-exchange-alt"></i> Transactions</a>
+                    <a href="#" class="nav-item active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a>
+                    <a href="#" class="nav-item" data-section="reports"><i class="fas fa-chart-bar"></i> Reports</a>
+                    <a href="#" class="nav-item" data-section="transactions"><i class="fas fa-exchange-alt"></i> Transactions</a>
                     <div class="notification-icon" id="notificationIcon">
                         <i class="fas fa-bell"></i>
                         <span class="notification-count">5</span>
@@ -451,79 +481,98 @@
     <div class="container">
         <div class="main-content">
             <div class="content-left">
-                <div class="card">
-                    <h2 class="card-title">Financial Summary</h2>
-                    <div class="summary-cards">
-                        <div class="summary-card">
-                            <div class="summary-card-title">Total Income</div>
-                            <div id="totalIncome" class="summary-card-value">₱0.00</div>
+                <div id="dashboard" class="content-section active">
+                    <div class="card">
+                        <h2 class="card-title">Financial Summary</h2>
+                        <div class="summary-cards">
+                            <div class="summary-card">
+                                <div class="summary-card-title">Total Income</div>
+                                <div id="totalIncome" class="summary-card-value">₱0.00</div>
+                            </div>
+                            <div class="summary-card">
+                                <div class="summary-card-title">Total Expenses</div>
+                                <div id="totalExpenses" class="summary-card-value">₱0.00</div>
+                            </div>
+                            <div class="summary-card">
+                                <div class="summary-card-title">Net Savings</div>
+                                <div id="netSavings" class="summary-card-value">₱0.00</div>
+                            </div>
                         </div>
-                        <div class="summary-card">
-                            <div class="summary-card-title">Total Expenses</div>
-                            <div id="totalExpenses" class="summary-card-value">₱0.00</div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">Add New Transaction</h2>
+                        <form id="transactionForm" class="form-grid">
+                            <div class="input-group">
+                                <label for="month">Month</label>
+                                <select id="month" required>
+                                    <option value="">Select Month</option>
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="August">August</option>
+                                    <option value="September">September</option>
+                                    <option value="October">October</option>
+                                    <option value="November">November</option>
+                                    <option value="December">December</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="income">Income (₱)</label>
+                                <input type="number" id="income" required min="0" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="expenses">Expenses (₱)</label>
+                                <input type="number" id="expenses" required min="0" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="category">Category</label>
+                                <select id="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Salary">Salary</option>
+                                    <option value="Investments">Investments</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Transportation">Transportation</option>
+                                    <option value="Utilities">Utilities</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </form>
+                        <button id="addTransactionBtn" class="btn btn-primary" style="margin-top: 1rem;">Add Transaction</button>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">Financial Visualization</h2>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" data-type="bar">Bar</button>
+                            <button class="chart-btn" data-type="line">Line</button>
+                            <button class="chart-btn" data-type="pie">Pie</button>
                         </div>
-                        <div class="summary-card">
-                            <div class="summary-card-title">Net Savings</div>
-                            <div id="netSavings" class="summary-card-value">₱0.00</div>
+                        <canvas id="financialChart"></canvas>
+                    </div>
+                </div>
+
+                <div id="reports" class="content-section">
+                    <div class="card">
+                        <h2 class="card-title">Financial Reports</h2>
+                        <div id="reportsContent">
+                            <!-- Reports content will be dynamically added here -->
                         </div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <h2 class="card-title">Add New Transaction</h2>
-                    <form id="transactionForm" class="form-grid">
-                        <div class="input-group">
-                
-<label for="month">Month</label>
-                            <select id="month" required>
-                                <option value="">Select Month</option>
-                                <option value="January">January</option>
-                                <option value="February">February</option>
-                                <option value="March">March</option>
-                                <option value="April">April</option>
-                                <option value="May">May</option>
-                                <option value="June">June</option>
-                                <option value="July">July</option>
-                                <option value="August">August</option>
-                                <option value="September">September</option>
-                                <option value="October">October</option>
-                                <option value="November">November</option>
-                                <option value="December">December</option>
-                            </select>
+                <div id="transactions" class="content-section">
+                    <div class="card">
+                        <h2 class="card-title">Transaction History</h2>
+                        <div id="transactionHistory">
+                            <!-- Transaction history will be dynamically added here -->
                         </div>
-                        <div class="input-group">
-                            <label for="income">Income (₱)</label>
-                            <input type="number" id="income" required min="0" step="0.01">
-                        </div>
-                        <div class="input-group">
-                            <label for="expenses">Expenses (₱)</label>
-                            <input type="number" id="expenses" required min="0" step="0.01">
-                        </div>
-                        <div class="input-group">
-                            <label for="category">Category</label>
-                            <select id="category" required>
-                                <option value="">Select Category</option>
-                                <option value="Salary">Salary</option>
-                                <option value="Investments">Investments</option>
-                                <option value="Food">Food</option>
-                                <option value="Transportation">Transportation</option>
-                                <option value="Utilities">Utilities</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                    </form>
-                    <button id="addTransactionBtn" class="btn btn-primary" style="margin-top: 1rem;">Add Transaction</button>
-                </div>
-
-                <div class="card">
-                    <h2 class="card-title">Financial Visualization</h2>
-                    <div class="chart-controls">
-                        <button class="chart-btn active" data-type="bar">Bar</button>
-                        <button class="chart-btn" data-type="line">Line</button>
-                        <button class="chart-btn" data-type="pie">Pie</button>
                     </div>
-                    <canvas id="financialChart"></canvas>
                 </div>
             </div>
 
@@ -550,28 +599,8 @@
         </div>
     </div>
 
-    <div id="reportsModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Financial Reports</h2>
-            <div id="reportsContent">
-                <!-- Reports content will be dynamically added here -->
-            </div>
-        </div>
-    </div>
-
-    <div id="transactionModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Transaction Details</h2>
-            <div id="transactionDetails">
-                <!-- Transaction details will be dynamically added here -->
-            </div>
-        </div>
-    </div>
-
     <footer>
-        <p>© 2024 Magnify! Financial Visualizer. All rights reserved.</p>
+        <p>© 2024 Magnify! | All rights reserved.</p>
     </footer>
 
     <script>
@@ -591,10 +620,8 @@
         const notificationPanel = document.getElementById('notificationPanel');
         const closeNotifications = document.getElementById('closeNotifications');
         const notificationList = document.getElementById('notificationList');
-        const reportsLink = document.getElementById('reportsLink');
-        const transactionsLink = document.getElementById('transactionsLink');
-        const reportsModal = document.getElementById('reportsModal');
-        const transactionModal = document.getElementById('transactionModal');
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentSections = document.querySelectorAll('.content-section');
 
         // Event listeners
         addTransactionBtn.addEventListener('click', addTransaction);
@@ -607,23 +634,13 @@
         });
         notificationIcon.addEventListener('click', toggleNotificationPanel);
         closeNotifications.addEventListener('click', toggleNotificationPanel);
-        reportsLink.addEventListener('click', showReportsModal);
-        transactionsLink.addEventListener('click', showTransactionHistory);
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target == reportsModal || event.target == transactionModal) {
-                reportsModal.style.display = "none";
-                transactionModal.style.display = "none";
-            }
-        }
-
-        // Close button for modals
-        document.querySelectorAll('.close').forEach(closeBtn => {
-            closeBtn.onclick = function() {
-                reportsModal.style.display = "none";
-                transactionModal.style.display = "none";
-            }
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetSection = item.getAttribute('data-section');
+                showSection(targetSection);
+            });
         });
 
         // Functions
@@ -663,7 +680,6 @@
                     </div>
                     <div class="transaction-date">${transaction.date.toLocaleString()}</div>
                 `;
-                transactionItem.addEventListener('click', () => showTransactionDetails(index));
                 transactionList.appendChild(transactionItem);
             });
         }
@@ -759,7 +775,25 @@
             notificationCount.style.display = count > 0 ? 'flex' : 'none';
         }
 
-        function showReportsModal() {
+        function showSection(sectionId) {
+            contentSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+
+            if (sectionId === 'reports') {
+                showReports();
+            } else if (sectionId === 'transactions') {
+                showTransactionHistory();
+            }
+        }
+
+        function showReports() {
             const reportsContent = document.getElementById('reportsContent');
             reportsContent.innerHTML = `
                 <h3>Financial Overview</h3>
@@ -775,13 +809,11 @@
                     }, {})).map(([category, total]) => `<li>${category}: ₱${total.toFixed(2)}</li>`).join('')}
                 </ul>
             `;
-            reportsModal.style.display = "block";
         }
 
         function showTransactionHistory() {
-            const transactionDetails = document.getElementById('transactionDetails');
-            transactionDetails.innerHTML = `
-                <h3>Transaction History</h3>
+            const transactionHistory = document.getElementById('transactionHistory');
+            transactionHistory.innerHTML = `
                 <ul>
                     ${transactions.map(t => `
                         <li>
@@ -793,22 +825,6 @@
                     `).join('')}
                 </ul>
             `;
-            transactionModal.style.display = "block";
-        }
-
-        function showTransactionDetails(index) {
-            const transaction = transactions[transactions.length - 1 - index];
-            const transactionDetails = document.getElementById('transactionDetails');
-            transactionDetails.innerHTML = `
-                <h3>Transaction Details</h3>
-                <p><strong>Month:</strong> ${transaction.month}</p>
-                <p><strong>Category:</strong> ${transaction.category}</p>
-                <p><strong>Income:</strong> ₱${transaction.income.toFixed(2)}</p>
-                <p><strong>Expenses:</strong> ₱${transaction.expenses.toFixed(2)}</p>
-                <p><strong>Net:</strong> ₱${(transaction.income - transaction.expenses).toFixed(2)}</p>
-                <p><strong>Date:</strong> ${transaction.date.toLocaleString()}</p>
-            `;
-            transactionModal.style.display = "block";
         }
 
         // Initialize chart and add sample data
