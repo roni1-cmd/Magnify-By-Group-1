@@ -88,9 +88,27 @@
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
             margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1200px) {
+            .feature-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .feature-card {
@@ -323,7 +341,8 @@
             opacity: 1;
         }
 
-        @media (max-width: 768px) {
+        @media (max
+-width: 768px) {
             .navbar {
                 padding: 1rem;
             }
@@ -333,7 +352,7 @@
             }
 
             .feature-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
             }
 
             .content-section {
@@ -362,7 +381,7 @@
 <body>
     <nav class="navbar">
         <div class="navbar-brand">
-            <img src="/placeholder.svg?height=50&width=50" alt="Magnify Logo">
+            <img src="logo.png" alt="Magnify Logo">
             <h1>Hello there! Welcome to Magnify!</h1>
         </div>
     </nav>
@@ -376,62 +395,63 @@
             <button class="tab-button" onclick="openTab('billsTab')">Manage Bills</button>
             <button class="tab-button" onclick="openTab('resourcesTab')">Resources</button>
             <button class="tab-button" onclick="openTab('qcsvTab')">Magnify! Q-CSV</button>
-            <button class="tab-button" onclick="redirectToSavingsChallenge()">Savings Challenge</button>
         </div>
 
         <div id="dashboard" class="content-section">
+            <button class="button" onclick="window.location.href='Entrep18.html'" style="margin-bottom: 1rem;">
+                <i class="fas fa-piggy-bank"></i> Savings Challenge
+            </button>
             <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
             <div class="feature-grid">
                 <div class="feature-card" onclick="openTab('transactionTab')">
                     <i class="fas fa-list-ul"></i>
                     <h3>Track List</h3>
-                    <p>Manage your transactions and list your expenses.</p>
+                    <p>Manage transactions</p>
                 </div>
                 <div class="feature-card" onclick="openTab('calculatorTab')">
                     <i class="fas fa-calculator"></i>
                     <h3>Calculators</h3>
-                    <p>Financial calculation tools helps you formulate your payments in your hands.</p>
+                    <p>Financial tools</p>
                 </div>
                 <div class="feature-card" onclick="openTab('analyticsTab')">
                     <i class="fas fa-chart-line"></i>
                     <h3>Analytics</h3>
-                    <p>View your financial insights within your reach.</p>
+                    <p>Financial insights</p>
                 </div>
                 <div class="feature-card" onclick="openTab('billsTab')">
                     <i class="fas fa-file-invoice"></i>
                     <h3>Magnify Remit-It!</h3>
-                    <p>Access and pay your bills using Magnify Remit-It!</p>
+                    <p>Manage bills</p>
                 </div>
                 <div class="feature-card" onclick="window.location.href='Entrep7.html'">
                     <i class="fas fa-calendar"></i>
                     <h3>Calendar</h3>
-                    <p>Schedule your financial activities and keep track with your audits.</p>
+                    <p>Schedule activities</p>
                 </div>
                 <div class="feature-card" onclick="window.location.href='Entrep8.html'">
                     <i class="fas fa-user"></i>
                     <h3>Profile</h3>
-                    <p>Explore your profile and manage your account with Magnify!</p>
+                    <p>Manage account</p>
                 </div>
                 <div class="feature-card" onclick="window.location.href='Entrep9.html'">
                     <i class="fas fa-exchange-alt"></i>
                     <h3>Currency Converter</h3>
-                    <p>Convert between different currencies of the world seamlessly with real-time updates.</p>
+                    <p>Convert currencies</p>
                 </div>
                 <div class="feature-card" onclick="window.location.href='Entrep12.html'">
                     <i class="fas fa-piggy-bank"></i>
                     <h3>Budget Planner</h3>
-                    <p>Plan your next finance and track your budget for the next times.</p>
+                    <p>Plan your budget</p>
                 </div>
                 <div class="feature-card" onclick="openTab('resourcesTab')">
                     <i class="fas fa-book-reader"></i>
-                    <h3>Financial Resources and Guidance</h3>
-                    <p>Access valuable financial resources and expert guidance to improve your financial literacy.</p>
+                    <h3>Resources</h3>
+                    <p>Financial guidance</p>
                 </div>
                 <div class="feature-card" onclick="openTab('qcsvTab')">
                     <i class="fas fa-file-csv"></i>
                     <h3>Magnify! Q-CSV</h3>
-                    <p>A Quick
-Comma-Separated Values On-the-go spreadsheet that can audit your transactions and be downloaded as Microsoft Excel.</p>
+                    <p>Quick CSV audits</p>
                 </div>
             </div>
         </div>
@@ -688,6 +708,36 @@ Comma-Separated Values On-the-go spreadsheet that can audit your transactions an
             updateTransactionList();
             updateBalance();
             updateChart();
+
+            // Clear input fields
+            document.getElementById('amount').value = '';
+        }
+
+        // Function to update transaction list
+        function updateTransactionList() {
+            const transactionList = document.getElementById('transactionList');
+            transactionList.innerHTML = '';
+
+            transactions.forEach((transaction, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${transaction.description}: ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}</span>
+                    <button onclick="deleteTransaction(${index})" class="button danger">Delete</button>
+                `;
+                transactionList.appendChild(li);
+            });
+        }
+
+        // Function to delete a transaction
+        function deleteTransaction(index) {
+            const transaction = transactions[index];
+            balance += transaction.type === 'income' ? -transaction.amount : transaction.amount;
+            transactions.splice(index, 1);
+
+            updateLocalStorage();
+            updateTransactionList();
+            updateBalance();
+            updateChart();
         }
 
         // Function to update balance display
@@ -791,10 +841,6 @@ Comma-Separated Values On-the-go spreadsheet that can audit your transactions an
             }
         }
 
-        // Function to redirect to Savings Challenge
-        function redirectToSavingsChallenge() {
-            window.location.href = 'Entrep18.html';
-        }
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
