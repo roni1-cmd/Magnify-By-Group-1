@@ -88,8 +88,7 @@
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(2, auto);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -363,7 +362,7 @@
 <body>
     <nav class="navbar">
         <div class="navbar-brand">
-            <img src="logo.png?height=50&width=50" alt="Magnify Logo">
+            <img src="/placeholder.svg?height=50&width=50" alt="Magnify Logo">
             <h1>Hello there! Welcome to Magnify!</h1>
         </div>
     </nav>
@@ -377,6 +376,7 @@
             <button class="tab-button" onclick="openTab('billsTab')">Manage Bills</button>
             <button class="tab-button" onclick="openTab('resourcesTab')">Resources</button>
             <button class="tab-button" onclick="openTab('qcsvTab')">Magnify! Q-CSV</button>
+            <button class="tab-button" onclick="redirectToSavingsChallenge()">Savings Challenge</button>
         </div>
 
         <div id="dashboard" class="content-section">
@@ -430,7 +430,8 @@
                 <div class="feature-card" onclick="openTab('qcsvTab')">
                     <i class="fas fa-file-csv"></i>
                     <h3>Magnify! Q-CSV</h3>
-                    <p>A Quick Comma-Separated Values On-the-go spreadsheet that can audit your transactions and be downloaded as Microsoft Excel.</p>
+                    <p>A Quick
+Comma-Separated Values On-the-go spreadsheet that can audit your transactions and be downloaded as Microsoft Excel.</p>
                 </div>
             </div>
         </div>
@@ -790,6 +791,11 @@
             }
         }
 
+        // Function to redirect to Savings Challenge
+        function redirectToSavingsChallenge() {
+            window.location.href = 'Entrep18.html';
+        }
+
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
             toggleDescriptionOptions();
@@ -800,7 +806,6 @@
             document.getElementById('addTransaction').addEventListener('click', addTransaction);
         });
     </script>
-    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-<script src="https://files.bpcontent.cloud/2024/11/24/12/20241124120340-PJ828UDO.js"></script>
 </body>
 </html>
+
