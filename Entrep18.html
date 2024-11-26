@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnify! Savings Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --gradient-start: #8A2BE2;
+            --gradient-end: #FF69B4;
+            --primary: #9932CC;
+            --secondary: #FF69B4;
+            --success: #2ECC71;
+            --warning: #F39C12;
+            --danger: #E74C3C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f0f2f5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-link i {
+            font-size: 1.25rem;
+        }
+
+        .nav-link::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover::after {
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 6rem auto 2rem;
+            padding: 0 1rem;
+        }
+
+        .challenge-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .challenge-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .progress-container {
+            background: #f0f2f5;
+            border-radius: 1rem;
+            height: 3rem;
+            position: relative;
+            overflow: hidden;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .progress-container:hover {
+            transform: scale(1.02);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .challenge-item {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .challenge-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .challenge-item.completed {
+            border: 2px solid var(--success);
+        }
+
+        .challenge-item h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .challenge-details {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .challenge-item:hover .challenge-details {
+            opacity: 1;
+        }
+
+        .notification-center {
+            position: fixed;
+            top: 5rem;
+            right: 1rem;
+            width: 300px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transform-origin: right;
+            animation: notificationSlide 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes notificationSlide {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 0.25rem;
+        }
+
+        .notification-body {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--primary);
+            width: 100%;
+            animation: progressShrink 5s linear;
+        }
+
+        @keyframes progressShrink {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .button {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .contact-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .contact-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .contact-content h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .contact-item i {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .contact-item strong {
+            display: block;
+            color: var(--primary);
+        }
+
+        .contact-item p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .close-modal {
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .challenges-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .challenges-list li {
+            background: white;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .challenges-list h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .challenges-list p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .progress-chart {
+            width: 100%;
+            height: 500px;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .container {
+                margin-top: 5rem;
+            }
+
+            .challenge-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-chart {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-piggy-bank"></i>
+            Magnify! Savings Challenge
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="nav-link" data-section="dashboard" data-tooltip="Go to Dashboard">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-link" data-section="challenges" data-tooltip="View Challenges">
+                <i class="fas fa-trophy"></i>
+                <span>Challenges</span>
+            </a>
+            <a href="#" class="nav-link" data-section="progress" data-tooltip="Check your Progress">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </a>
+            <a href="#" class="nav-link" data-tooltip="Contact Us" onclick="openModal()">
+                <i class="fas fa-envelope"></i>
+                <span>Contact</span>
+            </a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section id="dashboard" class="section active">
+            <div class="challenge-card">
+                <div class="challenge-header">
+                    <h2 class="challenge-title">52-Week Savings Challenge</h2>
+                    <button class="button" onclick="startNewChallenge()">Start New Challenge</button>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="challengeProgress">
+                        <span class="progress-label">0%</span>
+                    </div>
+                </div>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3>₱<span id="totalSaved">0</span></h3>
+                        <p>Total Saved</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3><span id="weeksCompleted">0</span>/52</h3>
+                        <p>Weeks Completed</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>₱<span id="weeklyTarget">0</span></h3>
+                        <p>Current Week Target</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="challenge-card">
+                <h2 class="challenge-title">This Week's Challenge</h2>
+                <div class="input-group">
+                    <label for="savingsAmount">Enter your savings amount (₱):</label>
+                    <input type="number" id="savingsAmount" placeholder="Enter amount in pesos">
+                </div>
+                <button class="button" onclick="submitSavings()">Submit Savings</button>
+            </div>
+
+            <div class="challenge-grid" id="challengeGrid">
+                <!-- Challenge items will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section id="challenges" class="section">
+            <h2 class="challenge-title">Available Challenges</h2>
+            <ul class="challenges-list">
+                <li>
+                    <h3>52-Week Savings Challenge</h3>
+                    <p>Save an increasing amount each week for a year. Start with ₱100 in week 1 and increase by ₱100 each week.</p>
+                    <button class="button" onclick="startNewChallenge()">Start Challenge</button>
+                </li>
+                <li>
+                    <h3>30-Day No-Spend Challenge</h3>
+                    <p>Avoid unnecessary expenses for 30 days. Focus on essential spending only.</p>
+                    <button class="button" onclick="showNotification('Coming Soon', 'This challenge will be available soon!', 'info')">Coming Soon</button>
+                </li>
+                <li>
+                    <h3>Save Your Change Challenge</h3>
+                    <p>Round up all your purchases to the nearest 100 pesos and save the difference.</p>
+                    <button class="button" onclick="showNotification('Coming Soon', 'This challenge will be available soon!', 'info')">Coming Soon</button>
+                </li>
+            </ul>
+        </section>
+
+        <section id="progress" class="section">
+            <h2 class="challenge-title">Your Savings Progress</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>₱<span id="totalSavedProgress">0</span></h3>
+                    <p>Total Saved</p>
+                </div>
+                <div class="stat-card">
+                    <h3><span id="weeksCompletedProgress">0</span>/52</h3>
+                    <p>Weeks Completed</p>
+                </div>
+                <div class="stat-card">
+                    <h3>₱<span id="averageWeeklySavings">0</span></h3>
+                    <p>Average Weekly Savings</p>
+                </div>
+            </div>
+            <div class="progress-chart">
+                <canvas id="savingsChart"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <div class="notification-center" id="notificationCenter">
+        <!-- Notifications will be added here dynamically -->
+    </div>
+
+    <div class="contact-modal" id="contactModal">
+        <div class="contact-content">
+            <h3>Contact Us</h3>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-user"></i>
+                    <div>
+                        <strong>Name:</strong> Ron Asnahon
+                        <p>Senior Web Developer & Project Lead</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <strong>Phone:</strong> 09696156121
+                        <p>Available Mon-Fri, 9AM-5PM PHT</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <strong>Email:</strong> asnahonron@gmail.com
+                        <p>Response within 24 hours</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <strong>Where?</strong> Lapu-Lapu City, Philippines
+                        <p>Place where I live, maybe?</p>
+                    </div>
+                </div>
+            </div>
+            <button class="button close-modal" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Challenge state
+        let challengeState = {
+            currentWeek: 1,
+            totalSaved: 0,
+            weeklyTargets: [],
+            completedWeeks: [],
+            isActive: false
+        };
+
+        // Initialize the challenge
+        function initializeChallenge() {
+            // Load saved state from localStorage
+            const savedState = localStorage.getItem('challengeState');
+            if (savedState) {
+                challengeState = JSON.parse(savedState);
+                updateUI();
+            }
+
+            // Generate weekly targets if not already set
+            if (challengeState.weeklyTargets.length === 0) {
+                for (let i = 1; i <= 52; i++) {
+                    challengeState.weeklyTargets.push(i * 100); // Increments of ₱100
+                }
+            }
+        }
+
+        // Start new challenge
+        function startNewChallenge() {
+            if (confirm('Are you sure you want to start a new challenge? This will reset your current progress.')) {
+                challengeState = {
+                    currentWeek: 1,
+                    totalSaved: 0,
+                    weeklyTargets: [],
+                    completedWeeks: [],
+                    isActive: true
+                };
+                for (let i = 1; i <= 52; i++) {
+                    challengeState.weeklyTargets.push(i * 100);
+                }
+                updateUI();
+                saveState();
+                showNotification('Challenge Started!', 'Your 52-week savings challenge has begun. Good luck!', 'success');
+            }
+        }
+
+        // Submit savings
+        function submitSavings() {
+            const amount = parseFloat(document.getElementById('savingsAmount').value);
+            if (isNaN(amount) || amount <= 0) {
+                showNotification('Invalid Amount', 'Please enter a valid savings amount.', 'warning');
+                return;
+            }
+
+            const target = challengeState.weeklyTargets[challengeState.currentWeek - 1];
+            challengeState.totalSaved += amount;
+            
+            if (amount >= target) {
+                challengeState.completedWeeks.push(challengeState.currentWeek);
+                challengeState.currentWeek++;
+                showNotification('Week Completed!', `Congratulations! You've saved ₱${amount.toLocaleString()}. That's ₱${(amount - target).toLocaleString()} more than your target!`, 'success');
+                
+                if (challengeState.currentWeek > 52) {
+                    showNotification('Challenge Completed!', 'You\'ve successfully completed the 52-week savings challenge! Great job!', 'success');
+                }
+            } else {
+                showNotification('Keep Going!', `You've saved ₱${amount.toLocaleString()}. You need ₱${(target - amount).toLocaleString()} more to reach this week's target.`, 'warning');
+            }
+
+            document.getElementById('savingsAmount').value = '';
+            updateUI();
+            saveState();
+        }
+
+        // Update UI elements
+        function updateUI() {
+            const progress = (challengeState.completedWeeks.length / 52) * 100;
+            document.getElementById('challengeProgress').style.width = `${progress}%`;
+            document.getElementById('challengeProgress').querySelector('.progress-label').textContent = `${Math.round(progress)}%`;
+            
+            document.getElementById('totalSaved').textContent = challengeState.totalSaved.toLocaleString();
+            document.getElementById('weeksCompleted').textContent = challengeState.completedWeeks.length;
+            document.getElementById('weeklyTarget').textContent = challengeState.weeklyTargets[challengeState.currentWeek - 1].toLocaleString();
+
+            // Update progress section
+            document.getElementById('totalSavedProgress').textContent = challengeState.totalSaved.toLocaleString();
+            document.getElementById('weeksCompletedProgress').textContent = challengeState.completedWeeks.length;
+            const averageWeeklySavings = challengeState.completedWeeks.length > 0 
+                ? (challengeState.totalSaved / challengeState.completedWeeks.length).toFixed(2) 
+                : 0;
+            document.getElementById('averageWeeklySavings').textContent = averageWeeklySavings;
+
+            const progressBar = document.getElementById('challengeProgress');
+            const progressContainer = progressBar.parentElement;
+            
+            progressContainer.title = `${Math.round(progress)}% complete`;
+            
+            progressContainer.addEventListener('click', () => {
+                showNotification('Challenge Progress', `You've completed ${challengeState.completedWeeks.length} weeks out of 52. Keep going!`, 'info');
+            });
+
+            updateChallengeGrid();
+            updateSavingsChart();
+        }
+
+        // Update challenge grid
+        function updateChallengeGrid() {
+            const grid = document.getElementById('challengeGrid');
+            grid.innerHTML = '';
+
+            for (let i = 1; i <= 52; i++) {
+                const isCompleted = challengeState.completedWeeks.includes(i);
+                const isCurrent = i === challengeState.currentWeek;
+                
+                const item = document.createElement('div');
+                item.className = `challenge-item ${isCompleted ? 'completed' : ''}`;
+                item.innerHTML = `
+                    <h3>Week ${i}</h3>
+                    <p>Target: ₱${challengeState.weeklyTargets[i-1].toLocaleString()}</p>
+                    ${isCompleted ? '<p style="color: var(--success)"><i class="fas fa-check"></i> Completed</p>' : ''}
+                    ${isCurrent ? '<p style="color: var(--primary)"><i class="fas fa-arrow-right"></i> Current Week</p>' : ''}
+                    <div class="challenge-details">
+                        <h4>Week ${i} Challenge</h4>
+                        <p>Save ₱${challengeState.weeklyTargets[i-1].toLocaleString()} this week to stay on track!</p>
+                        <p>Tip: Try cutting back on non-essential expenses.</p>
+                    </div>
+                `;
+                grid.appendChild(item);
+            }
+        }
+
+        // Show notification
+        function showNotification(title, message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-header">
+                    <span class="notification-title">${title}</span>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+                <div class="notification-body">${message}</div>
+                <div class="notification-progress"></div>
+            `;
+
+            document.getElementById('notificationCenter').appendChild(notification);
+
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                notification.style.animation = 'notificationSlide 0.3s ease reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('challengeState', JSON.stringify(challengeState));
+        }
+
+        // Update savings chart
+        function updateSavingsChart() {
+            const ctx = document.getElementById('savingsChart').getContext('2d');
+            const labels = Array.from({length: 52}, (_, i) => `Week ${i + 1}`);
+            const actualData = Array(52).fill(0);
+            const targetData = challengeState.weeklyTargets;
+
+            challengeState.completedWeeks.forEach(week => {
+                actualData[week - 1] = challengeState.weeklyTargets[week - 1];
+            });
+
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Actual Savings',
+                            data: actualData,
+                            borderColor: 'rgba(153, 50, 204, 1)',
+                            backgroundColor: 'rgba(153, 50, 204, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Target Savings',
+                            data: targetData,
+                            borderColor: 'rgba(255, 105, 180, 1)',
+                            backgroundColor: 'rgba(255, 105, 180, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Savings Amount (₱)'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return '₱' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += '₱' + context.parsed.y.toLocaleString();
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '52-Week Savings Challenge Progress'
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    elements: {
+                        point: {
+                            radius: 0,
+                            hoverRadius: 5,
+                        }
+                    }
+                }
+            });
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-link[data-section]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = link.getAttribute('data-section');
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        function openModal() {
+            document.getElementById('contactModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeChallenge();
+        });
+    </script>
+</body>
+</html>
