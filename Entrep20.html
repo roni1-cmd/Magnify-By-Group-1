@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peso Catcher Farm Deluxe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: linear-gradient(135deg, #FF69B4, #8A2BE2);
+            overflow: hidden;
+        }
+        #farm-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect width="100" height="50" fill="%2387CEEB"/%3E%3Crect y="50" width="100" height="50" fill="%234CAF50"/%3E%3Ccircle cx="80" cy="20" r="10" fill="%23FDB813"/%3E%3Cpath d="M20 80 L40 60 L60 80 Z" fill="%238B4513"/%3E%3C/svg%3E');
+            background-size: 200px 200px;
+            opacity: 0.3;
+        }
+        #cute-piggy-bank {
+            width: 120px;
+            height: 100px;
+            background-color: #FFC0CB;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: move;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+        #cute-piggy-bank::before {
+            content: "";
+            width: 40px;
+            height: 40px;
+            background-color: #FF69B4;
+            border-radius: 50%;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        #cute-piggy-bank::after {
+            content: "";
+            width: 30px;
+            height: 15px;
+            background-color: #FF69B4;
+            border-radius: 15px 15px 0 0;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .piggy-eye {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+        }
+        .piggy-eye::after {
+            content: "";
+            width: 10px;
+            height: 10px;
+            background-color: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 5px;
+        }
+        .piggy-eye.left {
+            left: 25px;
+        }
+        .piggy-eye.right {
+            right: 25px;
+        }
+        .coin {
+            width: 30px;
+            height: 30px;
+            background-color: gold;
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 12px;
+            color: #B8860B;
+            animation: fall 4s linear;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        @keyframes fall {
+            to { top: 100%; }
+        }
+        #score, #lives, #high-score {
+            position: absolute;
+            top: 10px;
+            font-size: 24px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        #score { left: 10px; }
+        #lives { right: 10px; }
+        #high-score { left: 10px; top: 50px; }
+        #shop-button {
+            position: absolute;
+            top: 90px;
+            right: 10px;
+            background-color: #FF69B4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        #shop-button:hover {
+            background-color: #FF1493;
+            transform: scale(1.1);
+        }
+        #shop {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .item {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            background-color: #f0f0f0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .item:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.05);
+        }
+        .item-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .buy-button {
+            background-color: #8A2BE2;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        .buy-button:hover {
+            background-color: #9400D3;
+            transform: scale(1.1);
+        }
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        #restart-button {
+            background-color: #8A2BE2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        #restart-button:hover {
+            background-color: #9400D3;
+            transform: scale(1.1);
+        }
+        #power-up {
+            position: absolute;
+            top: 90px;
+            left: 10px;
+            font-size: 18px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        #speed-indicator {
+            position: absolute;
+            top: 130px;
+            left: 10px;
+            font-size: 18px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="farm-background"></div>
+        <div id="cute-piggy-bank">
+            <div class="piggy-eye left"></div>
+            <div class="piggy-eye right"></div>
+        </div>
+        <div id="score">Pesos: ₱<span id="money">0</span></div>
+        <div id="high-score">High Score: ₱<span id="high-score-value">0</span></div>
+        <div id="lives">Lives: <span id="lives-count">8</span></div>
+        <div id="power-up"></div>
+        <div id="speed-indicator">Speed: x1</div>
+        <button id="shop-button">Farm Shop</button>
+        <div id="shop">
+            <h2>Farmer's Market</h2>
+            <div class="item">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 18l-8-4V8l8 4v8zm0-10L4 6l8-4 8 4-8 4zm8 6l-8 4V12l8-4v8z'/%3E%3C/svg%3E" alt="Magnet" class="item-icon">
+                <span>Coin Magnet (₱500)</span>
+                <button class="buy-button" onclick="buyItem(500, 'Coin Magnet')">Buy</button>
+            </div>
+            <div class="item">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234CAF50'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z'/%3E%3C/svg%3E" alt="Extra Life" class="item-icon">
+                <span>Extra Life (₱300)</span>
+                <button class="buy-button" onclick="buyItem(300, 'Extra Life')">Buy</button>
+            </div>
+            <div class="item">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF69B4'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E" alt="Double Points" class="item-icon">
+                <span>Double Points (₱400)</span>
+                <button class="buy-button" onclick="buyItem(400, 'Double Points')">Buy</button>
+            </div>
+            <div class="item">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFA500'%3E%3Cpath d='M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z'/%3E%3C/svg%3E" alt="Time Slow" class="item-icon">
+                <span>Time Slow (₱600)</span>
+                <button class="buy-button" onclick="buyItem(600, 'Time Slow')">Buy</button>
+            </div>
+            <div class="item">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300CED1'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm4-8c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4z'/%3E%3C/svg%3E" alt="Coin Shield" class="item-icon">
+                <span>Coin Shield (₱700)</span>
+                <button class="buy-button" onclick="buyItem(700, 'Coin Shield')">Buy</button>
+            </div>
+            <button onclick="closeShop()" class="buy-button">Close</button>
+        </div>
+        <div id="game-over">
+            <h2>Game Over!</h2>
+            <p>Your final score: ₱<span id="final-score"></span></p>
+            <p>High score: ₱<span id="final-high-score"></span></p>
+            <button id="restart-button">Play Again</button>
+        </div>
+    </div>
+
+    <audio id="coin-sound" src="data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU="></audio>
+
+    <script>
+        const cutePiggyBank = document.getElementById('cute-piggy-bank');
+        const moneySpan = document.getElementById('money');
+        const highScoreSpan = document.getElementById('high-score-value');
+        const livesSpan = document.getElementById('lives-count');
+        const shopButton = document.getElementById('shop-button');
+        const shop = document.getElementById('shop');
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScoreSpan = document.getElementById('final-score');
+        const finalHighScoreSpan = document.getElementById('final-high-score');
+        const restartButton = document.getElementById('restart-button');
+        const powerUpDisplay = document.getElementById('power-up');
+        const speedIndicator = document.getElementById('speed-indicator');
+        const gameContainer = document.getElementById('game-container');
+        const coinSound = document.getElementById('coin-sound');
+        let money = 0;
+        let highScore = 0;
+        let lives = 8;
+        let isDragging = false;
+        let dragStartX;
+        let gameInterval;
+        let currentPowerUp = null;
+        let powerUpTimer = null;
+        let difficulty = 1;
+        let isGameOver = false;
+        let speedMultiplier = 1;
+
+        function updateMoney(amount) {
+            money += amount;
+            moneySpan.textContent = money;
+            if (money > highScore) {
+                highScore = money;
+                highScoreSpan.textContent = highScore;
+            }
+            updateSpeed();
+        }
+
+        function updateSpeed() {
+            if (money >= 1000) {
+                speedMultiplier = 2;
+            } else if (money >= 500) {
+                speedMultiplier = 1.5;
+            } else {
+                speedMultiplier = 1;
+            }
+            speedIndicator.textContent = `Speed: x${speedMultiplier.toFixed(1)}`;
+            if (!isGameOver) {
+                clearInterval(gameInterval);
+                gameInterval = setInterval(createCoin, 1000 / (difficulty * speedMultiplier));
+            }
+        }
+
+        function updateLives(change) {
+            lives += change;
+            livesSpan.textContent = lives;
+            if (lives <= 0) {
+                gameOver();
+            }
+        }
+
+        function createCoin() {
+            if (isGameOver) return;
+            const coin = document.createElement('div');
+            coin.className = 'coin';
+            coin.style.left = `${Math.random() * (window.innerWidth - 30)}px`;
+            coin.style.top = '-30px';
+            const value = Math.random() < 0.7 ? 10 : (Math.random() < 0.9 ? 50 : 100);
+            coin.textContent = `₱${value}`;
+            coin.dataset.value = value;
+            gameContainer.appendChild(coin);
+
+            coin.addEventListener('animationend', () => {
+                if (coin.parentNode) {
+                    if (currentPowerUp === 'Coin Shield') {
+                        coin.remove();
+                    } else {
+                        coin.remove();
+                        if (!isGameOver) updateLives(-1);
+                    }
+                }
+            });
+        }
+
+        function checkCollision(coin) {
+            const piggyRect = cutePiggyBank.getBoundingClientRect();
+            const coinRect = coin.getBoundingClientRect();
+
+            if (currentPowerUp === 'Coin Magnet') {
+                const magnetRange = 100;
+                return (Math.abs(piggyRect.left - coinRect.left) < magnetRange &&
+                        Math.abs(piggyRect.top - coinRect.top) < magnetRange);
+            } else {
+                return !(piggyRect.right < coinRect.left || 
+                     piggyRect.left > coinRect.right || 
+                     piggyRect.bottom < coinRect.top || 
+                     piggyRect.top > coinRect.bottom);
+            }
+        }
+
+        function buyItem(cost, itemName) {
+            if (money >= cost) {
+                updateMoney(-cost);
+                activatePowerUp(itemName);
+                closeShop();
+            } else {
+                alert("You don't have enough pesos. Keep saving!");
+            }
+        }
+
+        function activatePowerUp(powerUp) {
+            currentPowerUp = powerUp;
+            clearTimeout(powerUpTimer);
+            powerUpDisplay.textContent = `Power-up: ${powerUp}`;
+            
+            if (powerUp === 'Extra Life') {
+                updateLives(1);
+            } else if (powerUp === 'Time Slow') {
+                const originalSpeed = speedMultiplier;
+                speedMultiplier *= 0.5;
+                updateSpeed();
+                setTimeout(() => {
+                    speedMultiplier = originalSpeed;
+                    updateSpeed();
+                }, 10000);
+            }
+
+            powerUpTimer = setTimeout(() => {
+                currentPowerUp = null;
+                powerUpDisplay.textContent = '';
+            }, 20000);
+        }
+
+        function openShop() {
+            shop.style.display = 'block';
+        }
+
+        function closeShop() {
+            shop.style.display = 'none';
+        }
+
+        function gameOver() {
+            isGameOver = true;
+            clearInterval(gameInterval);
+            gameOverScreen.style.display = 'block';
+            finalScoreSpan.textContent = money;
+            finalHighScoreSpan.textContent = highScore;
+        }
+
+        function startGame() {
+            isGameOver = false;
+            money = 0;
+            lives = 8;
+            difficulty = 1;
+            speedMultiplier = 1;
+            updateMoney(0);
+            updateLives(0);
+            updateSpeed();
+            currentPowerUp = null;
+            powerUpDisplay.textContent = '';
+            gameOverScreen.style.display = 'none';
+            document.querySelectorAll('.coin').forEach(coin => coin.remove());
+            clearInterval(gameInterval);
+            gameInterval = setInterval(createCoin, 1000 / (difficulty * speedMultiplier));
+        }
+
+        function handleStart(e) {
+            isDragging = true;
+            dragStartX = (e.clientX || e.touches[0].clientX) - cutePiggyBank.offsetLeft;
+        }
+
+        function handleMove(e) {
+            if (isDragging) {
+                e.preventDefault();
+                const clientX = e.clientX || e.touches[0].clientX;
+                let left = clientX - dragStartX;
+                left = Math.max(0, Math.min(left, window.innerWidth - cutePiggyBank.offsetWidth));
+                cutePiggyBank.style.left = `${left}px`;
+                cutePiggyBank.style.transform = 'none';
+            }
+        }
+
+        function handleEnd() {
+            isDragging = false;
+        }
+
+        function increaseDifficulty() {
+            if (!isGameOver) {
+                difficulty += 0.1;
+                updateSpeed();
+            }
+        }
+
+        setInterval(() => {
+            if (!isGameOver) {
+                document.querySelectorAll('.coin').forEach(coin => {
+                    if (checkCollision(coin)) {
+                        let value = parseInt(coin.dataset.value);
+                        if (currentPowerUp === 'Double Points') {
+                            value *= 2;
+                        }
+                        updateMoney(value);
+                        coin.remove();
+                        cutePiggyBank.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            cutePiggyBank.style.transform = 'none';
+                        }, 100);
+                        coinSound.play();
+                    }
+                });
+            }
+        }, 100);
+
+        setInterval(increaseDifficulty, 30000);
+
+        cutePiggyBank.addEventListener('mousedown', handleStart);
+        cutePiggyBank.addEventListener('touchstart', handleStart);
+
+        document.addEventListener('mousemove', handleMove);
+        document.addEventListener('touchmove', handleMove, { passive: false });
+
+        document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('touchend', handleEnd);
+
+        shopButton.addEventListener('click', openShop);
+        restartButton.addEventListener('click', startGame);
+
+        startGame();
+    </script>
+</body>
+</html>
