@@ -267,15 +267,16 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
+            overflow-y: auto;
         }
 
         .checkout-content {
             background-color: var(--white);
-            margin: 10% auto;
+            margin: 5% auto;
             padding: 20px;
             border-radius: 15px;
-            width: 50%;
-            max-width: 500px;
+            width: 70%;
+            max-width: 800px;
         }
 
         .checkout-tabs {
@@ -302,14 +303,14 @@
             gap: 15px;
         }
 
-        .checkout-form input {
+        .checkout-form input, .checkout-form select {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             transition: border-color 0.3s ease;
         }
 
-        .checkout-form input:focus {
+        .checkout-form input:focus, .checkout-form select:focus {
             border-color: var(--gradient-start);
             outline: none;
         }
@@ -333,6 +334,101 @@
             font-size: 1.2rem;
             color: var(--dark-purple);
             margin-top: 2rem;
+        }
+
+        .order-summary {
+            background-color: var(--light-purple);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .order-summary h3 {
+            margin-bottom: 10px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .delivery-estimate {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #downloadInvoice {
+            background-color: var(--dark-purple);
+            color: var(--white);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #downloadInvoice:hover {
+            opacity: 0.9;
+        }
+
+        .payment-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option.active {
+            background-color: var(--light-purple);
+            border-color: var(--gradient-start);
+        }
+
+        #gcash-fields, #card-fields {
+            display: none;
+        }
+
+        .order-success {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1003;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         @media (max-width: 768px) {
@@ -410,29 +506,77 @@
             <span class="close">&times;</span>
             <h2>Checkout</h2>
             <div class="checkout-tabs">
-                <div class="checkout-tab active" data-tab="card">Credit Card</div>
-                <div class="checkout-tab" data-tab="paypal">PayPal</div>
-                <div class="checkout-tab" data-tab="gcash">GCash</div>
+                <div class="checkout-tab active" data-tab="shipping">Shipping</div>
+                <div class="checkout-tab" data-tab="payment">Payment</div>
+                <div class="checkout-tab" data-tab="review">Review</div>
             </div>
             <form id="checkout-form" class="checkout-form">
-                <div id="card-fields">
-                    <input type="text" placeholder="Card Number" required>
-                    <input type="text" placeholder="Cardholder Name" required>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" placeholder="MM/YY" required style="width: 50%;">
-                        <input type="text" placeholder="CVV" required style="width: 50%;">
+                <div id="shipping-fields">
+                    <input type="text" id="fullName" placeholder="Full Name" required>
+                    <input type="text" id="address" placeholder="Address" required>
+                    <input type="text" id="city" placeholder="City" required>
+                    <input type="text" id="zipCode" placeholder="Zip Code" required>
+                    <select id="country" required>
+                        <option value="">Select Country</option>
+                        <option value="PH">Philippines</option>
+                        <option value="US">United States</option>
+                        <option value="UK">United Kingdom</option>
+                        <!-- Add more countries as needed -->
+                    </select>
+                    <input type="tel" id="phone" placeholder="Phone Number" required>
+                </div>
+                <div id="payment-fields" style="display: none;">
+                    <div class="payment-options">
+                        <div class="payment-option active" data-payment="card">Credit Card</div>
+                        <div class="payment-option" data-payment="gcash">GCash</div>
+                    </div>
+                    <div id="card-fields">
+                        <input type="text" id="cardNumber" placeholder="Card Number" required>
+                        <input type="text" id="cardName" placeholder="Cardholder Name" required>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="cardExpiry" placeholder="MM/YY" required style="width: 50%;">
+                            <input type="text" id="cardCVV" placeholder="CVV" required style="width: 50%;">
+                        </div>
+                    </div>
+                    <div id="gcash-fields" style="display: none;">
+                        <input type="tel" id="gcashNumber" placeholder="GCash Number" required>
                     </div>
                 </div>
-                <div id="paypal-fields" style="display: none;">
-                    <input type="email" placeholder="PayPal Email" required>
+                <div id="review-fields" style="display: none;">
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div id="order-items">
+                            <!-- Order items will be dynamically inserted here -->
+                        </div>
+                        <div class="order-item">
+                            <span>Subtotal:</span>
+                            <span id="subtotal"></span>
+                        </div>
+                        <div class="order-item">
+                            <span>Shipping:</span>
+                            <span id="shipping-cost"></span>
+                        </div>
+                        <div class="order-item">
+                            <strong>Total:</strong>
+                            <strong id="total-cost"></strong>
+                        </div>
+                        <div class="delivery-estimate">
+                            Estimated Delivery: <span id="delivery-date"></span>
+                        </div>
+                    </div>
+                    <div id="address-summary"></div>
                 </div>
-                <div id="gcash-fields" style="display: none;">
-                    <input type="tel" placeholder="GCash Number" required>
-                </div>
-                <button type="submit" class="checkout-button">Pay Now</button>
+                <button type="submit" class="checkout-button" id="place-order">Place Order</button>
             </form>
+            <div id="order-success" class="order-success" style="display: none;">
+                <h3>Order Placed Successfully!</h3>
+                <p>Thank you for your purchase. Your order has been placed successfully.</p>
+            </div>
+            <button id="downloadInvoice" style="display: none;">Download Invoice</button>
         </div>
     </div>
+
+    <div id="notification" class="notification"></div>
 
     <script>
         // Product data
@@ -463,6 +607,9 @@
             { id: 24, category: "Audio", title: "Sennheiser Momentum 4 Wireless", price: 19990.00, image: "images24.jfif", rating: 4.7 },
             { id: 25, category: "Smartwatches", title: "Garmin Fenix 7", price: 44990.00, image: "images25.jfif", rating: 4.8 }
         ];
+
+        // Cart data
+        let cart = [];
 
         // Function to generate star rating HTML
         function generateStarRating(rating) {
@@ -505,27 +652,38 @@
             const productId = parseInt(event.target.getAttribute('data-id'));
             const product = products.find(p => p.id === productId);
             
-            const cartItems = document.getElementById('cart-items');
-            const cartItem = document.createElement('div');
-            cartItem.classList.add('cart-item');
-            cartItem.innerHTML = `
-                <img src="${product.image}" alt="${product.title}">
-                <div>
-                    <h4>${product.title}</h4>
-                    <p>${formatPrice(product.price)}</p>
-                </div>
-            `;
-            cartItems.appendChild(cartItem);
-            updateCartTotal(product.price);
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            renderCart();
             openCart();
         }
 
+        // Function to render cart
+        function renderCart() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.title}">
+                    <div>
+                        <h4>${item.title}</h4>
+                        <p>${formatPrice(item.price)} x ${item.quantity}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            updateCartTotal();
+        }
+
         // Function to update cart total
-        function updateCartTotal(price) {
+        function updateCartTotal() {
             const cartTotalElement = document.getElementById('cart-total');
-            const currentTotal = parseFloat(cartTotalElement.textContent.replace('₱', '').replace(',', ''));
-            const newTotal = currentTotal + price;
-            cartTotalElement.textContent = formatPrice(newTotal);
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            cartTotalElement.textContent = formatPrice(total);
         }
 
         // Function to open cart
@@ -548,6 +706,100 @@
             renderProducts(filteredProducts);
         }
 
+        // Function to render order summary
+        function renderOrderSummary() {
+            const orderItems = document.getElementById('order-items');
+            orderItems.innerHTML = cart.map(item => `
+                <div class="order-item">
+                    <span>${item.title} x ${item.quantity}</span>
+                    <span>${formatPrice(item.price * item.quantity)}</span>
+                </div>
+            `).join('');
+
+            const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const shipping = 250; // Fixed shipping cost
+            const total = subtotal + shipping;
+
+            document.getElementById('subtotal').textContent = formatPrice(subtotal);
+            document.getElementById('shipping-cost').textContent = formatPrice(shipping);
+            document.getElementById('total-cost').textContent = formatPrice(total);
+
+            // Calculate estimated delivery date (7 days from now)
+            const deliveryDate = new Date();
+            deliveryDate.setDate(deliveryDate.getDate() + 7);
+            document.getElementById('delivery-date').textContent = deliveryDate.toDateString();
+        }
+
+        // Function to render address summary
+        function renderAddressSummary() {
+            const addressSummary = document.getElementById('address-summary');
+            const fullName = document.getElementById('fullName').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const zipCode = document.getElementById('zipCode').value;
+            const country = document.getElementById('country').value;
+            const phone = document.getElementById('phone').value;
+
+            addressSummary.innerHTML = `
+                <h3>Shipping Address</h3>
+                <p>${fullName}</p>
+                <p>${address}</p>
+                <p>${city}, ${zipCode}</p>
+                <p>${country}</p>
+                <p>Phone: ${phone}</p>
+            `;
+        }
+
+        // Function to generate invoice
+        function generateInvoice() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 600;
+            canvas.height = 800;
+
+            // Set background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Add header
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 24px Arial';
+            ctx.fillText('Invoice', 50, 50);
+
+            // Add order details
+            ctx.font = '16px Arial';
+            let y = 100;
+            cart.forEach((item, index) => {
+                ctx.fillText(`${item.title} x ${item.quantity}`, 50, y);
+                ctx.fillText(formatPrice(item.price * item.quantity), 450, y);
+                y += 30;
+            });
+
+            // Add total
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0) + 250; // Including shipping
+            ctx.font = 'bold 18px Arial';
+            ctx.fillText('Total:', 50, y + 30);
+            ctx.fillText(formatPrice(total), 450, y + 30);
+
+            // Add payment method
+            const activePaymentOption = document.querySelector('.payment-option.active');
+            const paymentMethod = activePaymentOption ? activePaymentOption.textContent : 'N/A';
+            ctx.fillText(`Payment Method: ${paymentMethod}`, 50, y + 60);
+
+            // Convert canvas to image
+            return canvas.toDataURL('image/png');
+        }
+
+        // Function to show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
         // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts(products);
@@ -564,6 +816,7 @@
 
             checkoutButton.onclick = function() {
                 modal.style.display = 'block';
+                renderOrderSummary();
             }
 
             closeButton.onclick = function() {
@@ -578,9 +831,9 @@
 
             // Checkout tabs
             const tabs = document.querySelectorAll('.checkout-tab');
-            const cardFields = document.getElementById('card-fields');
-            const paypalFields = document.getElementById('paypal-fields');
-            const gcashFields = document.getElementById('gcash-fields');
+            const shippingFields = document.getElementById('shipping-fields');
+            const paymentFields = document.getElementById('payment-fields');
+            const reviewFields = document.getElementById('review-fields');
 
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
@@ -588,18 +841,58 @@
                     tab.classList.add('active');
                     
                     const tabType = tab.getAttribute('data-tab');
-                    cardFields.style.display = tabType === 'card' ? 'block' : 'none';
-                    paypalFields.style.display = tabType === 'paypal' ? 'block' : 'none';
-                    gcashFields.style.display = tabType === 'gcash' ? 'block' : 'none';
+                    shippingFields.style.display = tabType === 'shipping' ? 'block' : 'none';
+                    paymentFields.style.display = tabType === 'payment' ? 'block' : 'none';
+                    reviewFields.style.display = tabType === 'review' ? 'block' : 'none';
+
+                    if (tabType === 'review') {
+                        renderAddressSummary();
+                        renderOrderSummary();
+                    }
+                });
+            });
+
+            // Payment option selection
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            const cardFields = document.getElementById('card-fields');
+            const gcashFields = document.getElementById('gcash-fields');
+
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    paymentOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                    const paymentType = option.getAttribute('data-payment');
+                    cardFields.style.display = paymentType === 'card' ? 'block' : 'none';
+                    gcashFields.style.display = paymentType === 'gcash' ? 'block' : 'none';
                 });
             });
 
             // Checkout form submission
             document.getElementById('checkout-form').addEventListener('submit', (e) => {
                 e.preventDefault();
-                alert('Thank you for your purchase!');
-                modal.style.display = 'none';
-                // Here you would typically process the payment and clear the cart
+                const orderSuccessMessage = document.getElementById('order-success');
+                const checkoutForm = document.getElementById('checkout-form');
+                const downloadInvoiceButton = document.getElementById('downloadInvoice');
+
+                // Simulate order processing
+                setTimeout(() => {
+                    orderSuccessMessage.style.display = 'block';
+                    checkoutForm.style.display = 'none';
+                    downloadInvoiceButton.style.display = 'block';
+                    showNotification("We are shipping your order! Yippee, just wait for it!");
+                    cart = []; // Clear the cart
+                    renderCart(); // Update cart display
+                    modal.style.display = 'none'; // Close the modal
+                }, 1000);
+            });
+
+            // Download invoice
+            document.getElementById('downloadInvoice').addEventListener('click', () => {
+                const invoiceImage = generateInvoice();
+                const link = document.createElement('a');
+                link.download = 'invoice.png';
+                link.href = invoiceImage;
+                link.click();
             });
         });
     </script>
