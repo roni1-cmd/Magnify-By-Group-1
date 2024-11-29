@@ -16,20 +16,28 @@
             width: 100vw;
             height: 100vh;
             position: relative;
-            background: linear-gradient(135deg, #FF69B4, #8A2BE2);
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 70%, #4a4a4a 70%, #4a4a4a 100%);
             overflow: hidden;
         }
-        #farm-background {
+        #road {
             position: absolute;
+            bottom: 0;
             width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect width="100" height="50" fill="%2387CEEB"/%3E%3Crect y="50" width="100" height="50" fill="%234CAF50"/%3E%3Ccircle cx="80" cy="20" r="10" fill="%23FDB813"/%3E%3Cpath d="M20 80 L40 60 L60 80 Z" fill="%238B4513"/%3E%3C/svg%3E');
-            background-size: 200px 200px;
-            opacity: 0.3;
+            height: 30%;
+            background-color: #4a4a4a;
+            overflow: hidden;
+        }
+        .road-line {
+            position: absolute;
+            width: 100px;
+            height: 10px;
+            background-color: #ffffff;
+            top: 50%;
+            transform: translateY(-50%);
         }
         #cute-piggy-bank {
-            width: 120px;
-            height: 100px;
+            width: 140px;
+            height: 120px;
             background-color: #FFC0CB;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             position: absolute;
@@ -39,56 +47,57 @@
             cursor: move;
             user-select: none;
             transition: transform 0.1s;
+            z-index: 10;
         }
         #cute-piggy-bank::before {
             content: "";
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             background-color: #FF69B4;
             border-radius: 50%;
             position: absolute;
-            top: -20px;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
         }
         #cute-piggy-bank::after {
             content: "";
-            width: 30px;
-            height: 15px;
+            width: 40px;
+            height: 20px;
             background-color: #FF69B4;
-            border-radius: 15px 15px 0 0;
+            border-radius: 20px 20px 0 0;
             position: absolute;
-            bottom: 10px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
         }
         .piggy-eye {
-            width: 20px;
-            height: 20px;
+            width: 25px;
+            height: 25px;
             background-color: white;
             border-radius: 50%;
             position: absolute;
-            top: 20px;
+            top: 25px;
         }
         .piggy-eye::after {
             content: "";
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             background-color: black;
             border-radius: 50%;
             position: absolute;
-            top: 2px;
-            left: 5px;
+            top: 3px;
+            left: 6px;
         }
         .piggy-eye.left {
-            left: 25px;
+            left: 30px;
         }
         .piggy-eye.right {
-            right: 25px;
+            right: 30px;
         }
         .coin {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             background-color: gold;
             border-radius: 50%;
             position: absolute;
@@ -96,36 +105,43 @@
             justify-content: center;
             align-items: center;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 14px;
             color: #B8860B;
             animation: fall 4s linear;
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            z-index: 5;
         }
         @keyframes fall {
             to { top: 100%; }
         }
-        #score, #lives, #high-score {
-            position: absolute;
-            top: 10px;
-            font-size: 24px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        .info-container {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            padding: 5px 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        #score { left: 10px; }
-        #lives { right: 10px; }
+        #score, #lives, #high-score, #speed-indicator {
+            position: absolute;
+            font-size: 18px;
+            color: #FF4500;
+        }
+        #score { left: 10px; top: 10px; }
+        #lives { right: 10px; top: 10px; }
         #high-score { left: 10px; top: 50px; }
+        #speed-indicator { left: 10px; top: 90px; }
         #shop-button {
             position: absolute;
-            top: 90px;
+            top: 130px;
             right: 10px;
             background-color: #FF69B4;
             color: white;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 25px;
             font-size: 18px;
             transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         #shop-button:hover {
             background-color: #FF1493;
@@ -139,13 +155,14 @@
             transform: translate(-50%, -50%);
             background-color: rgba(255, 255, 255, 0.9);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 20px;
             text-align: center;
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
             width: 80%;
             max-width: 600px;
             max-height: 80vh;
             overflow-y: auto;
+            z-index: 100;
         }
         .item {
             margin-bottom: 20px;
@@ -153,7 +170,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 15px;
             transition: all 0.3s;
             background-color: #f0f0f0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -168,17 +185,17 @@
             margin-right: 10px;
         }
         .buy-button {
-            background-color: #8A2BE2;
+            background-color: #4CAF50;
             color: white;
             border: none;
             padding: 8px 15px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 15px;
             transition: all 0.3s;
             font-size: 16px;
         }
         .buy-button:hover {
-            background-color: #9400D3;
+            background-color: #45a049;
             transform: scale(1.1);
         }
         #game-over {
@@ -189,58 +206,159 @@
             transform: translate(-50%, -50%);
             background-color: rgba(255, 255, 255, 0.9);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 20px;
             text-align: center;
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            z-index: 100;
         }
         #restart-button {
-            background-color: #8A2BE2;
+            background-color: #4CAF50;
             color: white;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 15px;
             font-size: 18px;
             margin-top: 20px;
             transition: all 0.3s;
         }
         #restart-button:hover {
-            background-color: #9400D3;
+            background-color: #45a049;
             transform: scale(1.1);
         }
         #power-up {
             position: absolute;
-            top: 90px;
+            top: 170px;
             left: 10px;
             font-size: 18px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #FF4500;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            padding: 5px 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        #speed-indicator {
+        .sun {
             position: absolute;
-            top: 130px;
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            background-color: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 50px #FFD700;
+        }
+        .cloud {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+        }
+        .cloud:nth-child(1) {
+            width: 100px;
+            height: 40px;
+            top: 50px;
+            left: 10%;
+        }
+        .cloud:nth-child(1)::before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
             left: 10px;
-            font-size: 18px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .cloud:nth-child(1)::after {
+            width: 70px;
+            height: 70px;
+            top: -35px;
+            right: 10px;
+        }
+        .cloud:nth-child(2) {
+            width: 80px;
+            height: 30px;
+            top: 100px;
+            left: 30%;
+        }
+        .cloud:nth-child(2)::before {
+            width: 40px;
+            height: 40px;
+            top: -20px;
+            left: 5px;
+        }
+        .cloud:nth-child(2)::after {
+            width: 55px;
+            height: 55px;
+            top: -30px;
+            right: 5px;
+        }
+        .cloud:nth-child(3) {
+            width: 120px;
+            height: 45px;
+            top: 70px;
+            right: 15%;
+        }
+        .cloud:nth-child(3)::before {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 15px;
+        }
+        .cloud:nth-child(3)::after {
+            width: 80px;
+            height: 80px;
+            top: -40px;
+            right: 15px;
+        }
+        .cloud:nth-child(4) {
+            width: 90px;
+            height: 35px;
+            top: 150px;
+            right: 35%;
+        }
+        .cloud:nth-child(4)::before {
+            width: 45px;
+            height: 45px;
+            top: -22px;
+            left: 8px;
+        }
+        .cloud:nth-child(4)::after {
+            width: 65px;
+            height: 65px;
+            top: -32px;
+            right: 8px;
         }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <div id="farm-background"></div>
+        <div class="sun"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div id="road">
+            <div class="road-line" style="left: 10%;"></div>
+            <div class="road-line" style="left: 30%;"></div>
+            <div class="road-line" style="left: 50%;"></div>
+            <div class="road-line" style="left: 70%;"></div>
+            <div class="road-line" style="left: 90%;"></div>
+        </div>
         <div id="cute-piggy-bank">
             <div class="piggy-eye left"></div>
             <div class="piggy-eye right"></div>
         </div>
-        <div id="score">Pesos: ₱<span id="money">0</span></div>
-        <div id="high-score">High Score: ₱<span id="high-score-value">0</span></div>
-        <div id="lives">Lives: <span id="lives-count">8</span></div>
+        <div id="score" class="info-container">Magnify Credits: ₱<span id="money">0</span></div>
+        <div id="high-score" class="info-container">High Score: ₱<span id="high-score-value">0</span></div>
+        <div id="lives" class="info-container">Lives: <span id="lives-count">8</span></div>
+        <div id="speed-indicator" class="info-container">Speed: x1</div>
         <div id="power-up"></div>
-        <div id="speed-indicator">Speed: x1</div>
-        <button id="shop-button">Farm Shop</button>
+        <button id="shop-button">MagniShop</button>
         <div id="shop">
-            <h2>Farmer's Market</h2>
+            <h2>Help SquealSaver!</h2>
             <div class="item">
                 <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 18l-8-4V8l8 4v8zm0-10L4 6l8-4 8 4-8 4zm8 6l-8 4V12l8-4v8z'/%3E%3C/svg%3E" alt="Magnet" class="item-icon">
                 <span>Coin Magnet (₱500)</span>
@@ -274,9 +392,10 @@
             <p>High score: ₱<span id="final-high-score"></span></p>
             <button id="restart-button">Play Again</button>
         </div>
-    </div>
+       </div>
 
-    <audio id="coin-sound" src="data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU="></audio>
+    <audio id="coin-sound" src="https://themushroomkingdom.net/sounds/wav/smw/smw_coin.wav"></audio>
+    <audio id="game-over-sound" src="Pou game over sound effect.mp3"></audio>
 
     <script>
         const cutePiggyBank = document.getElementById('cute-piggy-bank');
@@ -293,6 +412,7 @@
         const speedIndicator = document.getElementById('speed-indicator');
         const gameContainer = document.getElementById('game-container');
         const coinSound = document.getElementById('coin-sound');
+        const gameOverSound = document.getElementById('game-over-sound');
         let money = 0;
         let highScore = 0;
         let lives = 8;
@@ -316,13 +436,8 @@
         }
 
         function updateSpeed() {
-            if (money >= 1000) {
-                speedMultiplier = 2;
-            } else if (money >= 500) {
-                speedMultiplier = 1.5;
-            } else {
-                speedMultiplier = 1;
-            }
+            const baseSpeed = Math.floor(money / 500);
+            speedMultiplier = 1 + (baseSpeed * 0.5);
             speedIndicator.textContent = `Speed: x${speedMultiplier.toFixed(1)}`;
             if (!isGameOver) {
                 clearInterval(gameInterval);
@@ -342,8 +457,8 @@
             if (isGameOver) return;
             const coin = document.createElement('div');
             coin.className = 'coin';
-            coin.style.left = `${Math.random() * (window.innerWidth - 30)}px`;
-            coin.style.top = '-30px';
+            coin.style.left = `${Math.random() * (window.innerWidth - 40)}px`;
+            coin.style.top = '-40px';
             const value = Math.random() < 0.7 ? 10 : (Math.random() < 0.9 ? 50 : 100);
             coin.textContent = `₱${value}`;
             coin.dataset.value = value;
@@ -424,6 +539,7 @@
             gameOverScreen.style.display = 'block';
             finalScoreSpan.textContent = money;
             finalHighScoreSpan.textContent = highScore;
+            gameOverSound.play();
         }
 
         function startGame() {
@@ -455,7 +571,7 @@
                 let left = clientX - dragStartX;
                 left = Math.max(0, Math.min(left, window.innerWidth - cutePiggyBank.offsetWidth));
                 cutePiggyBank.style.left = `${left}px`;
-                cutePiggyBank.style.transform = 'none';
+                cutePiggyBank.style.transform = 'translateX(0)';
             }
         }
 
@@ -484,6 +600,7 @@
                         setTimeout(() => {
                             cutePiggyBank.style.transform = 'none';
                         }, 100);
+                        coinSound.currentTime = 0;
                         coinSound.play();
                     }
                 });
