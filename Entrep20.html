@@ -393,10 +393,11 @@
             <p>High score: ₱<span id="final-high-score"></span></p>
             <button id="restart-button">Play Again</button>
         </div>
-       </div>
+    </div>
 
     <audio id="coin-sound" src="https://themushroomkingdom.net/sounds/wav/smw/smw_coin.wav"></audio>
     <audio id="game-over-sound" src="Pou game over sound effect.mp3"></audio>
+    <audio id="background-music" src="background music" loop></audio>
 
     <script>
         const cutePiggyBank = document.getElementById('cute-piggy-bank');
@@ -414,6 +415,7 @@
         const gameContainer = document.getElementById('game-container');
         const coinSound = document.getElementById('coin-sound');
         const gameOverSound = document.getElementById('game-over-sound');
+        const backgroundMusic = document.getElementById('background-music');
         let money = 0;
         let highScore = 0;
         let lives = 8;
@@ -541,6 +543,7 @@
             finalScoreSpan.textContent = money;
             finalHighScoreSpan.textContent = highScore;
             gameOverSound.play();
+            backgroundMusic.pause();
         }
 
         function startGame() {
@@ -558,6 +561,8 @@
             document.querySelectorAll('.coin').forEach(coin => coin.remove());
             clearInterval(gameInterval);
             gameInterval = setInterval(createCoin, 1000 / (difficulty * speedMultiplier));
+            backgroundMusic.currentTime = 0;
+            backgroundMusic.play();
         }
 
         function handleStart(e) {
