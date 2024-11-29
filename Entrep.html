@@ -341,8 +341,7 @@
             opacity: 1;
         }
 
-        @media (max
--width: 768px) {
+        @media (max-width: 768px) {
             .navbar {
                 padding: 1rem;
             }
@@ -406,7 +405,7 @@
                 <div class="feature-card" onclick="openTab('transactionTab')">
                     <i class="fas fa-list-ul"></i>
                     <h3>Track List</h3>
-                    <p></p></p>
+                    <p></p>
                 </div>
                 <div class="feature-card" onclick="openTab('calculatorTab')">
                     <i class="fas fa-calculator"></i>
@@ -708,36 +707,6 @@
             updateTransactionList();
             updateBalance();
             updateChart();
-
-            // Clear input fields
-            document.getElementById('amount').value = '';
-        }
-
-        // Function to update transaction list
-        function updateTransactionList() {
-            const transactionList = document.getElementById('transactionList');
-            transactionList.innerHTML = '';
-
-            transactions.forEach((transaction, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <span>${transaction.description}: ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}</span>
-                    <button onclick="deleteTransaction(${index})" class="button danger">Delete</button>
-                `;
-                transactionList.appendChild(li);
-            });
-        }
-
-        // Function to delete a transaction
-        function deleteTransaction(index) {
-            const transaction = transactions[index];
-            balance += transaction.type === 'income' ? -transaction.amount : transaction.amount;
-            transactions.splice(index, 1);
-
-            updateLocalStorage();
-            updateTransactionList();
-            updateBalance();
-            updateChart();
         }
 
         // Function to update balance display
@@ -841,7 +810,6 @@
             }
         }
 
-
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
             toggleDescriptionOptions();
@@ -851,9 +819,13 @@
 
             document.getElementById('addTransaction').addEventListener('click', addTransaction);
         });
+
+        // Redirect to Entrep20.html when "Magnify!" is clicked
+        document.querySelector('.navbar-brand h1').addEventListener('click', () => {
+            window.location.href = 'Entrep20.html';
+        });
     </script>
-<script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-<script src="https://files.bpcontent.cloud/2024/11/24/12/20241124120340-PJ828UDO.js"></script>
+    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2024/11/24/12/20241124120340-PJ828UDO.js"></script>
 </body>
 </html>
-
