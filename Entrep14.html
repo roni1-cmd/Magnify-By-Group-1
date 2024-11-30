@@ -10,12 +10,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #8A2BE2; /* Purple */
-            --secondary-color: #FF69B4; /* Pink */
-            --accent-color: #FF1493; /* Deep Pink */
+            --primary-color: #8A2BE2;
+            --secondary-color: #FF69B4;
+            --accent-color: #FF1493;
             --background-color: #f0f2f5;
-            --text-color: #8A2BE2; /* Purple */
-            --text-light: #9370DB; /* Medium Purple */
+            --text-color: #8A2BE2;
+            --text-light: #9370DB;
             --border-color: #e5e7eb;
             --card-bg: #FFFFFF;
             --success-color: #10B981;
@@ -38,14 +38,14 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 1rem;
+            padding: 0.5rem;
         }
 
         header {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 1rem 0;
+            padding: 0.5rem 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
@@ -56,17 +56,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--primary-color);
+            margin-bottom: 0.5rem;
         }
 
         .nav-menu {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
         }
 
         .nav-item {
@@ -77,10 +82,10 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
             border-radius: 4px;
-            position: relative;
+            font-size: 0.9rem;
         }
 
         .nav-item::after {
@@ -121,73 +126,73 @@
             background-color: var(--accent-color);
             color: white;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: bold;
         }
 
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 2rem;
-            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
         .card {
             background-color: var(--card-bg);
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
         }
 
         .card-title {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             color: var(--primary-color);
         }
 
         .summary-cards {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
         }
 
         .summary-card {
             background-color: var(--card-bg);
             border-radius: 8px;
-            padding: 1rem;
+            padding: 0.75rem;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
 
         .summary-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         .summary-card-title {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--text-light);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
 
         .summary-card-value {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--primary-color);
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
         }
 
         .input-group {
@@ -196,8 +201,9 @@
         }
 
         .input-group label {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             font-weight: 500;
+            font-size: 0.9rem;
         }
 
         .input-group input,
@@ -205,7 +211,7 @@
             padding: 0.5rem;
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             background-color: var(--card-bg);
             color: var(--text-color);
             transition: all 0.3s ease;
@@ -219,10 +225,10 @@
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1rem;
             border: none;
             border-radius: 4px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -242,15 +248,16 @@
         .chart-controls {
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
         }
 
         .chart-btn {
-            padding: 0.5rem 1rem;
+            padding: 0.25rem 0.5rem;
             border: none;
             border-radius: 4px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.3s ease;
             background-color: var(--card-bg);
@@ -268,12 +275,12 @@
         }
 
         .transaction-list {
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
         }
 
         .transaction-item {
-            padding: 1rem;
+            padding: 0.75rem;
             border-bottom: 1px solid var(--border-color);
             background-color: var(--card-bg);
             transition: all 0.3s ease;
@@ -286,18 +293,19 @@
 
         .transaction-item:hover {
             background-color: rgba(255, 255, 255, 0.9);
-            transform: translateX(5px);
+            transform: translateX(3px);
         }
 
         .transaction-month {
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
         }
 
         .transaction-details {
             display: flex;
             justify-content: space-between;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .income {
@@ -311,8 +319,9 @@
         .notification-panel {
             position: fixed;
             top: 60px;
-            right: 20px;
-            width: 300px;
+            right: 10px;
+            width: 90%;
+            max-width: 300px;
             background-color: var(--card-bg);
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -321,7 +330,7 @@
         }
 
         .notification-header {
-            padding: 1rem;
+            padding: 0.75rem;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
@@ -329,12 +338,12 @@
         }
 
         .notification-list {
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
         }
 
         .notification-item {
-            padding: 1rem;
+            padding: 0.75rem;
             border-bottom: 1px solid var(--border-color);
             transition: all 0.3s ease;
             cursor: pointer;
@@ -357,25 +366,26 @@
 
         .notification-title {
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
         }
 
         .notification-message {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--text-light);
         }
 
         .notification-time {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: var(--text-light);
-            margin-top: 0.5rem;
+            margin-top: 0.25rem;
         }
 
         .notification-dismiss {
             color: var(--text-light);
             cursor: pointer;
-            padding: 0.5rem;
-            font-size: 1.2rem;
+            padding: 0.25rem;
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
@@ -386,10 +396,10 @@
 
         footer {
             text-align: center;
-            padding: 1rem 0;
-            margin-top: 2rem;
+            padding: 0.75rem 0;
+            margin-top: 1rem;
             color: var(--text-light);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             background-color: rgba(255, 255, 255, 0.9);
         }
 
@@ -411,8 +421,8 @@
             padding: 20px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            width: 80%;
-            max-width: 600px;
+            width: 90%;
+            max-width: 500px;
         }
 
         .close {
@@ -445,17 +455,33 @@
             to { opacity: 1; }
         }
 
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
+        @media (min-width: 768px) {
+            .container {
+                padding: 1rem;
             }
 
-            .summary-cards {
-                grid-template-columns: 1fr;
+            .main-content {
+                flex-direction: row;
+            }
+
+            .content-left {
+                flex: 2;
+            }
+
+            .content-right {
+                flex: 1;
             }
 
             .form-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-menu {
+                width: auto;
+            }
+
+            .logo {
+                margin-bottom: 0;
             }
         }
     </style>
@@ -837,4 +863,3 @@
     </script>
 </body>
 </html>
-
