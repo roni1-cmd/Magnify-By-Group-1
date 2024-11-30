@@ -37,7 +37,7 @@
         }
 
         .container {
-            max-width: 1800px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 1rem;
         }
@@ -53,19 +53,23 @@
 
         .header-content {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--primary);
+            text-align: center;
+            margin-bottom: 1rem;
         }
 
         .nav-menu {
             display: flex;
-            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
         }
 
         .nav-item {
@@ -76,6 +80,7 @@
             text-decoration: none;
             font-weight: 500;
             transition: var(--transition);
+            padding: 0.5rem;
         }
 
         .nav-item:hover {
@@ -89,8 +94,8 @@
         }
 
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr 5fr;
+            display: flex;
+            flex-direction: column;
             gap: 2rem;
             margin-top: 2rem;
         }
@@ -131,19 +136,16 @@
 
         .resources-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
             gap: 2rem;
         }
 
         .resource-section {
             background: white;
             border-radius: 1rem;
-            padding: 2rem;
+            padding: 1.5rem;
             box-shadow: var(--card-shadow);
             transition: var(--transition);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
         }
 
         .resource-section:hover {
@@ -154,7 +156,7 @@
         .resource-section h2 {
             color: var(--primary);
             margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             position: relative;
             padding-bottom: 0.5rem;
         }
@@ -176,17 +178,15 @@
         }
 
         .resource-cards-container {
-            flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            gap: 1rem;
         }
 
         .resource-card {
             background: var(--background);
             border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
+            padding: 1rem;
             transition: var(--transition);
             cursor: pointer;
             position: relative;
@@ -255,7 +255,7 @@
         .cta-section {
             text-align: center;
             margin-top: 3rem;
-            padding: 3rem;
+            padding: 2rem;
             background: white;
             border-radius: 1rem;
             box-shadow: var(--card-shadow);
@@ -263,7 +263,7 @@
 
         .cta-button {
             display: inline-block;
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             background: var(--success);
             color: white;
             text-decoration: none;
@@ -274,6 +274,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            margin-top: 1rem;
         }
 
         .cta-button::before {
@@ -301,10 +302,10 @@
 
         .chatbot-button {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 60px;
-            height: 60px;
+            bottom: 1rem;
+            right: 1rem;
+            width: 50px;
+            height: 50px;
             background: var(--primary);
             border-radius: 50%;
             display: flex;
@@ -352,11 +353,12 @@
 
         .notification-panel {
             position: fixed;
-            top: 80px;
-            right: 20px;
-            width: 400px;
+            top: 70px;
+            left: 0;
+            right: 0;
+            width: 100%;
             background: white;
-            border-radius: 1rem;
+            border-radius: 0 0 1rem 1rem;
             box-shadow: var(--card-shadow);
             z-index: 1001;
             opacity: 0;
@@ -383,7 +385,7 @@
 
         .notification-content {
             padding: 1rem;
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
         }
 
@@ -453,7 +455,7 @@
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
+            width: 90%;
             max-width: 600px;
             border-radius: 1rem;
             transform: scale(0.7);
@@ -514,35 +516,48 @@
             }
         }
 
-        @media (max-width: 1200px) {
-            .main-content {
-                grid-template-columns: 1fr 3fr;
+        @media (min-width: 768px) {
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
             }
-        }
 
-        @media (max-width: 768px) {
+            .logo {
+                margin-bottom: 0;
+            }
+
+            .nav-menu {
+                justify-content: flex-end;
+            }
+
             .main-content {
-                grid-template-columns: 1fr;
+                flex-direction: row;
             }
 
             .sidebar {
-                order: -1;
+                flex: 1;
             }
 
             .resources-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .notification-panel {
-                width: 100%;
-                top: 70px;
-                right: 0;
-                border-radius: 0;
+                top: 80px;
+                left: auto;
+                right: 20px;
+                width: 400px;
+                border-radius: 1rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .resources-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
-
 <body>
     <header class="header">
         <div class="container">
@@ -589,21 +604,6 @@
                     <li><a href="#">Tax Planning</a></li>
                     <li><a href="#">Insurance Basics</a></li>
                     <li><a href="#">Credit Score Management</a></li>
-                    <li><a href="#">Personal Finance Tools</a></li>
-                    <li><a href="#">Financial Calculators</a></li>
-                    <li><a href="#">Money-Saving Tips</a></li>
-                    <li><a href="#">Financial Literacy Resources</a></li>
-                    <li><a href="#">Budgeting Templates</a></li>
-                    <li><a href="#">Stock Market Basics</a></li>
-                    <li><a href="#">Real Estate Investing</a></li>
-                    <li><a href="#">Cryptocurrency Guide</a></li>
-                    <li><a href="#">Side Hustle Ideas</a></li>
-                    <li><a href="#">Student Loan Management</a></li>
-                    <li><a href="#">Negotiating Salary</a></li>
-                    <li><a href="#">Financial Books Recommendations</a></li>
-                    <li><a href="#">Frugal Living Tips</a></li>
-                    <li><a href="#">Understanding Credit Cards</a></li>
-                    <li><a href="#">Estate Planning Basics</a></li>
                 </ul>
             </div>
 
