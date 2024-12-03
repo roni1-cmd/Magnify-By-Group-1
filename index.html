@@ -48,6 +48,11 @@
             z-index: 0;
         }
 
+        .navbar, .hero, .footer {
+            position: relative;
+            z-index: 1;
+        }
+
         .navbar {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
@@ -140,8 +145,6 @@
             padding: 2rem 1rem;
             max-width: 1400px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
         }
 
         .hero-content {
@@ -295,8 +298,6 @@
             background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
             padding: 2rem 1rem;
-            position: relative;
-            z-index: 1;
         }
 
         .footer-container {
@@ -419,14 +420,14 @@
         }
 
         .loading-icon {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
             position: relative;
             overflow: hidden;
             cursor: pointer;
@@ -461,16 +462,6 @@
 
         .loading-icon:hover i {
             color: var(--accent);
-        }
-
-        .loading-text {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-top: 1rem;
-            min-height: 3em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .loading-progress {
@@ -575,9 +566,9 @@
             }
 
             .loading-icon {
-                width: 80px;
-                height: 80px;
-                font-size: 2rem;
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -760,8 +751,10 @@
                 <div class="loading-icon" data-tip="Save for the future">
                     <i class="fas fa-piggy-bank"></i>
                 </div>
+                <div class="loading-icon" data-tip="Invest wisely">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
             </div>
-            <div class="loading-text"></div>
             <div class="loading-progress">
                 <div class="loading-bar"></div>
             </div>
@@ -796,16 +789,9 @@
             });
         }
 
-        const loadingMessages = [
-            "Tip: A money a day, keeps the sadness away",
-            "Tip: 1 peso is the foundation of all",
-            "Finance here, finance there, maybe you need a hand?",
-            "Saving today for a brighter tomorrow",
-            "Every coin counts on your journey to wealth"
-        ];
-
         function typeWriter(element, text, speed) {
             let i = 0;
+            element.textContent = '';
             function type() {
                 if (i < text.length) {
                     element.textContent += text.charAt(i);
@@ -819,19 +805,10 @@
         function showLoading(redirectUrl) {
             const loadingScreen = document.querySelector('.loading-screen');
             const loadingIcons = document.querySelectorAll('.loading-icon');
-            const loadingText = document.querySelector('.loading-text');
             const loadingBar = document.querySelector('.loading-bar');
             loadingScreen.classList.add('active');
             
-            let messageIndex = 0;
             let progress = 0;
-            const changeMessage = () => {
-                typeWriter(loadingText, loadingMessages[messageIndex], 50);
-                messageIndex = (messageIndex + 1) % loadingMessages.length;
-            };
-            changeMessage();
-            const messageInterval = setInterval(changeMessage, 4000);
-
             const updateProgress = () => {
                 progress += 1;
                 loadingBar.style.width = `${progress}%`;
@@ -847,13 +824,6 @@
             loadingIcons.forEach((icon, index) => {
                 icon.addEventListener('click', () => {
                     icon.classList.toggle('filled');
-                    const tip = icon.getAttribute('data-tip');
-                    loadingText.textContent = '';
-                    typeWriter(loadingText, tip, 50);
-                    clearInterval(messageInterval);
-                    setTimeout(() => {
-                        messageInterval = setInterval(changeMessage, 4000);
-                    }, 4000);
                 });
 
                 setTimeout(() => {
@@ -864,7 +834,6 @@
             updateProgress();
 
             setTimeout(() => {
-                clearInterval(messageInterval);
                 loadingScreen.classList.remove('active');
             }, 6000);
         }
