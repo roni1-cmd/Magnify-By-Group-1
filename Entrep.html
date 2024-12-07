@@ -3,27 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify! - Financial Management Dashboard</title>
+    <title>Magnify! Dashboard</title>
     <link rel="icon" href="logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
         :root {
-            --gradient-start: #8A2BE2;
-            --gradient-middle: #9932CC;
-            --gradient-end: #FF69B4;
-            --primary: #9932CC;
-            --secondary: #FF69B4;
-            --accent: #DA70D6;
-            --text: #333333;
-            --text-light: #666666;
-            --background: #F8E8FF;
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --success: #2ECC71;
-            --danger: #E74C3C;
-            --warning: #F39C12;
+            --primary-gradient: linear-gradient(135deg, #8B5CF6, #EC4899);
+            --secondary-gradient: linear-gradient(135deg, #EC4899, #8B5CF6);
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --background: #F3F4F6;
+            --card-background: #FFFFFF;
+            --sidebar-width: 240px;
+            --header-height: 80px;
         }
 
         * {
@@ -34,798 +28,1177 @@
         }
 
         body {
+            background: var(--background);
+            color: var(--text-primary);
+            display: flex;
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
-            color: var(--text);
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--primary-gradient);
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-        }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
+            position: fixed;
+            height: 100vh;
+            transition: transform 0.3s ease-in-out;
             z-index: 1000;
+        }
+
+        .sidebar-hidden .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .logo {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(-20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .navbar-brand img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-        }
-
-        .navbar-brand h1 {
+            gap: 0.75rem;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
             color: white;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .logo span {
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 1.25rem;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            padding-top: calc(var(--header-height) + 2rem);
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .sidebar-hidden .main-content {
+            margin-left: 0;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            height: var(--header-height);
+            background: var(--secondary-gradient);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease-in-out;
+            z-index: 100;
+        }
+
+        .sidebar-hidden .header {
+            left: 0;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--background);
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            width: 300px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: none;
+            outline: none;
+            padding: 0.5rem;
+            width: 100%;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            flex-grow: 1;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 1rem;
+            background: var(--card-background);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 2rem;
         }
 
-        @media (max-width: 1200px) {
-            .feature-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        @media (max-width: 768px) {
-            .feature-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .feature-card {
-            background: var(--card-bg);
+        .metric-card {
+            background: var(--secondary-gradient);
             border-radius: 1rem;
             padding: 1.5rem;
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .metric-card .title {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .metric-card .value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-card .change {
+            font-size: 0.875rem;
+        }
+
+        .metric-card .change.negative {
+            color: #FFD700;
+        }
+
+        .analytics-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: var(--card-background);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .analytics-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .chart-type-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-type-btn {
+            background: none;
+            border: none;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 0.5s ease;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .chart-type-btn:hover,
+        .chart-type-btn.active {
+            color: var(--text-primary);
         }
 
-        .feature-card::before {
-            content: '';
-            position: absolute;
+        .chart-container {
+            height: 300px;
+            width: 100%;
+        }
+
+        .transaction-list {
+            margin-top: 2rem;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #E8E8E8;
+            transition: background-color 0.3s ease;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-item:hover {
+            background-color: #F7F7F7;
+        }
+
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .transaction-details h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .transaction-details p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+        }
+
+        .transaction-amount.positive {
+            color: #10B981;
+        }
+
+        .transaction-amount.negative {
+            color: #EF4444;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: 0.5s;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
         }
 
-        .feature-card:hover::before {
-            transform: translateX(100%);
+        .modal-content {
+            background: var(--card-background);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            animation: modalFadeIn 0.3s ease-out;
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .feature-card i {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #E8E8E8;
+            border-radius: 0.5rem;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #8B5CF6;
+        }
+
+        .btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
             transition: all 0.3s ease;
         }
 
-        .feature-card:hover i {
-            transform: scale(1.1);
-            color: var(--accent);
+        .btn:hover {
+            opacity: 0.9;
         }
 
-        .feature-card h3 {
+        .btn-outline {
+            background: none;
+            border: 1px solid #8B5CF6;
+            color: #8B5CF6;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1002;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
             font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .feature-card p {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .content-section {
-            background: var(--card-bg);
-            border-radius: 1rem;
-            padding: 2rem;
+        .quick-actions {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            animation: slideUp 0.5s ease;
         }
 
-        @keyframes slideUp {
+        .quick-action-card {
+            background: var(--card-background);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            flex: 1;
+            margin-right: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .quick-action-card:last-child {
+            margin-right: 0;
+        }
+
+        .quick-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .quick-action-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-action-card p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .popup-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        /* New styles for colored containers */
+        .colored-container {
+            background: var(--primary-gradient);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .colored-container .btn {
+            background: white;
+            color: #8B5CF6;
+        }
+
+        .colored-container .btn:hover {
+            background: #F3F4F6;
+        }
+
+        @media (max-width: 1024px) {
+            .metrics-grid,
+            .analytics-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding-top: calc(var(--header-height) + 2rem);
+            }
+
+            .header {
+                left: 0;
+            }
+
+            .metrics-grid,
+            .analytics-section {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+            }
+
+            .quick-action-card {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity:0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
         }
 
-        .button:hover {
-            background: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .button.danger {
-            background: var(--danger);
-        }
-
-        .button.danger:hover {
-            background: #c0392b;
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-            font-weight: 500;
-        }
-
-        .input-group input,
-        .input-group select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus,
-        .input-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(153, 50, 204, 0.1);
-        }
-
-        .chart-container {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            margin-top: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        #transactionList {
-            list-style: none;
-            margin-top: 1rem;
-        }
-
-        #transactionList li {
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        #transactionList li:hover {
-            transform: translateX(5px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .calculator-modal {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            margin-top: 1rem;
-            display: none;
-            animation: slideIn 0.3s ease;
-        }
-
-        footer {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .tab-nav {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .tab-button {
-            background: var(--card-bg);
-            color: var(--text);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            margin: 0.5rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .tab-button:hover,
-        .tab-button.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 120px;
-            background-color: var(--primary);
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px 0;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -60px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 1rem;
-            }
-
-            .navbar-brand h1 {
-                font-size: 1.2rem;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .content-section {
-                padding: 1.5rem;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <img src="logo.png" alt="Magnify Logo">
-            <h1>Hello there! Welcome to Magnify!</h1>
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="placeholder-logo.png" alt="Magnify! Logo">
+            <span>Magnify!</span>
         </div>
-    </nav>
+        <nav>
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i>
+                Dashboard
+            </a>
+            <a href="Entrep4.html" class="nav-item">
+                <i class="fas fa-exchange-alt"></i>
+                Magnify Remit-It!
+            </a>
+            <a href="Entrep7.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                Calendar
+            </a>
+            <a href="Entrep8.html" class="nav-item">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+            <a href="Entrep9.html" class="nav-item">
+                <i class="fas fa-dollar-sign"></i>
+                Currency Converter
+            </a>
+            <a href="Entrep12.html" class="nav-item">
+                <i class="fas fa-chart-pie"></i>
+                Budget Planner
+            </a>
+            <a href="Entrep11.html" class="nav-item">
+                <i class="fas fa-book"></i>
+                Resources
+            </a>
+            <a href="Entrep17.html" class="nav-item">
+                <i class="fas fa-file-csv"></i>
+                Magnify! Q-CSV
+            </a>
+        </nav>
+    </aside>
 
-    <div class="container">
-        <div class="tab-nav">
-            <button class="tab-button active" onclick="openTab('dashboard')">Dashboard</button>
-            <button class="tab-button" onclick="openTab('transactionTab')">Track List</button>
-            <button class="tab-button" onclick="openTab('calculatorTab')">Calculators</button>
-            <button class="tab-button" onclick="openTab('analyticsTab')">Analytics</button>
-            <button class="tab-button" onclick="openTab('billsTab')">Manage Bills</button>
-            <button class="tab-button" onclick="openTab('resourcesTab')">Resources</button>
-            <button class="tab-button" onclick="openTab('qcsvTab')">Magnify! Q-CSV</button>
+    <!-- Header -->
+    <header class="header">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search transactions...">
         </div>
-
-        <div id="dashboard" class="content-section">
-            <button class="button" onclick="window.location.href='Entrep18.html'" style="margin-bottom: 1rem;">
-                <i class="fas fa-piggy-bank"></i> Can you keep up?
-            </button>
-            <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
-            <div class="feature-grid">
-                <div class="feature-card" onclick="openTab('transactionTab')">
-                    <i class="fas fa-list-ul"></i>
-                    <h3>Track List</h3>
-                    <p></p>
-                </div>
-                <div class="feature-card" onclick="openTab('calculatorTab')">
-                    <i class="fas fa-calculator"></i>
-                    <h3>Calculators</h3>
-                    <p></p>
-                </div>
-                <div class="feature-card" onclick="openTab('analyticsTab')">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Analytics</h3>
-                    <p></p>
-                </div>
-                <div class="feature-card" onclick="openTab('billsTab')">
-                    <i class="fas fa-file-invoice"></i>
-                    <h3>Magnify Remit-It!</h3>
-                    <p></p>
-                </div>
-                <div class="feature-card" onclick="window.location.href='Entrep7.html'">
-                    <i class="fas fa-calendar"></i>
-                    <h3>Calendar</h3>
-                    <p></p>
-                </div>
-                <div class="feature-card" onclick="window.location.href='Entrep8.html'">
-                    <i class="fas fa-user"></i>
-                    <h3>Profile</h3>
-                    <p></p>
-                </div>
-                <div class="feature-card" onclick="window.location.href='Entrep9.html'">
-                    <i class="fas fa-exchange-alt"></i>
-                    <h3>Currency Converter</h3>
-                    <p></p>
-                </div>
-                <div class="feature-card" onclick="window.location.href='Entrep12.html'">
-                    <i class="fas fa-piggy-bank"></i>
-                    <h3>Budget Planner</h3>
-                    <p></p>
-                </div>
-                <div class="feature-card" onclick="openTab('resourcesTab')">
-                    <i class="fas fa-book-reader"></i>
-                    <h3>Resources</h3>
-                    <p></p>
-                </div>
-                <div class="feature-card" onclick="openTab('qcsvTab')">
-                    <i class="fas fa-file-csv"></i>
-                    <h3>Magnify! Q-CSV</h3>
-                    <p></p>
-                </div>
-            </div>
-        </div>
-
-        <div id="transactionTab" class="content-section" style="display: none;">
-            <h2><i class="fas fa-plus-circle"></i> Add Transaction</h2>
-            <div class="input-group">
-                <label for="type">Transaction Type</label>
-                <select id="type" onchange="toggleDescriptionOptions()">
-                    <option value="income">Income</option>
-                    <option value="expense">Expense</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="description">Description</label>
-                <select id="description" required></select>
-            </div>
-            <div class="input-group">
-                <label for="amount">Amount</label>
-                <input type="number" id="amount" placeholder="Enter amount" required>
-            </div>
-            <button id="addTransaction" class="button">
-                <i class="fas fa-plus"></i> Add Transaction
-            </button>
-
-            <h2 class="mt-6"><i class="fas fa-list"></i> Transaction List</h2>
-            <ul id="transactionList"></ul>
-
-            <h2 class="mt-6"><i class="fas fa-wallet"></i> Total Balance: ₱<span id="balance">0</span></h2>
-            <button onclick="openTab('dashboard')" class="button">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </button>
-        </div>
-
-        <div id="calculatorTab" class="content-section" style="display: none;">
-            <h2><i class="fas fa-calculator"></i> Financial Calculators</h2>
-            
-            <div class="calculator-section">
-                <h3><i class="fas fa-home"></i> Mortgage Calculator</h3>
-                <button id="openMortgageCalculator" class="button">
-                    <i class="fas fa-calculator"></i> 
-                    Open Mortgage Calculator
+        <div class="header-actions">
+            <div class="colored-container">
+                <button class="btn" onclick="openModal('addTransactionModal')">
+                    <i class="fas fa-plus"></i> Add Transaction
                 </button>
-                <div id="mortgageCalculatorModal" class="calculator-modal">
-                    <div class="input-group">
-                        <label for="mortgageAmount">Mortgage Amount</label>
-                        <input type="number" id="mortgageAmount" placeholder="Enter mortgage amount">
-                    </div>
-                    <div class="input-group">
-                        <label for="interestRate">Interest Rate (%)</label>
-                        <input type="number" id="interestRate" placeholder="Enter interest rate">
-                    </div>
-                    <div class="input-group">
-                        <label for="loanTerm">Loan Term (Years)</label>
-                        <input type="number" id="loanTerm" placeholder="Enter loan term">
-                    </div>
-                    <button id="calculateMortgage" class="button">Calculate</button>
-                    <h3 id="mortgageResult" class="mt-4"></h3>
-                    <button id="closeMortgageCalculator" class="button danger">Close</button>
-                </div>
             </div>
-
-            <div class="calculator-section mt-6">
-                <h3><i class="fas fa-file-invoice-dollar"></i> Tax Calculator</h3>
-                <button id="openTaxCalculator" class="button">
-                    <i class="fas fa-calculator"></i>
-                    Open Tax Calculator
+            <div class="colored-container">
+                <button class="btn" onclick="openModal('mortgageCalculatorModal')">
+                    <i class="fas fa-calculator"></i> Mortgage Calculator
                 </button>
-                <div id="taxCalculatorModal" class="calculator-modal">
-                    <div class="input-group">
-                        <label for="income">Income</label>
-                        <input type="number" id="income" placeholder="Enter income">
-                    </div>
-                    <div class="input-group">
-                        <label for="taxRate">Tax Rate (%)</label>
-                        <input type="number" id="taxRate" placeholder="Enter tax rate">
-                    </div>
-                    <button id="calculateTax" class="button">Calculate</button>
-                    <h3 id="taxResult" class="mt-4"></h3>
-                    <button id="closeTaxCalculator" class="button danger">Close</button>
+            </div>
+            <div class="colored-container">
+                <button class="btn" onclick="openModal('taxCalculatorModal')">
+                    <i class="fas fa-calculator"></i> Tax Calculator
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Quick Actions -->
+        <div class="quick-actions slide-in">
+            <div class="quick-action-card">
+                <h3>Set Budget Goal</h3>
+                <p>Define your monthly savings target</p>
+                <button class="btn" onclick="openModal('setBudgetGoalModal')">Set Goal</button>
+            </div>
+            <div class="quick-action-card">
+                <h3>Financial Health Check</h3>
+                <p>Get a quick overview of your finances</p>
+                <button class="btn" onclick="checkFinancialHealth()">Check Now</button>
+            </div>
+            <div class="quick-action-card">
+                <h3>Investment Tips</h3>
+                <p>Receive personalized investment advice</p>
+                <button class="btn" onclick="getInvestmentTips()">Get Tips</button>
+            </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="container fade-in">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="title">Total Balance</div>
+                    <div class="value" id="totalBalance">₱0.00</div>
+                    <div class="change" id="balanceChange">0% change</div>
+                </div>
+                <div class="metric-card">
+                    <div class="title">Monthly Income</div>
+                    <div class="value" id="monthlyIncome">₱0.00</div>
+                    <div class="change" id="incomeChange">0% change</div>
+                </div>
+                <div class="metric-card">
+                    <div class="title">Monthly Expenses</div>
+                    <div class="value" id="monthlyExpenses">₱0.00</div>
+                    <div class="change" id="expensesChange">0% change</div>
+                </div>
+                <div class="metric-card">
+                    <div class="title">Savings Rate</div>
+                    <div class="value" id="savingsRate">0%</div>
+                    <div class="change" id="savingsChange">0% change</div>
                 </div>
             </div>
-            <button onclick="openTab('dashboard')" class="button">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </button>
         </div>
 
-        <div id="analyticsTab" class="content-section" style="display: none;">
-            <h2><i class="fas fa-chart-pie"></i> Financial Analytics</h2>
-            <div class="input-group">
-                <label for="graphType"><i class="fas fa-chart-bar"></i> Graph Type</label>
-                <select id="graphType" onchange="updateChart()">
-                    <option value="bar">Bar Chart</option>
-                    <option value="pie">Pie Chart</option>
-                    <option value="line">Line Chart</option>
-                </select>
+        <!-- Analytics Section -->
+        <div class="container fade-in">
+            <div class="analytics-section" id="analyticsSection">
+                <div class="analytics-card">
+                    <div class="analytics-header">
+                        <h3 class="analytics-title">Income</h3>
+                        <div class="chart-type-selector">
+                            <button class="chart-type-btn active" data-type="bar" data-chart="incomeChart"><i class="fas fa-chart-bar"></i></button>
+                            <button class="chart-type-btn" data-type="line" data-chart="incomeChart"><i class="fas fa-chart-line"></i></button>
+                            <button class="chart-type-btn" data-type="pie" data-chart="incomeChart"><i class="fas fa-chart-pie"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="incomeChart"></canvas>
+                    </div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-header">
+                        <h3 class="analytics-title">Expense Categories</h3>
+                        <div class="chart-type-selector">
+                            <button class="chart-type-btn active" data-type="pie" data-chart="expenseCategoriesChart"><i class="fas fa-chart-pie"></i></button>
+                            <button class="chart-type-btn" data-type="bar" data-chart="expenseCategoriesChart"><i class="fas fa-chart-bar"></i></button>
+                            <button class="chart-type-btn" data-type="line" data-chart="expenseCategoriesChart"><i class="fas fa-chart-line"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="expenseCategoriesChart"></canvas>
+                    </div>
+                </div>
             </div>
-            <div class="chart-container">
-                <canvas id="financialChart"></canvas>
+        </div>
+
+        <!-- Transaction List -->
+        <div class="container fade-in">
+            <div class="transaction-list">
+                <h3>Recent Transactions</h3>
+                <div id="transactionsList"></div>
             </div>
-            <button onclick="openTab('dashboard')" class="button">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </button>
         </div>
+    </main>
 
-        <div id="billsTab" class="content-section" style="display: none;">
-            <h2><i class="fas fa-file-invoice"></i> Manage your bills</h2>
-            <p>Access all your bills in one place and manage your payments efficiently.</p>
-            <button class="button" style="margin-top: 1rem;" onclick="window.location.href='Entrep4.html'">
-                <i class="fas fa-external-link-alt"></i>
-                Pay Your Bills
-            </button>
-            <button onclick="openTab('dashboard')" class="button">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </button>
+    <!-- Add Transaction Modal -->
+    <div id="addTransactionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Transaction</h3>
+                <button class="close-modal" onclick="closeModal('addTransactionModal')">&times;</button>
+            </div>
+            <form id="transactionForm">
+                <div class="form-group">
+                    <label for="transactionType">Type</label>
+                    <select id="transactionType" required onchange="updateDescriptionOptions()">
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transactionAmount">Amount (₱)</label>
+                    <input type="number" id="transactionAmount" required>
+                </div>
+                <div class="form-group">
+                    <label for="transactionDescription">Description</label>
+                    <select id="transactionDescription" required>
+                        <!-- Options will be dynamically populated -->
+                    </select>
+                </div>
+                <button type="submit" class="btn">Add Transaction</button>
+            </form>
         </div>
-
-        <div id="resourcesTab" class="content-section" style="display: none;">
-            <h2><i class="fas fa-book-reader"></i> Financial Resources and Guidance</h2>
-            <p>Access valuable financial resources and expert guidance to improve your financial literacy.</p>
-            <button class="button" style="margin-top: 1rem;" onclick="window.location.href='Entrep11.html'">
-                <i class="fas fa-external-link-alt"></i>
-                Magnify Your Resources
-            </button>
-            <button onclick="openTab('dashboard')" class="button">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </button>
-        </div>
-
-        <div id="qcsvTab" class="content-section" style="display: none;">
-            <h2><i class="fas fa-file-csv"></i> Magnify! Q-CSV</h2>
-            <p>A Quick Comma-Separated Values On-the-go spreadsheet that can audit your transactions and migrate everything to your Microsoft Excel.</p>
-            <button class="button" style="margin-top: 1rem;"  onclick="window.location.href='Entrep17.html'">
-                <i class="fas fa-external-link-alt"></i>
-                Magnify Your Audit
-            </button>
-            <button onclick="openTab('dashboard')" class="button">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </button>
-        </div>
-
-        <button onclick="resetAll()" class="button danger tooltip">
-            <i class="fas fa-trash-alt"></i>
-            Reset All Data
-            <span class="tooltiptext">This will delete all your data</span>
-        </button>
     </div>
 
-    <footer>
-        <p>© 2024 Magnify! By Group 1 LLC. All rights reserved.</p>
-    </footer>
+    <!-- Mortgage Calculator Modal -->
+    <div id="mortgageCalculatorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Mortgage Calculator</h3>
+                <button class="close-modal" onclick="closeModal('mortgageCalculatorModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="loanAmount">Loan Amount (₱)</label>
+                <input type="number" id="loanAmount" placeholder="Enter loan amount">
+            </div>
+            <div class="form-group">
+                <label for="interestRate">Interest Rate (%)</label>
+                <input type="number" id="interestRate" placeholder="Enter interest rate">
+            </div>
+            <div class="form-group">
+                <label for="loanTerm">Loan Term (years)</label>
+                <input type="number" id="loanTerm" placeholder="Enter loan term">
+            </div>
+            <button class="btn" onclick="calculateMortgage()">Calculate</button>
+            <p id="mortgageResult"></p>
+        </div>
+    </div>
+
+    <!-- Tax Calculator Modal -->
+    <div id="taxCalculatorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Tax Calculator</h3>
+                <button class="close-modal" onclick="closeModal('taxCalculatorModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="income">Annual Income (₱)</label>
+                <input type="number" id="income" placeholder="Enter annual income">
+            </div>
+            <div class="form-group">
+                <label for="taxRate">Tax Rate (%)</label>
+                <input type="number" id="taxRate" placeholder="Enter tax rate">
+            </div>
+            <button class="btn" onclick="calculateTax()">Calculate</button>
+            <p id="taxResult"></p>
+        </div>
+    </div>
+
+    <!-- Set Budget Goal Modal -->
+    <div id="setBudgetGoalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Set Budget Goal</h3>
+                <button class="close-modal" onclick="closeModal('setBudgetGoalModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="budgetGoal">Monthly Savings Goal (₱)</label>
+                <input type="number" id="budgetGoal" placeholder="Enter your monthly savings goal">
+            </div>
+            <button class="btn" onclick="setBudgetGoal()">Set Goal</button>
+            <p id="budgetGoalResult"></p>
+        </div>
+    </div>
+
+    <!-- Financial Health Check Modal -->
+    <div id="financialHealthModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Financial Health Check</h3>
+                <button class="close-modal" onclick="closeModal('financialHealthModal')">&times;</button>
+            </div>
+            <img src="logo.png" alt="Financial Health" class="popup-image">
+            <p id="financialHealthResult"></p>
+        </div>
+    </div>
+
+    <!-- Investment Tips Modal -->
+    <div id="investmentTipsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Investment Tips</h3>
+                <button class="close-modal" onclick="closeModal('investmentTipsModal')">&times;</button>
+            </div>
+            <img src="logo.png" alt="Investment Tips" class="popup-image">
+            <p id="investmentTip"></p>
+        </div>
+    </div>
 
     <script>
-        // Global variables
-        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-        let balance = parseFloat(localStorage.getItem('balance')) || 0;
-        let chart;
+        // Sample transactions data
+        let transactions = [];
+        let budgetGoal = 0;
 
-        // Function to handle tab switching
-        function openTab(tabId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.style.display = 'none';
+        // Function to update transactions list
+        function updateTransactionsList() {
+            const transactionsList = document.getElementById('transactionsList');
+            transactionsList.innerHTML = '';
+
+            transactions.forEach(transaction => {
+                const transactionEl = document.createElement('div');
+                transactionEl.className = 'transaction-item';
+                transactionEl.innerHTML = `
+                    <div class="transaction-info">
+                        <div class="transaction-icon">
+                            <i class="fas fa-${transaction.type === 'income' ? 'arrow-down' : 'arrow-up'}"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>${transaction.description}</h4>
+                            <p>${transaction.date}</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
+                        ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}
+                    </div>
+                `;
+                transactionsList.appendChild(transactionEl);
             });
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
 
-            const selectedTab = document.getElementById(tabId);
-            if (selectedTab) {
-                selectedTab.style.display = 'block';
-                selectedTab.style.animation = 'slideUp 0.5s ease';
-            }
+            // Show analytics section if there are transactions
+            document.getElementById('analyticsSection').style.display = transactions.length > 0 ? 'grid' : 'none';
 
-            const activeButton = document.querySelector(`.tab-button[onclick="openTab('${tabId}')"]`);
-            if (activeButton) {
-                activeButton.classList.add('active');
-            }
-
-            if (tabId === 'analyticsTab') {
-                updateChart();
+            // Update metrics and charts if there are transactions
+            if (transactions.length > 0) {
+                updateMetrics();
+                updateCharts();
             }
         }
 
-        // Function to toggle description options based on transaction type
-        function toggleDescriptionOptions() {
-            const type = document.getElementById('type').value;
-            const description = document.getElementById('description');
-            description.innerHTML = '';
+        // Function to update metrics
+        function updateMetrics() {
+            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const balance = totalIncome - totalExpenses;
+            const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpenses) / totalIncome) * 100 : 0;
 
-            const options = type === 'income' 
-                ? ['Salary', 'Bonus', 'Investment', 'Other Income']
-                : ['Food', 'Transportation', 'Utilities', 'Entertainment', 'Other Expense'];
+            document.getElementById('totalBalance').textContent = `₱${balance.toFixed(2)}`;
+            document.getElementById('monthlyIncome').textContent = `₱${totalIncome.toFixed(2)}`;
+            document.getElementById('monthlyExpenses').textContent = `₱${totalExpenses.toFixed(2)}`;
+            document.getElementById('savingsRate').textContent = `${savingsRate.toFixed(2)}%`;
+
+            // Calculate changes (assuming last month's data is available)
+            const lastMonthBalance = 10000; // Example value
+            const lastMonthIncome = 15000; // Example value
+            const lastMonthExpenses = 8000; // Example value
+            const lastMonthSavingsRate = 46.67; // Example value
+
+            const balanceChange = ((balance - lastMonthBalance) / lastMonthBalance) * 100;
+            const incomeChange = ((totalIncome - lastMonthIncome) / lastMonthIncome) * 100;
+            const expensesChange = ((totalExpenses - lastMonthExpenses) / lastMonthExpenses) * 100;
+            const savingsRateChange = savingsRate - lastMonthSavingsRate;
+
+            document.getElementById('balanceChange').textContent = `${balanceChange.toFixed(2)}% from last month`;
+            document.getElementById('incomeChange').textContent = `${incomeChange.toFixed(2)}% from last month`;
+            document.getElementById('expensesChange').textContent = `${expensesChange.toFixed(2)}% from last month`;
+            document.getElementById('savingsChange').textContent = `${savingsRateChange.toFixed(2)}% from last month`;
+
+            // Update classes for positive/negative changes
+            document.getElementById('balanceChange').className = `change ${balanceChange >= 0 ? 'positive' : 'negative'}`;
+            document.getElementById('incomeChange').className = `change ${incomeChange >= 0 ? 'positive' : 'negative'}`;
+            document.getElementById('expensesChange').className = `change ${expensesChange <= 0 ? 'positive' : 'negative'}`;
+            document.getElementById('savingsChange').className = `change ${savingsRateChange >= 0 ? 'positive' : 'negative'}`;
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Form submission
+        document.getElementById('transactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const type = document.getElementById('transactionType').value;
+            const amount = parseFloat(document.getElementById('transactionAmount').value);
+            const description = document.getElementById('transactionDescription').value;
+            
+            transactions.unshift({
+                type,
+                amount,
+                description,
+                date: new Date().toISOString().split('T')[0]
+            });
+            
+            updateTransactionsList();
+            closeModal('addTransactionModal');
+            this.reset();
+        });
+
+        // Initialize transactions list
+        updateTransactionsList();
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredTransactions = transactions.filter(transaction => 
+                transaction.description.toLowerCase().includes(searchTerm) ||
+                transaction.amount.toString().includes(searchTerm) ||
+                transaction.date.includes(searchTerm)
+            );
+            
+            const transactionsList = document.getElementById('transactionsList');
+            transactionsList.innerHTML = '';
+
+            filteredTransactions.forEach(transaction => {
+                const transactionEl = document.createElement('div');
+                transactionEl.className = 'transaction-item';
+                transactionEl.innerHTML = `
+                    <div class="transaction-info">
+                        <div class="transaction-icon">
+                            <i class="fas fa-${transaction.type === 'income' ? 'arrow-down' : 'arrow-up'}"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>${transaction.description}</h4>
+                            <p>${transaction.date}</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
+                        ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}
+                    </div>
+                `;
+                transactionsList.appendChild(transactionEl);
+            });
+        });
+
+        // Mortgage Calculator
+        function calculateMortgage() {
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+            const loanTerm = parseFloat(document.getElementById('loanTerm').value) * 12;
+
+            const x = Math.pow(1 + interestRate, loanTerm);
+            const monthlyPayment = (loanAmount * x * interestRate) / (x - 1);
+
+            document.getElementById('mortgageResult').textContent = `Monthly Payment: ₱${monthlyPayment.toFixed(2)}`;
+        }
+
+        // Tax Calculator
+        function calculateTax() {
+            const income = parseFloat(document.getElementById('income').value);
+            const taxRate = parseFloat(document.getElementById('taxRate').value) / 100;
+            const tax = income * taxRate;
+
+            document.getElementById('taxResult').textContent = `Estimated Annual Tax: ₱${tax.toFixed(2)}`;
+        }
+
+        // Update description options based on transaction type
+        function updateDescriptionOptions() {
+            const transactionType = document.getElementById('transactionType').value;
+            const descriptionSelect = document.getElementById('transactionDescription');
+            descriptionSelect.innerHTML = '';
+
+            const options = transactionType === 'income' 
+                ? ['Salary', 'Freelance', 'Investments', 'Rental Income', 'Other Income']
+                : ['Rent', 'Groceries', 'Utilities', 'Entertainment', 'Transportation', 'Other Expense'];
 
             options.forEach(option => {
-                const optionElement = document.createElement('option');
-                optionElement.value = option.toLowerCase();
-                optionElement.textContent = option;
-                description.appendChild(optionElement);
+                const optionEl = document.createElement('option');
+                optionEl.value = option;
+                optionEl.textContent = option;
+                descriptionSelect.appendChild(optionEl);
             });
         }
 
-        // Function to add a transaction
-        function addTransaction() {
-            const type = document.getElementById('type').value;
-            const description = document.getElementById('description').value;
-            const amount = parseFloat(document.getElementById('amount').value);
+        // Initialize description options
+        updateDescriptionOptions();
 
-            if (isNaN(amount) || amount <= 0) {
-                alert('Please enter a valid amount.');
-                return;
-            }
-
-            const transaction = {
-                type,
-                description,
-                amount,
-                date: new Date().toISOString()
-            };
-
-            transactions.push(transaction);
-            balance += type === 'income' ? amount : -amount;
-
-            updateLocalStorage();
-            updateTransactionList();
-            updateBalance();
-            updateChart();
-
-            // Clear input fields
-            document.getElementById('amount').value = '';
-        }
-
-        // Function to update transaction list
-        function updateTransactionList() {
-            const transactionList = document.getElementById('transactionList');
-            transactionList.innerHTML = '';
-
-            transactions.forEach((transaction, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <span>${transaction.description}: ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}</span>
-                    <button onclick="deleteTransaction(${index})" class="button danger">Delete</button>
-                `;
-                transactionList.appendChild(li);
-            });
-        }
-
-        // Function to delete a transaction
-        function deleteTransaction(index) {
-            const transaction = transactions[index];
-            balance += transaction.type === 'income' ? -transaction.amount : transaction.amount;
-            transactions.splice(index, 1);
-
-            updateLocalStorage();
-            updateTransactionList();
-            updateBalance();
-            updateChart();
-        }
-
-        // Function to update balance display
-        function updateBalance() {
-            document.getElementById('balance').textContent = balance.toFixed(2);
-        }
-
-        // Function to update local storage
-        function updateLocalStorage() {
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-            localStorage.setItem('balance', balance.toString());
-        }
-
-        // Function to update the chart
-        function updateChart() {
-            const ctx = document.getElementById('financialChart').getContext('2d');
-            const graphType = document.getElementById('graphType').value;
-
-            const incomeData = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const expenseData = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-
-            const data = {
-                labels: ['Income', 'Expense'],
-                datasets: [{
-                    data: [incomeData, expenseData],
-                    backgroundColor: ['#9932CC', '#FF69B4']
-                }]
-            };
-
-            const options = {
-                responsive: true,
-                maintainAspectRatio: false
-            };
+        // Function to create or update chart
+        function createOrUpdateChart(chartId, type, labels, data) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            let chart = Chart.getChart(chartId);
 
             if (chart) {
                 chart.destroy();
             }
 
-            chart = new Chart(ctx, {
-                type: graphType,
-                data: data,
-                options: options
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(139, 92, 246, 0.8)');
+            gradient.addColorStop(1, 'rgba(236, 72, 153, 0.8)');
+
+            new Chart(ctx, {
+                type: type,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: chartId.replace('Chart', ''),
+                        data: data,
+                        backgroundColor: type === 'pie' ? [
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(236, 72, 153, 0.8)',
+                            'rgba(248, 113, 113, 0.8)',
+                            'rgba(52, 211, 153, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(251, 191, 36, 0.8)'
+                        ] : gradient,
+                        borderColor: 'rgba(139, 92, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
             });
         }
 
-        // Mortgage Calculator Functions
-        document.getElementById('openMortgageCalculator').addEventListener('click', () => {
-            document.getElementById('mortgageCalculatorModal').style.display = 'block';
-        });
+        // Function to update charts
+        function updateCharts() {
+            const incomeData = transactions.filter(t => t.type === 'income').map(t => t.amount);
+            const labels = transactions.filter(t => t.type === 'income').map(t => t.date);
 
-        document.getElementById('closeMortgageCalculator').addEventListener('click', () => {
-            document.getElementById('mortgageCalculatorModal').style.display = 'none';
-        });
+            createOrUpdateChart('incomeChart', 'bar', labels, incomeData);
 
-        document.getElementById('calculateMortgage').addEventListener('click', () => {
-            const amount = parseFloat(document.getElementById('mortgageAmount').value);
-            const rate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
-            const term = parseFloat(document.getElementById('loanTerm').value) * 12;
+            const expenseCategories = {};
+            transactions.filter(t => t.type === 'expense').forEach(t => {
+                expenseCategories[t.description] = (expenseCategories[t.description] || 0) + t.amount;
+            });
 
-            if (isNaN(amount) || isNaN(rate) || isNaN(term)) {
-                alert('Please enter valid numbers for all fields.');
-                return;
-            }
-
-            const monthlyPayment = (amount * rate * Math.pow(1 + rate, term)) / (Math.pow(1 + rate, term) - 1);
-            document.getElementById('mortgageResult').textContent = `Monthly Payment: ₱${monthlyPayment.toFixed(2)}`;
-        });
-
-        // Tax Calculator Functions
-        document.getElementById('openTaxCalculator').addEventListener('click', () => {
-            document.getElementById('taxCalculatorModal').style.display = 'block';
-        });
-
-        document.getElementById('closeTaxCalculator').addEventListener('click', () => {
-            document.getElementById('taxCalculatorModal').style.display = 'none';
-        });
-
-        document.getElementById('calculateTax').addEventListener('click', () => {
-            const income = parseFloat(document.getElementById('income').value);
-            const taxRate = parseFloat(document.getElementById('taxRate').value);
-
-            if (isNaN(income) || isNaN(taxRate)) {
-                alert('Please enter valid numbers for all fields.');
-                return;
-            }
-
-            const taxAmount = income * (taxRate / 100);
-            document.getElementById('taxResult').textContent = `Tax Amount: ₱${taxAmount.toFixed(2)}`;
-        });
-
-        // Function to reset all data
-        function resetAll() {
-            if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {
-                localStorage.clear();
-                transactions = [];
-                balance = 0;
-                updateTransactionList();
-                updateBalance();
-                updateChart();
-                alert('All data has been reset successfully!');
-            }
+            createOrUpdateChart('expenseCategoriesChart', 'pie', 
+                Object.keys(expenseCategories),
+                Object.values(expenseCategories)
+            );
         }
 
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', () => {
-            toggleDescriptionOptions();
-            updateTransactionList();
-            updateBalance();
-            updateChart();
+        // Event listeners for chart type buttons
+        document.querySelectorAll('.chart-type-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const chartId = this.dataset.chart;
+                const chartType = this.dataset.type;
+                
+                if (chartId === 'incomeChart') {
+                    const incomeData = transactions.filter(t => t.type === 'income').map(t => t.amount);
+                    const labels = transactions.filter(t => t.type === 'income').map(t => t.date);
+                    createOrUpdateChart(chartId, chartType, labels, incomeData);
+                } else if (chartId === 'expenseCategoriesChart') {
+                    const expenseCategories = {};
+                    transactions.filter(t => t.type === 'expense').forEach(t => {
+                        expenseCategories[t.description] = (expenseCategories[t.description] || 0) + t.amount;
+                    });
+                    createOrUpdateChart(chartId, chartType, 
+                        Object.keys(expenseCategories),
+                        Object.values(expenseCategories)
+                    );
+                }
 
-            document.getElementById('addTransaction').addEventListener('click', addTransaction);
+                // Update active button
+                this.parentNode.querySelectorAll('.chart-type-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
         });
 
-        // Redirect to Entrep20.html when "Magnify!" is clicked
-        document.querySelector('.navbar-brand h1').addEventListener('click', () => {
-            window.location.href = 'Entrep20.html';
+        // Sidebar toggle functionality
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const body = document.body;
+
+        sidebarToggle.addEventListener('click', function() {
+            body.classList.toggle('sidebar-hidden');
         });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+
+            if (window.innerWidth <= 768 && !sidebar.contains(event.target) && event.target !== sidebarToggle) {
+                body.classList.add('sidebar-hidden');
+            }
+        });
+
+        // Responsive sidebar behavior
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                body.classList.remove('sidebar-hidden');
+            }
+        });
+
+        // Set Budget Goal
+        function setBudgetGoal() {
+            const goal = parseFloat(document.getElementById('budgetGoal').value);
+            if (isNaN(goal) || goal < 0) {
+                document.getElementById('budgetGoalResult').textContent = 'Please enter a valid goal amount.';
+                return;
+            }
+            budgetGoal = goal;
+            document.getElementById('budgetGoalResult').textContent = `Your monthly savings goal is set to ₱${goal.toFixed(2)}`;
+            closeModal('setBudgetGoalModal');
+        }
+
+        // Financial Health Check
+        function checkFinancialHealth() {
+            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpenses) / totalIncome) * 100 : 0;
+
+            let healthStatus = '';
+            let advice = '';
+
+            if (savingsRate >= 20) {
+                healthStatus = 'Excellent';
+                advice = 'Keep up the great work! Consider investing more for long-term growth.';
+            } else if (savingsRate >= 10) {
+                healthStatus = 'Good';
+                advice = 'You\'re on the right track. Try to increase your savings rate to 20% or more.';
+            } else if (savingsRate >= 0) {
+                healthStatus = 'Fair';
+                advice = 'You\'re breaking even, but there\'s room for improvement. Look for ways to reduce expenses or increase income.';
+            } else {
+                healthStatus = 'Poor';
+                advice = 'You\'re spending more than you earn. It\'s crucial to reduce expenses and avoid debt.';
+            }
+
+            document.getElementById('financialHealthResult').innerHTML = `
+                <h4>Financial Health: ${healthStatus}</h4>
+                <p>Your current savings rate is ${savingsRate.toFixed(2)}%</p>
+                <p><strong>Advice:</strong> ${advice}</p>
+            `;
+            openModal('financialHealthModal');
+        }
+
+        // Investment Tips
+        function getInvestmentTips() {
+            const tips = [
+                "Diversify your portfolio to spread risk.",
+                "Consider low-cost index funds for long-term growth.",
+                "Regularly contribute to your retirement accounts.",
+                "Keep an emergency fund separate from your investments.",
+                "Stay informed about market trends, but avoid making impulsive decisions.",
+                "Consider seeking advice from a financial advisor for personalized strategies."
+            ];
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            document.getElementById('investmentTip').textContent = randomTip;
+            openModal('investmentTipsModal');
+        }
+
+        // Add some sample transactions for demonstration
+        transactions = [
+            { type: 'income', amount: 50000, description: 'Salary', date: '2023-06-01' },
+            { type: 'expense', amount: 15000, description: 'Rent', date: '2023-06-02' },
+            { type: 'expense', amount: 5000, description: 'Groceries', date: '2023-06-05' },
+            { type: 'income', amount: 10000, description: 'Freelance', date: '2023-06-10' },
+            { type: 'expense', amount: 2000, description: 'Entertainment', date: '2023-06-15' }
+        ];
+        updateTransactionsList();
     </script>
     <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-    <script src="https://files.bpcontent.cloud/2024/11/24/12/20241124120340-PJ828UDO.js"></script>
+    <script src="https://files.bpcontent.cloud/2024/11/02/01/20241102014603-MY6MW47G.js"></script>
 </body>
 </html>
