@@ -3,18 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify!</title>
-    <link rel="icon" href="logo.png">
+    <title>Magnify - Your AI Financial Companion</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
         :root {
-            --gradient-start: #4158D0;
-            --gradient-middle: #C850C0;
-            --gradient-end: #FFCC70;
-            --accent: #C850C0;
-            --text: #ffffff;
+            --gradient-start: #A855F7;
+            --gradient-end: #EC4899;
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --background: #0D1117;
+            --card-bg: #161B22;
+            --border-color: #30363D;
+            --transition-speed: 0.3s;
+        }
+
+        .light-mode {
+            --gradient-start: #8B5CF6;
+            --gradient-end: #D946EF;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --background: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --border-color: #E5E7EB;
         }
 
         * {
@@ -25,361 +37,384 @@
         }
 
         body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
-            color: var(--text);
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
             overflow-x: hidden;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: background-color var(--transition-speed) ease;
         }
 
-        body.loaded {
-            opacity: 1;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .pattern-bg {
-            position: fixed;
-            inset: 0;
-            background-image: 
-                radial-gradient(circle at 20px 20px, rgba(255,255,255,0.1) 2px, transparent 0),
-                radial-gradient(circle at 40px 40px, rgba(255,255,255,0.1) 2px, transparent 0);
-            background-size: 40px 40px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .navbar, .hero, .footer {
-            position: relative;
-            z-index: 1;
-        }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.15);
+        header {
+            background: rgba(13, 17, 23, 0.8);
             backdrop-filter: blur(10px);
-            padding: 1rem;
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: background-color var(--transition-speed) ease;
+        }
+
+        .light-mode header {
+            background: rgba(243, 244, 246, 0.8);
+        }
+
+        nav {
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: space-between;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            align-items: center;
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 10px;
         }
 
-        .logo {
+        .logo-image {
             width: 40px;
             height: 40px;
-            object-fit: contain;
         }
 
-        .brand-name {
-            font-size: 1.5rem;
+        .logo-text {
+            font-size: 24px;
             font-weight: 700;
-            color: var(--text);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .nav-links {
-            display: none;
-            flex-direction: column;
-            gap: 1rem;
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        .nav-link {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            text-align: center;
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .google-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1.5rem;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50px;
-            color: #444;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            cursor: pointer;
-            width: 100%;
-            max-width: 250px;
-        }
-
-        .google-btn:hover {
-            background: rgba(255, 255, 255, 1);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .google-btn img {
-            width: 20px;
-            height: 20px;
-        }
-
-        .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem 1rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .hero-content {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            opacity: 0.9;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .hero-title {
-            font-size: 2.5rem;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            background: linear-gradient(to right, #fff, rgba(255,255,255,0.8));
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero-description {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .cta-container {
+        .nav-links {
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            align-items: center;
+            gap: 30px;
         }
 
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--accent);
+        .nav-links a {
+            color: var(--text-primary);
             text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-weight: 500;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gradient-end);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 20px;
             cursor: pointer;
+            transition: color var(--transition-speed) ease;
         }
 
-        .cta-button:hover {
-            background: transparent;
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        .theme-toggle:hover {
+            color: var(--gradient-end);
         }
 
-        .diamond-grid {
+        .hero {
             position: relative;
-            transform: rotate(-12deg) scale(0.8);
-            width: 100%;
-            max-width: 600px;
-            margin: 2rem auto;
-            opacity: 0;
-            transition: opacity 1s ease-out, transform 1s ease-out;
-        }
-
-        .diamond-grid.animate {
-            opacity: 1;
-            transform: rotate(-12deg) scale(0.8) translateY(0);
-        }
-
-        .accent-line {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.3);
-            z-index: -1;
-        }
-
-        .line-1 {
-            width: 4px;
-            height: 120%;
-            right: -2rem;
-            top: -10%;
-        }
-
-        .line-2 {
-            width: 120%;
-            height: 4px;
-            left: -10%;
-            bottom: -2rem;
-        }
-
-        .diamond-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            transform-origin: center;
-        }
-
-        .diamond {
-            position: relative;
-            width: 100%;
-            padding-top: 100%;
-            transform: rotate(45deg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
             overflow: hidden;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            opacity: 0;
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
 
-        .diamond.animate {
-            opacity: 1;
-            transform: rotate(45deg) scale(1);
-        }
-
-        .diamond-content {
+        .hero::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
+            right: 0;
+            bottom: 0;
+            background-image: url('Joeron2.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            z-index: -1;
+        }
+
+        .hero.fade-in::before {
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .hero.fade-in .hero-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(236, 72, 153, 0.1);
+            color: var(--gradient-end);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        .light-mode .hero-badge {
+            background: rgba(217, 70, 239, 0.1);
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -10px;
+            width: 2px;
             height: 100%;
-            transform: rotate(-45deg) scale(1.42);
-            overflow: hidden;
+            background-color: var(--gradient-end);
+            animation: blink 0.7s infinite;
         }
 
-        .diamond img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
         }
 
-        .diamond:hover img {
-            transform: scale(1.1);
+        .hero-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            transition: color var(--transition-speed) ease;
         }
 
-        .diamond:nth-child(1) { grid-column: 2; grid-row: 1; }
-        .diamond:nth-child(2) { grid-column: 1; grid-row: 2; }
-        .diamond:nth-child(3) { grid-column: 2; grid-row: 2; }
-        .diamond:nth-child(4) { grid-column: 3; grid-row: 2; }
-        .diamond:nth-child(5) { grid-column: 1; grid-row: 3; }
-        .diamond:nth-child(6) { grid-column: 2; grid-row: 3; }
-
-        .footer {
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 2rem 1rem;
-        }
-
-        .footer-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .footer-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: #fff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .team-member {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .team-member:hover {
-            transform: translateY(-5px);
-        }
-
-        .member-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            overflow: hidden;
-        }
-
-        .member-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .member-name {
-            font-size: 1.1rem;
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, background var(--transition-speed) ease;
         }
 
-        .member-role {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 1rem;
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(236, 72, 153, 0.2);
         }
 
-        .social-links {
+        .light-mode .button:hover {
+            box-shadow: 0 10px 20px rgba(217, 70, 239, 0.2);
+        }
+
+        .google-button {
+            display: inline-block;
+            background-color: #fff;
+            color: #4285f4;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 10px;
+            border: 1px solid #4285f4;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+
+        .google-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(66, 133, 244, 0.2);
+        }
+
+        .google-icon {
+            margin-right: 8px;
+        }
+
+        .features, .statistics, .information {
+            padding: 100px 0;
+            background: var(--card-bg);
+            transition: background-color var(--transition-speed) ease, opacity 0.5s ease-out, transform 0.5s ease-out;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .features.visible, .statistics.visible, .information.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .features-grid, .stats-grid, .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card, .stat-card, .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, background-color var(--transition-speed) ease, opacity 0.5s ease-out, transform 0.5s ease-out;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .light-mode .feature-card, .light-mode .stat-card, .light-mode .info-card {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card.visible, .stat-card.visible, .info-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature-card:hover, .stat-card:hover, .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.1);
+        }
+
+        .light-mode .feature-card:hover, .light-mode .stat-card:hover, .light-mode .info-card:hover {
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.1);
+        }
+
+        .feature-icon, .stat-icon, .info-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .feature-title, .stat-title, .info-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            transition: color var(--transition-speed) ease;
+        }
+
+        .feature-description, .stat-description, .info-description {
+            color: var(--text-secondary);
+            transition: color var(--transition-speed) ease;
+        }
+
+        .cta {
+            padding: 100px 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            transition: background var(--transition-speed) ease, opacity 0.5s ease-out, transform 0.5s ease-out;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .cta.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .cta-description {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--text-primary);
+        }
+
+        .cta .button {
+            background: var(--text-primary);
+            color: var(--gradient-end);
+        }
+
+        footer {
+            background: var(--card-bg);
+            padding: 50px 0;
+            text-align: center;
+            transition: background-color var(--transition-speed) ease;
+        }
+
+        .footer-links {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 30px;
+            margin-bottom: 30px;
         }
 
-        .social-link {
-            color: #fff;
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color var(--transition-speed) ease;
         }
 
-        .social-link:hover {
-            transform: translateY(-2px);
+        .footer-links a:hover {
+            color: var(--gradient-end);
         }
 
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .social-icons a {
+            color: var(--text-secondary);
+            font-size: 24px;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--gradient-end);
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: color var(--transition-speed) ease;
         }
 
         .loading-screen {
@@ -388,11 +423,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background-color: rgba(13, 17, 23, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 9999;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -403,440 +438,511 @@
             visibility: visible;
         }
 
-        .loading-content {
-            text-align: center;
-            color: #fff;
-            max-width: 600px;
-            width: 100%;
-            padding: 1rem;
-        }
-
         .loading-icons {
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
+            align-items: center;
         }
 
         .loading-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s ease, background-color 0.3s ease;
+            font-size: 36px;
+            color: var(--gradient-end);
+            margin: 0 10px;
+            opacity: 0.2;
+            animation: pulse 1.5s ease-in-out infinite;
         }
 
-        .loading-icon:hover {
-            transform: scale(1.1);
-            background-color: rgba(255, 255, 255, 0.2);
+        .loading-icon:nth-child(2) {
+            animation-delay: 0.2s;
         }
 
-        .loading-icon::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 0;
-            background: var(--gradient-middle);
-            transition: height 0.5s ease;
+        .loading-icon:nth-child(3) {
+            animation-delay: 0.4s;
         }
 
-        .loading-icon.filled::before {
-            height: 100%;
-        }
-
-        .loading-icon i {
-            position: relative;
-            z-index: 1;
-            transition: color 0.3s ease;
-        }
-
-        .loading-icon:hover i {
-            color: var(--accent);
-        }
-
-        .loading-progress {
-            width: 100%;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin-top: 2rem;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .loading-bar {
-            width: 0;
-            height: 100%;
-            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
-            transition: width 0.5s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.4),
-                transparent
-            );
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(1);
             }
-            100% {
-                transform: translateX(100%);
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
             }
         }
 
-        @media (min-width: 768px) {
-            .navbar {
-                flex-direction: row;
-                padding: 1rem 2rem;
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 36px;
             }
 
-            .logo-container {
-                margin-bottom: 0;
+            .features-grid,
+            .stats-grid,
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button,
+            .google-button {
+                display: block;
+                margin: 10px 0;
+                text-align: center;
             }
 
             .nav-links {
-                display: flex;
-                flex-direction: row;
-                width: auto;
-                margin-top: 0;
+                display: none;
             }
 
-            .google-btn {
-                width: auto;
+            .mobile-menu-toggle {
+                display: block;
+                font-size: 24px;
+                color: var(--text-primary);
+                background: none;
+                border: none;
+                cursor: pointer;
             }
 
-            .hero {
-                flex-direction: row;
-                padding: 4rem 2rem;
+            .mobile-menu {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: var(--card-bg);
+                padding: 20px;
+                display: none;
+                transform: translateY(-100%);
+                transition: transform 0.3s ease-in-out;
             }
 
-            .hero-content {
-                text-align: left;
-                margin-bottom: 0;
-                flex: 1;
+            .mobile-menu.active {
+                display: block;
+                transform: translateY(0);
             }
 
-            .hero-title {
-                font-size: 3.5rem;
+            .mobile-menu a {
+                display: block;
+                padding: 10px 0;
+                color: var(--text-primary);
+                text-decoration: none;
+                font-weight: 500;
+                transition: color var(--transition-speed) ease;
             }
 
-            .cta-container {
-                flex-direction: row;
-            }
-
-            .diamond-grid {
-                transform: rotate(-12deg) scale(1);
-                flex: 1;
-            }
-
-            .footer {
-                padding: 4rem 2rem;
-            }
-
-            .team-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            }
-
-            .loading-icons {
-                gap: 2rem;
-            }
-
-            .loading-icon {
-                width: 100px;
-                height: 100px;
-                font-size: 2.5rem;
+            .mobile-menu a:hover {
+                color: var(--gradient-end);
             }
         }
     </style>
 </head>
 <body>
-    <div class="pattern-bg"></div>
-    <nav class="navbar">
-        <div class="logo-container">
-            <img src="logo.png" alt="logo.png" class="logo">
-            <span class="brand-name">Magnify!</span>
-        </div>
-        <div class="nav-links">
-            <a href="#" class="nav-link">Mark.</a>
-            <a href="#" class="nav-link">Organize.</a>
-            <a href="#" class="nav-link">Assemble.</a>
-            <a href="#" class="nav-link">Magnify It!</a>
-        </div>
-        <button class="google-btn" onclick="showLoading('Entrep6.html')">
-            <img src="png-transparent-google-logo-google-logo-g-suite-chrome-text-logo-chrome-removebg-preview.png" alt="Google Logo">
-                Continue with Google
-        </button>
-    </nav>
+    <header>
+        <nav class="container">
+            <div class="logo-container">
+                <img src="logo.png" alt="Magnify Logo" class="logo-image">
+                <div class="logo-text">Magnify</div>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#statistics">Statistics</a>
+                <a href="#information">Information</a>
+                <a href="#cta">Get Started</a>
+            </div>
+            <button class="theme-toggle" aria-label="Toggle dark/light mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
 
-    <main class="hero">
-        <div class="hero-content">
-            <p class="hero-subtitle">Entrepreneurship: Business Plan</p>
-            <h1 class="hero-title"></h1>
-            <p class="hero-description">One family. One community at a time.</p>
-            <div class="cta-container">
-                <button class="cta-button" onclick="showLoading('Entrep16.html')">LEARN MORE</button>
-            </div>
-        </div>
+    <div class="mobile-menu">
+        <a href="#features">Features</a>
+        <a href="#statistics">Statistics</a>
+        <a href="#information">Information</a>
+        <a href="#cta">Get Started</a>
+    </div>
 
-        <div class="diamond-grid">
-            <div class="accent-line line-1"></div>
-            <div class="accent-line line-2"></div>
-            <div class="diamond-container">
-                <div class="diamond">
-                    <div class="diamond-content">
-                        <img src="Arpay and shelina (2).jpg" alt="Business">
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge">
+                        <i class="fas fa-star"></i>
+                        Magnify! Smart Capabilities
                     </div>
-                </div>
-                <div class="diamond">
-                    <div class="diamond-content">
-                        <img src="JOERON.jpg" alt="Finance">
-                    </div>
-                </div>
-                <div class="diamond">
-                    <div class="diamond-content">
-                        <img src="VAN.jpg" alt="Technology">
-                    </div>
-                </div>
-                <div class="diamond">
-                    <div class="diamond-content">
-                        <img src="Virtucio.jpg" alt="Community">
-                    </div>
-                </div>
-                <div class="diamond">
-                    <div class="diamond-content">
-                        <img src="Vince.jpg" alt="Growth">
-                    </div>
-                </div>
-                <div class="diamond">
-                    <div class="diamond-content">
-                        <img src="Joeron2.jpg" alt="Success">
-                    </div>
+                    <h1 class="hero-title">Your Gateway to Financial Management.</h1>
+                    <p class="hero-description">One family. One Community at a time.</p>
+                    <a href="#" class="button" id="get-started-button">Get Started <i class="fas fa-arrow-right"></i></a>
+                    <a href="#" class="google-button" id="google-button">
+                        <i class="fab fa-google google-icon"></i>
+                        Continue with Google
+                    </a>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <footer class="footer">
-        <div class="footer-container">
-            <h2 class="footer-title">Meet Our Team</h2>
-            <div class="team-grid">
-                <div class="team-member">
-                    <div class="member-avatar">
-                        <img src="SHELINA 1X1.jpg" alt="Shelina Mae Dela Cruz">
-                    </div>
-                    <h3 class="member-name">Shelina Mae Dela Cruz</h3>
-                    <p class="member-role">Team Leader</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                    </div>
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Powerful Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                    <h3 class="feature-title">AI-Powered Insights</h3>
+                    <p class="feature-description">Get personalized financial advice and insights powered by advanced AI algorithms.</p>
                 </div>
-                <div class="team-member">
-                    <div class="member-avatar">
-                        <img src="SEAN 1X1.jpg" alt="Sean Ferneil Ricaza">
-                    </div>
-                    <h3 class="member-name">Sean Ferneil Ricaza</h3>
-                    <p class="member-role">Co-Leader</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="feature-title">Real-time Tracking</h3>
+                    <p class="feature-description">Monitor your investments and expenses in real-time with our advanced tracking system.</p>
                 </div>
-                <div class="team-member">
-                    <div class="member-avatar">
-                        <img src="ARPAY 1X1.jpg" alt="Carl John Arpay">
-                    </div>
-                    <h3 class="member-name">Carl John Arpay</h3>
-                    <p class="member-role">Web Developer</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-piggy-bank"></i></div>
+                    <h3 class="feature-title">Smart Savings</h3>
+                    <p class="feature-description">Automatically optimize your savings with AI-driven recommendations and goals.</p>
                 </div>
-                <div class="team-member">
-                    <div class="member-avatar">
-                        <img src="RONI 1X1.jpg" alt="Ron Asnahon">
-                    </div>
-                    <h3 class="member-name">Ron Asnahon</h3>
-                    <p class="member-role">Web Developer</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="feature-title">Bank-Level Security</h3>
+                    <p class="feature-description">Rest easy knowing your financial data is protected with state-of-the-art encryption.</p>
                 </div>
-                <div class="team-member">
-                    <div class="member-avatar">
-                        <img src="VAN 1X1.jpg" alt="Van Erich Nisnisan">
-                    </div>
-                    <h3 class="member-name">Van Erich Nisnisan</h3>
-                    <p class="member-role">Member</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+                    <h3 class="feature-title">Automated Budgeting</h3>
+                    <p class="feature-description">Create and maintain budgets effortlessly with our AI-powered system.</p>
                 </div>
-                <div class="team-member">
-                    <div class="member-avatar">
-                        <img src="VINCE 1X1.jpg" alt="Vince Jerard Gonzaga">
-                    </div>
-                    <h3 class="member-name">Vince Jerard Gonzaga</h3>
-                    <p class="member-role">Member</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-university"></i></div>
+                    <h3 class="feature-title">Multi-Account Integration</h3>
+                    <p class="feature-description">Connect and manage all your financial accounts in one place.</p>
                 </div>
-                <div class="team-member">
-                    <div class="member-avatar">
-                        <img src="VIRTUCIO 1X1.jpg" alt="James Virtucio">
-                    </div>
-                    <h3 class="member-name">James Roque Virtucio</h3>
-                    <p class="member-role">Member</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-coins"></i></div>
+                    <h3 class="feature-title">Investment Strategies</h3>
+                    <p class="feature-description">Receive tailored investment strategies based on your risk profile and goals.</p>
                 </div>
-                <div class="team-member">
-                    <div class="member-avatar">
-                        <img src="JOERON 1X1.jpg" alt="Joeron Zeniff Paloma">
-                    </div>
-                    <h3 class="member-name">Joeron Zeniff Paloma</h3>
-                    <p class="member-role">Member</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                    </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-bell"></i></div>
+                    <h3 class="feature-title">Smart Alerts</h3>
+                    <p class="feature-description">Get timely notifications about important financial events and opportunities.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3 class="feature-title">Financial Education</h3>
+                    <p class="feature-description">Access a wealth of educational resources to improve your financial literacy.</p>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Magnify! All rights reserved.</p>
+        </div>
+    </section>
+
+    <section id="statistics" class="statistics">
+        <div class="container">
+            <h2 class="section-title">User Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <h3 class="stat-title">Active Users</h3>
+                    <p class="stat-description">2,500,000+</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                    <h3 class="stat-title">Total Savings</h3>
+                    <p class="stat-description">₱50,000,000,000+</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-chart-pie"></i></div>
+                    <h3 class="stat-title">Investment Growth</h3>
+                    <p class="stat-description">42% Average</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+                    <h3 class="stat-title">Goals Achieved</h3>
+                    <p class="stat-description">1,200,000+</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-globe"></i></div>
+                    <h3 class="stat-title">Countries Served</h3>
+                    <p class="stat-description">50+</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-star"></i></div>
+                    <h3 class="stat-title">User Satisfaction</h3>
+                    <p class="stat-description">4.8/5 Stars</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <h3 class="stat-title">Time Saved</h3>
+                    <p class="stat-description">5 hrs/week/user</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                    <h3 class="stat-title">Debt Reduction</h3>
+                    <p class="stat-description">30% Average</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="stat-title">Secure Transactions</h3>
+                    <p class="stat-description">99.99% Uptime</p>
+                </div>
             </div>
+        </div>
+    </section>
+
+    <section id="information" class="information">
+        <div class="container">
+            <h2 class="section-title">Important Information</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-book"></i></div>
+                    <h3 class="info-title">Financial Education</h3>
+                    <p class="info-description">Access our comprehensive library of financial resources and courses.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-handshake"></i></div>
+                    <h3 class="info-title">Partner Network</h3>
+                    <p class="info-description">Explore our network of trusted financial institutions and service providers.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-lock"></i></div>
+                    <h3 class="info-title">Security Measures</h3>
+                    <p class="info-description">Learn about our robust security protocols to protect your financial data.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-question-circle"></i></div>
+                    <h3 class="info-title">FAQ</h3>
+                    <p class="info-description">Find answers to commonly asked questions about our services and features.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3 class="info-title">Mobile App</h3>
+                    <p class="info-description">Download our mobile app for on-the-go financial management.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-headset"></i></div>
+                    <h3 class="info-title">Customer Support</h3>
+                    <p class="info-description">Get 24/7 support from our dedicated customer service team.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-newspaper"></i></div>
+                    <h3 class="info-title">Market News</h3>
+                    <p class="info-description">Stay updated with the latest financial market news and trends.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-cog"></i></div>
+                    <h3 class="info-title">Customization</h3>
+                    <p class="info-description">Tailor your financial dashboard to suit your specific needs and preferences.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3 class="info-title">Performance Reports</h3>
+                    <p class="info-description">Generate detailed reports on your financial performance and progress.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="cta">
+        <div class="container">
+            <h2 class="cta-title">Ready to Transform Your Finances?</h2>
+            <p class="cta-description">Join millions of users who have already revolutionized their financial management with Magnify.</p>
+            <a href="#" class="button" id="cta-button">Get Started Now <i class="fas fa-rocket"></i></a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p class="copyright">&copy; 2024 Magnify! | All rights reserved.</p>
         </div>
     </footer>
 
     <div class="loading-screen">
-        <div class="loading-content">
-            <div class="loading-icons">
-                <div class="loading-icon" data-tip="Analyze your finances">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="loading-icon" data-tip="Manage your money">
-                    <i class="fas fa-dollar-sign"></i>
-                </div>
-                <div class="loading-icon" data-tip="Save for the future">
-                    <i class="fas fa-piggy-bank"></i>
-                </div>
-                <div class="loading-icon" data-tip="Invest wisely">
-                    <i class="fas fa-chart-pie"></i>
-                </div>
-            </div>
-            <div class="loading-progress">
-                <div class="loading-bar"></div>
-            </div>
+        <div class="loading-icons">
+            <i class="fas fa-chart-line loading-icon"></i>
+            <i class="fas fa-coins loading-icon"></i>
+            <i class="fas fa-piggy-bank loading-icon"></i>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        // Theme toggle functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            if (body.classList.contains('light-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        // Mobile menu functionality
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const mobileMenu = document.querySelector('.mobile-menu');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                // Close mobile menu if open
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        // Fade-in effect for the hero background and content
+        window.addEventListener('load', () => {
+            const hero = document.querySelector('.hero');
             setTimeout(() => {
-                document.body.classList.add('loaded');
-                animateHeroContent();
-                animateDiamondGrid();
-                typeWriter(document.querySelector('.hero-title'), "Your Gateway to Financial Management.", 50);
+                hero.classList.add('fade-in');
             }, 100);
         });
 
-        function animateHeroContent() {
-            const heroContent = document.querySelector('.hero-content');
-            heroContent.classList.add('animate');
-        }
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
 
-        function animateDiamondGrid() {
-            const diamondGrid = document.querySelector('.diamond-grid');
-            const diamonds = document.querySelectorAll('.diamond');
-            
-            diamondGrid.classList.add('animate');
-            
-            diamonds.forEach((diamond, index) => {
-                setTimeout(() => {
-                    diamond.classList.add('animate');
-                }, index * 200);
-            });
-        }
-
-        function typeWriter(element, text, speed) {
-            let i = 0;
-            element.textContent = '';
-            function type() {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
-            }
-            type();
+            });
+        }, observerOptions);
+
+        // Observe all sections and cards
+        document.querySelectorAll('.features, .statistics, .information, .cta, .feature-card, .stat-card, .info-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Loading screen functionality
+        function showLoadingScreen() {
+            document.querySelector('.loading-screen').classList.add('active');
         }
 
-        function showLoading(redirectUrl) {
-            const loadingScreen = document.querySelector('.loading-screen');
-            const loadingIcons = document.querySelectorAll('.loading-icon');
-            const loadingBar = document.querySelector('.loading-bar');
-            loadingScreen.classList.add('active');
-            
-            let progress = 0;
-            const updateProgress = () => {
-                progress += 1;
-                loadingBar.style.width = `${progress}%`;
-                if (progress < 100) {
-                    requestAnimationFrame(updateProgress);
-                } else {
-                    setTimeout(() => {
-                        window.location.href = redirectUrl;
-                    }, 500);
-                }
-            };
+        function hideLoadingScreen() {
+            document.querySelector('.loading-screen').classList.remove('active');
+        }
 
-            loadingIcons.forEach((icon, index) => {
-                icon.addEventListener('click', () => {
-                    icon.classList.toggle('filled');
-                });
-
-                setTimeout(() => {
-                    icon.classList.add('filled');
-                }, index * 500);
-            });
-
-            updateProgress();
-
+        // Redirect functionality with loading screen
+        document.getElementById('get-started-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            showLoadingScreen();
             setTimeout(() => {
-                loadingScreen.classList.remove('active');
-            }, 6000);
+                window.location.href = 'Entrep16.html';
+            }, 2000); // Simulating a 2-second load time
+        });
+
+        document.getElementById('google-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            showLoadingScreen();
+            setTimeout(() => {
+                window.location.href = 'Entrep6.html';
+            }, 2000); // Simulating a 2-second load time
+        });
+
+        document.getElementById('cta-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            showLoadingScreen();
+            setTimeout(() => {
+                window.location.href = 'Entrep16.html';
+            }, 2000); // Simulating a 2-second load time
+        });
+
+        // Typewriter effect for hero title
+        const heroTitle = document.querySelector('.hero-title');
+        const text = heroTitle.textContent;
+        heroTitle.textContent = '';
+
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                heroTitle.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            }
         }
+
+        // Start the typewriter effect when the page loads
+        window.addEventListener('load', typeWriter);
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            const heroContent = document.querySelector('.hero-content');
+            
+            hero.style.backgroundPositionY = scrollPosition * 0.7 + 'px';
+            heroContent.style.transform = `translateY(${scrollPosition * 0.4}px)`;
+        });
+
+        // Scroll-triggered animations for sections
+        const animateSections = () => {
+            const sections = document.querySelectorAll('.features, .statistics, .information, .cta');
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const sectionBottom = section.getBoundingClientRect().bottom;
+                const windowHeight = window.innerHeight;
+
+                if (sectionTop < windowHeight * 0.75 && sectionBottom > 0) {
+                    section.classList.add('visible');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateSections);
+        window.addEventListener('resize', animateSections);
+        animateSections(); // Initial check on page load
+
+        // Smooth reveal for feature cards
+        const revealCards = () => {
+            const cards = document.querySelectorAll('.feature-card, .stat-card, .info-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, 100 * index);
+            });
+        };
+
+        // Run revealCards when the respective section becomes visible
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    revealCards();
+                    sectionObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.features, .statistics, .information').forEach(section => {
+            sectionObserver.observe(section);
+        });
     </script>
 </body>
 </html>
