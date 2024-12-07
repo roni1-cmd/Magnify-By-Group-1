@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in to your account</title>
+    <title>Magnify! - Sign in</title>
     <link rel="icon" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,6 +24,7 @@
             background: linear-gradient(135deg, #FFC0CB, #FF69B4, #8A2BE2);
             padding: 2rem;
             gap: 2rem;
+            overflow-x: hidden;
         }
 
         .container {
@@ -35,6 +36,14 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .container.slide-in {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         h1 {
@@ -75,6 +84,7 @@
             top: 50%;
             transform: translateY(-50%);
             color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
         }
 
         button {
@@ -129,81 +139,6 @@
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            color: white;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .feature-card:hover::before {
-            left: 100%;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .feature-card i {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            background: linear-gradient(45deg, #FF69B4, #8A2BE2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover i {
-            transform: scale(1.2);
-        }
-
-        .feature-card h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .feature-card p {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        @media (max-width: 768px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            body {
-                padding: 1rem;
-            }
-        }
-
         .loading-screen {
             position: fixed;
             inset: 0;
@@ -243,10 +178,34 @@
             opacity: 1;
         }
 
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
+        .all-rights-reserved {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            input, button {
+                font-size: 14px;
             }
         }
     </style>
@@ -272,29 +231,6 @@
         </div>
     </div>
 
-    <div class="features-grid">
-        <div class="feature-card" onclick="showFeatureDetails('savings')">
-            <i class="fas fa-piggy-bank"></i>
-            <h2>Mark!</h2>
-            <p>Your Total Savings</p>
-        </div>
-        <div class="feature-card" onclick="showFeatureDetails('income')">
-            <i class="fas fa-chart-line"></i>
-            <h2>Organize</h2>
-            <p>Your Monthly Income</p>
-        </div>
-        <div class="feature-card" onclick="showFeatureDetails('investment')">
-            <i class="fas fa-coins"></i>
-            <h2>Assemble</h2>
-            <p>Your Investment Growth</p>
-        </div>
-        <div class="feature-card" onclick="showFeatureDetails('security')">
-            <i class="fas fa-shield-alt"></i>
-            <h2>Magnify It!</h2>
-            <p>You Are Safe With Us</p>
-        </div>
-    </div>
-
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-animation">
             <div class="loading-icons">
@@ -307,7 +243,23 @@
         </div>
     </div>
 
+    <div class="all-rights-reserved">
+        © 2024 Magnify! | All rights reserved.
+    </div>
+
     <script>
+        // Professional entrance animation
+        function animateEntrance() {
+            const container = document.querySelector('.container');
+            
+            setTimeout(() => {
+                container.classList.add('slide-in');
+            }, 100);
+        }
+
+        // Trigger entrance animation on page load
+        window.addEventListener('load', animateEntrance);
+
         // Login form submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -347,42 +299,6 @@
             }, 4000);
         });
 
-        // Feature card details
-        function showFeatureDetails(feature) {
-            const features = {
-                savings: {
-                    title: 'Total Savings Tracker',
-                    description: 'Track and analyze your savings with powerful visualization tools'
-                },
-                income: {
-                    title: 'Income Management',
-                    description: 'Organize and optimize your monthly income streams'
-                },
-                investment: {
-                    title: 'Investment Portfolio',
-                    description: 'Monitor and grow your investment portfolio'
-                },
-                security: {
-                    title: 'Security Features',
-                    description: 'Your data is protected with state-of-the-art security'
-                }
-            };
-
-            const details = features[feature];
-            const loadingScreen = document.getElementById('loadingScreen');
-            const loadingText = document.getElementById('loadingText');
-            
-            loadingScreen.classList.add('active');
-            loadingText.innerHTML = `
-                <h3 style="margin-bottom: 10px">${details.title}</h3>
-                <p>${details.description}</p>
-            `;
-
-            setTimeout(() => {
-                loadingScreen.classList.remove('active');
-            }, 2000);
-        }
-
         // Add hover effect to input groups
         document.querySelectorAll('.input-group').forEach(group => {
             const input = group.querySelector('input');
@@ -398,35 +314,7 @@
                 group.style.transform = 'scale(1)';
             });
         });
-
-        // Add ripple effect to feature cards
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.addEventListener('click', function(e) {
-                const ripple = document.createElement('div');
-                ripple.classList.add('ripple');
-                
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                ripple.style.cssText = `
-                    position: absolute;
-                    background: rgba(255, 255, 255, 0.2);
-                    border-radius: 50%;
-                    pointer-events: none;
-                    width: 100px;
-                    height: 100px;
-                    left: ${x - 50}px;
-                    top: ${y - 50}px;
-                    transform: scale(0);
-                    animation: ripple 0.6s linear;
-                `;
-                
-                this.appendChild(ripple);
-                
-                setTimeout(() => ripple.remove(), 600);
-            });
-        });
     </script>
 </body>
 </html>
+
