@@ -373,7 +373,7 @@
             font-size: 0.9rem;
         }
 
-        .contact-modal {
+        .start-challenge-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -386,7 +386,7 @@
             z-index: 2000;
         }
 
-        .contact-content {
+        .modal-content {
             background: white;
             padding: 2rem;
             border-radius: 0.5rem;
@@ -395,39 +395,11 @@
             position: relative;
         }
 
-        .contact-content h3 {
+        .modal-content h3 {
             margin-top: 0;
             color: var(--primary);
             font-size: 1.5rem;
             margin-bottom: 1rem;
-        }
-
-        .contact-info {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .contact-item i {
-            color: var(--primary);
-            font-size: 1.2rem;
-            margin-top: 0.2rem;
-        }
-
-        .contact-item strong {
-            display: block;
-            color: var(--primary);
-        }
-
-        .contact-item p {
-            margin: 0;
-            color: #666;
-            font-size: 0.9rem;
         }
 
         .close-modal {
@@ -470,6 +442,14 @@
             width: 100%;
             height: 500px;
             margin-top: 2rem;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 1rem;
+            text-align: center;
         }
 
         @media (max-width: 768px) {
@@ -518,10 +498,6 @@
                 <i class="fas fa-chart-line"></i>
                 <span>Progress</span>
             </a>
-            <a href="#" class="nav-link" data-tooltip="Contact Us" onclick="openModal()">
-                <i class="fas fa-envelope"></i>
-                <span>Contact</span>
-            </a>
         </nav>
     </header>
 
@@ -530,7 +506,7 @@
             <div class="challenge-card">
                 <div class="challenge-header">
                     <h2 class="challenge-title">52-Week Savings Challenge</h2>
-                    <button class="button" onclick="startNewChallenge()">Start New Challenge</button>
+                    <button class="button" onclick="openStartChallengeModal()">Start New Challenge</button>
                 </div>
                 <div class="progress-container">
                     <div class="progress-bar" id="challengeProgress">
@@ -551,6 +527,7 @@
                         <p>Current Week Target</p>
                     </div>
                 </div>
+                <div class="timer" id="weekTimer"></div>
             </div>
 
             <div class="challenge-card">
@@ -573,7 +550,7 @@
                 <li>
                     <h3>52-Week Savings Challenge</h3>
                     <p>Save an increasing amount each week for a year. Start with ₱100 in week 1 and increase by ₱100 each week.</p>
-                    <button class="button" onclick="startNewChallenge()">Start Challenge</button>
+                    <button class="button" onclick="openStartChallengeModal()">Start Challenge</button>
                 </li>
                 <li>
                     <h3>30-Day No-Spend Challenge</h3>
@@ -614,40 +591,12 @@
         <!-- Notifications will be added here dynamically -->
     </div>
 
-    <div class="contact-modal" id="contactModal">
-        <div class="contact-content">
-            <h3>Contact Us</h3>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <i class="fas fa-user"></i>
-                    <div>
-                        <strong>Name:</strong> Ron Asnahon
-                        <p>Senior Web Developer & Project Lead</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <div>
-                        <strong>Phone:</strong> 09696156121
-                        <p>Available Mon-Fri, 9AM-5PM PHT</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <div>
-                        <strong>Email:</strong> asnahonron@gmail.com
-                        <p>Response within 24 hours</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div>
-                        <strong>Where?</strong> Lapu-Lapu City, Philippines
-                        <p>Place where I live, maybe?</p>
-                    </div>
-                </div>
-            </div>
-            <button class="button close-modal" onclick="closeModal()">Close</button>
+    <div class="start-challenge-modal" id="startChallengeModal">
+        <div class="modal-content">
+            <h3>Start New Challenge</h3>
+            <p>Are you sure you want to start a new 52-Week Savings Challenge? This will reset your current progress.</p>
+            <button class="button" onclick="startNewChallenge()">Yes, Start New Challenge</button>
+            <button class="button close-modal" onclick="closeModal('startChallengeModal')">Cancel</button>
         </div>
     </div>
 
@@ -659,7 +608,8 @@
             totalSaved: 0,
             weeklyTargets: [],
             completedWeeks: [],
-            isActive: false
+            isActive: false,
+            weekStartTime: null
         };
 
         // Initialize the challenge
@@ -668,7 +618,11 @@
             const savedState = localStorage.getItem('challengeState');
             if (savedState) {
                 challengeState = JSON.parse(savedState);
+                if (challengeState.weekStartTime) {
+                    challengeState.weekStartTime = new Date(challengeState.weekStartTime);
+                }
                 updateUI();
+                startWeekTimer();
             }
 
             // Generate weekly targets if not already set
@@ -679,23 +633,29 @@
             }
         }
 
+        // Open start challenge modal
+        function openStartChallengeModal() {
+            document.getElementById('startChallengeModal').style.display = 'flex';
+        }
+
         // Start new challenge
         function startNewChallenge() {
-            if (confirm('Are you sure you want to start a new challenge? This will reset your current progress.')) {
-                challengeState = {
-                    currentWeek: 1,
-                    totalSaved: 0,
-                    weeklyTargets: [],
-                    completedWeeks: [],
-                    isActive: true
-                };
-                for (let i = 1; i <= 52; i++) {
-                    challengeState.weeklyTargets.push(i * 100);
-                }
-                updateUI();
-                saveState();
-                showNotification('Challenge Started!', 'Your 52-week savings challenge has begun. Good luck!', 'success');
+            challengeState = {
+                currentWeek: 1,
+                totalSaved: 0,
+                weeklyTargets: [],
+                completedWeeks: [],
+                isActive: true,
+                weekStartTime: new Date()
+            };
+            for (let i = 1; i <= 52; i++) {
+                challengeState.weeklyTargets.push(i * 100);
             }
+            updateUI();
+            saveState();
+            showNotification('Challenge Started!', 'Your 52-week savings challenge has begun. Good luck!', 'success');
+            closeModal('startChallengeModal');
+            startWeekTimer();
         }
 
         // Submit savings
@@ -712,10 +672,12 @@
             if (amount >= target) {
                 challengeState.completedWeeks.push(challengeState.currentWeek);
                 challengeState.currentWeek++;
+                challengeState.weekStartTime = new Date(); // Reset timer for new week
                 showNotification('Week Completed!', `Congratulations! You've saved ₱${amount.toLocaleString()}. That's ₱${(amount - target).toLocaleString()} more than your target!`, 'success');
                 
                 if (challengeState.currentWeek > 52) {
                     showNotification('Challenge Completed!', 'You\'ve successfully completed the 52-week savings challenge! Great job!', 'success');
+                    challengeState.isActive = false;
                 }
             } else {
                 showNotification('Keep Going!', `You've saved ₱${amount.toLocaleString()}. You need ₱${(target - amount).toLocaleString()} more to reach this week's target.`, 'warning');
@@ -724,6 +686,7 @@
             document.getElementById('savingsAmount').value = '';
             updateUI();
             saveState();
+            startWeekTimer();
         }
 
         // Update UI elements
@@ -916,18 +879,45 @@
             });
         });
 
-        function openModal() {
-            document.getElementById('contactModal').style.display = 'flex';
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
 
-        function closeModal() {
-            document.getElementById('contactModal').style.display = 'none';
+        // Start week timer
+        function startWeekTimer() {
+            if (!challengeState.isActive) return;
+
+            const timerElement = document.getElementById('weekTimer');
+            const updateTimer = () => {
+                const now = new Date();
+                const timeDiff = now - challengeState.weekStartTime;
+                const daysLeft = 7 - Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                const hoursLeft = 23 - (now.getHours() - challengeState.weekStartTime.getHours() +24) % 24;
+                const minutesLeft = 59 - (now.getMinutes() - challengeState.weekStartTime.getMinutes() + 60) % 60;
+                const secondsLeft = 59 - (now.getSeconds() - challengeState.weekStartTime.getSeconds() + 60) % 60;
+
+                timerElement.textContent = `Time left for Week ${challengeState.currentWeek}: ${daysLeft}d ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s`;
+
+                if (timeDiff >= 7 * 24 * 60 * 60 * 1000) {
+                    // Week is over, move to next week
+                    challengeState.currentWeek++;
+                    challengeState.weekStartTime = new Date();
+                    updateUI();
+                    saveState();
+                    showNotification('New Week Started', `Week ${challengeState.currentWeek} has begun. Keep up the good work!`, 'info');
+                }
+            };
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
         }
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
             initializeChallenge();
+            startWeekTimer();
         });
     </script>
 </body>
 </html>
+
