@@ -662,6 +662,11 @@
                     <i class="fas fa-calculator"></i> Tax Calculator
                 </button>
             </div>
+            <div class="colored-container">
+                <button class="btn" onclick="resetData()">
+                    <i class="fas fa-trash"></i> Reset Data
+                </button>
+            </div>
         </div>
     </header>
 
@@ -676,7 +681,7 @@
             </div>
             <div class="quick-action-card">
                 <h3>Financial Health</h3>
-                <p>Get a quick overview of your finances and know your staus.</p>
+                <p>Get a quick overview of your finances and know your status.</p>
                 <button class="btn" onclick="checkFinancialHealth()">Check Now</button>
             </div>
             <div class="quick-action-card">
@@ -722,15 +727,15 @@
             <div class="analytics-section" id="analyticsSection">
                 <div class="analytics-card">
                     <div class="analytics-header">
-                        <h3 class="analytics-title">Income</h3>
+                        <h3 class="analytics-title">Transaction Category</h3>
                         <div class="chart-type-selector">
-                            <button class="chart-type-btn active" data-type="bar" data-chart="incomeChart"><i class="fas fa-chart-bar"></i></button>
-                            <button class="chart-type-btn" data-type="line" data-chart="incomeChart"><i class="fas fa-chart-line"></i></button>
-                            <button class="chart-type-btn" data-type="pie" data-chart="incomeChart"><i class="fas fa-chart-pie"></i></button>
+                            <button class="chart-type-btn active" data-type="bar" data-chart="categoryChart"><i class="fas fa-chart-bar"></i></button>
+                            <button class="chart-type-btn" data-type="line" data-chart="categoryChart"><i class="fas fa-chart-line"></i></button>
+                            <button class="chart-type-btn" data-type="pie" data-chart="categoryChart"><i class="fas fa-chart-pie"></i></button>
                         </div>
                     </div>
                     <div class="chart-container">
-                        <canvas id="incomeChart"></canvas>
+                        <canvas id="categoryChart"></canvas>
                     </div>
                 </div>
                 <div class="analytics-card">
@@ -898,7 +903,7 @@
             } else {
                 transactions.forEach((transaction, index) => {
                     const transactionEl = document.createElement('div');
-                    transactionEl.className = 'transaction-item';
+                    transactionEl.className= 'transaction-item';
                     transactionEl.innerHTML = `
                         <div class="transaction-info">
                             <div class="transaction-icon">
@@ -1136,10 +1141,18 @@
 
         // Function to update charts
         function updateCharts() {
-            const incomeData = transactions.filter(t => t.type === 'income').map(t => t.amount);
-            const labels = transactions.filter(t => t.type === 'income').map(t => t.date);
+            const selectedCategory = document.getElementById('transactionDescription').value;
+            const categoryData = transactions
+                .filter(t => t.description === selectedCategory)
+                .map(t => ({ amount: t.amount, date: t.date }));
 
-            createOrUpdateChart('incomeChart', 'bar', labels, incomeData);
+            const labels = categoryData.map(d => d.date);
+            const data = categoryData.map(d => d.amount);
+
+            createOrUpdateChart('categoryChart', 'bar', labels, data);
+
+            // Update the chart title
+            document.querySelector('#categoryChart').closest('.analytics-card').querySelector('.analytics-title').textContent = `${selectedCategory} Transactions`;
 
             const expenseCategories = {};
             transactions.filter(t => t.type === 'expense').forEach(t => {
@@ -1154,7 +1167,7 @@
 
         // Function to reset charts
         function resetCharts() {
-            createOrUpdateChart('incomeChart', 'bar', [], []);
+            createOrUpdateChart('categoryChart', 'bar', [], []);
             createOrUpdateChart('expenseCategoriesChart', 'pie', [], []);
         }
 
@@ -1164,10 +1177,15 @@
                 const chartId = this.dataset.chart;
                 const chartType = this.dataset.type;
                 
-                if (chartId === 'incomeChart') {
-                    const incomeData = transactions.filter(t => t.type === 'income').map(t => t.amount);
-                    const labels = transactions.filter(t => t.type === 'income').map(t => t.date);
-                    createOrUpdateChart(chartId, chartType, labels, incomeData);
+                if (chartId === 'categoryChart') {
+                    const selectedCategory = document.getElementById('transactionDescription').value;
+                    const categoryData = transactions
+                        .filter(t => t.description === selectedCategory)
+                        .map(t => ({ amount: t.amount, date: t.date }));
+
+                    const labels = categoryData.map(d => d.date);
+                    const data = categoryData.map(d => d.amount);
+                    createOrUpdateChart(chartId, chartType, labels, data);
                 } else if (chartId === 'expenseCategoriesChart') {
                     const expenseCategories = {};
                     transactions.filter(t => t.type === 'expense').forEach(t => {
@@ -1236,7 +1254,7 @@
             } else if (savingsRate >= 10) {
                 healthStatus = 'Good';
                 advice = 'You\'re on the right track. Try to increase your savings rate to 20% or more.';
-            } else if (savingsRate >= 0) {
+            } else if (savingsRate >=0) {
                 healthStatus = 'Fair';
                 advice = 'You\'re breaking even, but there\'s room for improvement. Look for ways to reduce expenses or increase income.';
             } else {
@@ -1247,7 +1265,7 @@
             document.getElementById('financialHealthResult').innerHTML = `
                 <h4>Financial Health: ${healthStatus}</h4>
                 <p>Your current savings rate is ${savingsRate.toFixed(2)}%</p>
-                <p><strong>Advice:</strong<strong>Advice:</strong> ${advice}</p>
+                <p><strong>Advice:</strong> ${advice}</p>
             `;
             openModal('financialHealthModal');
         }
@@ -1277,6 +1295,16 @@
                 <p><strong>Date:</strong> ${transaction.date}</p>
             `;
             openModal('transactionDetailsModal');
+        }
+
+        // Reset Data
+        function resetData() {
+            transactions = [];
+            budgetGoal = 0;
+            updateTransactionsList();
+            resetMetrics();
+            resetCharts();
+            alert('All data has been reset.');
         }
 
         // Initialize the dashboard
