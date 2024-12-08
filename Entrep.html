@@ -17,6 +17,7 @@
             --background: #F3F4F6;
             --card-background: #FFFFFF;
             --sidebar-width: 240px;
+            --sidebar-width-collapsed: 60px;
             --header-height: 80px;
         }
 
@@ -42,8 +43,12 @@
             flex-direction: column;
             position: fixed;
             height: 100vh;
-            transition: transform 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
             z-index: 1000;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-width-collapsed);
         }
 
         .sidebar-hidden .sidebar {
@@ -67,6 +72,15 @@
         .logo span {
             font-size: 1.5rem;
             font-weight: 700;
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .sidebar.collapsed .logo span {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
         }
 
         .nav-item {
@@ -80,6 +94,7 @@
             margin-bottom: 0.5rem;
             transition: all 0.3s ease;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         .nav-item:hover,
@@ -90,6 +105,13 @@
 
         .nav-item i {
             font-size: 1.25rem;
+            min-width: 1.25rem;
+        }
+
+        .sidebar.collapsed .nav-item span {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
         }
 
         .main-content {
@@ -104,13 +126,17 @@
             margin-left: 0;
         }
 
+        .sidebar.collapsed + .main-content {
+            margin-left: var(--sidebar-width-collapsed);
+        }
+
         .header {
             position: fixed;
             top: 0;
             left: var(--sidebar-width);
             right: 0;
             height: var(--header-height);
-            background: var(--secondary-gradient);
+            background: var(--primary-gradient);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -122,6 +148,10 @@
 
         .sidebar-hidden .header {
             left: 0;
+        }
+
+        .sidebar.collapsed + .main-content .header {
+            left: var(--sidebar-width-collapsed);
         }
 
         .search-bar {
@@ -152,6 +182,10 @@
             padding: 1.5rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 2rem;
+            width: 95%;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .metrics-grid {
@@ -467,9 +501,8 @@
             border-radius: 0.5rem;
         }
 
-        /* New styles for colored containers */
         .colored-container {
-            background: var(--primary-gradient);
+            background: transparent;
             border-radius: 0.5rem;
             padding: 0.5rem;
             margin-bottom: 0.5rem;
@@ -480,7 +513,7 @@
             color: #8B5CF6;
         }
 
-        .colored-container .btn:hover {
+        .colored-container .btn:hover{
             background: #F3F4F6;
         }
 
@@ -566,7 +599,7 @@
     </button>
 
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="logo">
             <img src="logo.png" alt="Magnify! Logo">
             <span>Magnify!</span>
@@ -574,35 +607,35 @@
         <nav>
             <a href="#" class="nav-item active">
                 <i class="fas fa-home"></i>
-                Dashboard
+                <span>Dashboard</span>
             </a>
             <a href="Entrep4.html" class="nav-item">
                 <i class="fas fa-exchange-alt"></i>
-                Magnify Remit-It!
+                <span>Magnify Remit-It!</span>
             </a>
             <a href="Entrep7.html" class="nav-item">
                 <i class="fas fa-calendar-alt"></i>
-                Calendar
+                <span>Calendar</span>
             </a>
             <a href="Entrep8.html" class="nav-item">
                 <i class="fas fa-user"></i>
-                Profile
+                <span>Profile</span>
             </a>
             <a href="Entrep9.html" class="nav-item">
                 <i class="fas fa-dollar-sign"></i>
-                Currency Converter
+                <span>Currency Converter</span>
             </a>
             <a href="Entrep12.html" class="nav-item">
                 <i class="fas fa-chart-pie"></i>
-                Budget Planner
+                <span>Budget Planner</span>
             </a>
             <a href="Entrep11.html" class="nav-item">
                 <i class="fas fa-book"></i>
-                Resources
+                <span>Resources</span>
             </a>
             <a href="Entrep17.html" class="nav-item">
                 <i class="fas fa-file-csv"></i>
-                Magnify! Q-CSV
+                <span>Magnify! Q-CSV</span>
             </a>
         </nav>
     </aside>
@@ -647,9 +680,14 @@
                 <button class="btn" onclick="checkFinancialHealth()">Check Now</button>
             </div>
             <div class="quick-action-card">
-                <h3>Investment Tips</h3>
-                <p>Receive personalized investment advice</p>
-                <button class="btn" onclick="getInvestmentTips()">Get Tips</button>
+                <h3>Savings Challenge</h3>
+                <p>Join a savings challenge</p>
+                <button class="btn" onclick="window.location.href='Entrep18.html'">Join Now</button>
+            </div>
+            <div class="quick-action-card">
+                <h3>Magnify!</h3>
+                <p>Explore advanced features</p>
+                <button class="btn" onclick="window.location.href='Entrep20.html'">Magnify!</button>
             </div>
         </div>
 
@@ -834,6 +872,17 @@
         </div>
     </div>
 
+    <!-- Transaction Details Modal -->
+    <div id="transactionDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Transaction Details</h3>
+                <button class="close-modal" onclick="closeModal('transactionDetailsModal')">&times;</button>
+            </div>
+            <div id="transactionDetailsContent"></div>
+        </div>
+    </div>
+
     <script>
         // Sample transactions data
         let transactions = [];
@@ -844,25 +893,30 @@
             const transactionsList = document.getElementById('transactionsList');
             transactionsList.innerHTML = '';
 
-            transactions.forEach(transaction => {
-                const transactionEl = document.createElement('div');
-                transactionEl.className = 'transaction-item';
-                transactionEl.innerHTML = `
-                    <div class="transaction-info">
-                        <div class="transaction-icon">
-                            <i class="fas fa-${transaction.type === 'income' ? 'arrow-down' : 'arrow-up'}"></i>
+            if (transactions.length === 0) {
+                transactionsList.innerHTML = '<p>No transactions yet. Add a transaction to get started!</p>';
+            } else {
+                transactions.forEach((transaction, index) => {
+                    const transactionEl = document.createElement('div');
+                    transactionEl.className = 'transaction-item';
+                    transactionEl.innerHTML = `
+                        <div class="transaction-info">
+                            <div class="transaction-icon">
+                                <i class="fas fa-${transaction.type === 'income' ? 'arrow-down' : 'arrow-up'}"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <h4>${transaction.description}</h4>
+                                <p>${transaction.date}</p>
+                            </div>
                         </div>
-                        <div class="transaction-details">
-                            <h4>${transaction.description}</h4>
-                            <p>${transaction.date}</p>
+                        <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
+                            ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}
                         </div>
-                    </div>
-                    <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
-                        ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}
-                    </div>
-                `;
-                transactionsList.appendChild(transactionEl);
-            });
+                    `;
+                    transactionEl.addEventListener('click', () => showTransactionDetails(transaction));
+                    transactionsList.appendChild(transactionEl);
+                });
+            }
 
             // Show analytics section if there are transactions
             document.getElementById('analyticsSection').style.display = transactions.length > 0 ? 'grid' : 'none';
@@ -871,6 +925,9 @@
             if (transactions.length > 0) {
                 updateMetrics();
                 updateCharts();
+            } else {
+                resetMetrics();
+                resetCharts();
             }
         }
 
@@ -907,6 +964,18 @@
             document.getElementById('incomeChange').className = `change ${incomeChange >= 0 ? 'positive' : 'negative'}`;
             document.getElementById('expensesChange').className = `change ${expensesChange <= 0 ? 'positive' : 'negative'}`;
             document.getElementById('savingsChange').className = `change ${savingsRateChange >= 0 ? 'positive' : 'negative'}`;
+        }
+
+        // Function to reset metrics
+        function resetMetrics() {
+            document.getElementById('totalBalance').textContent = '₱0.00';
+            document.getElementById('monthlyIncome').textContent = '₱0.00';
+            document.getElementById('monthlyExpenses').textContent = '₱0.00';
+            document.getElementById('savingsRate').textContent = '0%';
+            document.getElementById('balanceChange').textContent = '0% change';
+            document.getElementById('incomeChange').textContent = '0% change';
+            document.getElementById('expensesChange').textContent = '0% change';
+            document.getElementById('savingsChange').textContent = '0% change';
         }
 
         // Modal functions
@@ -953,25 +1022,30 @@
             const transactionsList = document.getElementById('transactionsList');
             transactionsList.innerHTML = '';
 
-            filteredTransactions.forEach(transaction => {
-                const transactionEl = document.createElement('div');
-                transactionEl.className = 'transaction-item';
-                transactionEl.innerHTML = `
-                    <div class="transaction-info">
-                        <div class="transaction-icon">
-                            <i class="fas fa-${transaction.type === 'income' ? 'arrow-down' : 'arrow-up'}"></i>
+            if (filteredTransactions.length === 0) {
+                transactionsList.innerHTML = '<p>No matching transactions found.</p>';
+            } else {
+                filteredTransactions.forEach(transaction => {
+                    const transactionEl = document.createElement('div');
+                    transactionEl.className = 'transaction-item';
+                    transactionEl.innerHTML = `
+                        <div class="transaction-info">
+                            <div class="transaction-icon">
+                                <i class="fas fa-${transaction.type === 'income' ? 'arrow-down' : 'arrow-up'}"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <h4>${transaction.description}</h4>
+                                <p>${transaction.date}</p>
+                            </div>
                         </div>
-                        <div class="transaction-details">
-                            <h4>${transaction.description}</h4>
-                            <p>${transaction.date}</p>
+                        <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
+                            ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}
                         </div>
-                    </div>
-                    <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
-                        ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}
-                    </div>
-                `;
-                transactionsList.appendChild(transactionEl);
-            });
+                    `;
+                    transactionEl.addEventListener('click', () => showTransactionDetails(transaction));
+                    transactionsList.appendChild(transactionEl);
+                });
+            }
         });
 
         // Mortgage Calculator
@@ -1078,6 +1152,12 @@
             );
         }
 
+        // Function to reset charts
+        function resetCharts() {
+            createOrUpdateChart('incomeChart', 'bar', [], []);
+            createOrUpdateChart('expenseCategoriesChart', 'pie', [], []);
+        }
+
         // Event listeners for chart type buttons
         document.querySelectorAll('.chart-type-btn').forEach(button => {
             button.addEventListener('click', function() {
@@ -1107,17 +1187,16 @@
 
         // Sidebar toggle functionality
         const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
         const body = document.body;
 
         sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
             body.classList.toggle('sidebar-hidden');
         });
 
         // Close sidebar when clicking outside on mobile
         document.addEventListener('click', function(event) {
-            const sidebar = document.querySelector('.sidebar');
-            const sidebarToggle = document.getElementById('sidebarToggle');
-
             if (window.innerWidth <= 768 && !sidebar.contains(event.target) && event.target !== sidebarToggle) {
                 body.classList.add('sidebar-hidden');
             }
@@ -1168,7 +1247,7 @@
             document.getElementById('financialHealthResult').innerHTML = `
                 <h4>Financial Health: ${healthStatus}</h4>
                 <p>Your current savings rate is ${savingsRate.toFixed(2)}%</p>
-                <p><strong>Advice:</strong> ${advice}</p>
+                <p><strong>Advice:</strong<strong>Advice:</strong> ${advice}</p>
             `;
             openModal('financialHealthModal');
         }
@@ -1188,17 +1267,23 @@
             openModal('investmentTipsModal');
         }
 
-        // Add some sample transactions for demonstration
-        transactions = [
-            { type: 'income', amount: 50000, description: 'Salary', date: '2023-06-01' },
-            { type: 'expense', amount: 15000, description: 'Rent', date: '2023-06-02' },
-            { type: 'expense', amount: 5000, description: 'Groceries', date: '2023-06-05' },
-            { type: 'income', amount: 10000, description: 'Freelance', date: '2023-06-10' },
-            { type: 'expense', amount: 2000, description: 'Entertainment', date: '2023-06-15' }
-        ];
+        // Show Transaction Details
+        function showTransactionDetails(transaction) {
+            const detailsContent = document.getElementById('transactionDetailsContent');
+            detailsContent.innerHTML = `
+                <p><strong>Type:</strong> ${transaction.type}</p>
+                <p><strong>Amount:</strong> ₱${transaction.amount.toFixed(2)}</p>
+                <p><strong>Description:</strong> ${transaction.description}</p>
+                <p><strong>Date:</strong> ${transaction.date}</p>
+            `;
+            openModal('transactionDetailsModal');
+        }
+
+        // Initialize the dashboard
         updateTransactionsList();
     </script>
     <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
     <script src="https://files.bpcontent.cloud/2024/11/02/01/20241102014603-MY6MW47G.js"></script>
 </body>
 </html>
+
