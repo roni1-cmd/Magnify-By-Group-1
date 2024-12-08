@@ -3,11 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify! - Sign in</title>
+    <title>Log in to Magnify! </title>
     <link rel="icon" href="logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <style>
+        :root {
+            --bg-color: #f3e8ff;
+            --text-color: #1a1a1a;
+            --primary-color: #8b5cf6;
+            --secondary-color: #d946ef;
+            --tertiary-color: #ec4899;
+            --input-bg: white;
+            --input-border: #e5e7eb;
+            --error-color: #ef4444;
+            --success-color: #10b981;
+        }
+
+        .dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #f3e8ff;
+            --primary-color: #a78bfa;
+            --secondary-color: #e879f9;
+            --tertiary-color: #f472b6;
+            --input-bg: #2d2d2d;
+            --input-border: #4a4a4a;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,138 +40,306 @@
         body {
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #FFC0CB, #FF69B4, #8A2BE2);
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             padding: 2rem;
-            gap: 2rem;
-            overflow-x: hidden;
+            transition: all 0.3s ease;
         }
 
-        .container {
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            padding: 40px;
+        .login-container {
             width: 100%;
-            max-width: 400px;
-            text-align: center;
+            max-width: 1000px;
+            min-height: 600px;
+            background: var(--input-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
 
-        .container.slide-in {
-            opacity: 1;
-            transform: translateY(0);
+        .login-form {
+            width: 50%;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        h1 {
-            color: white;
-            margin-bottom: 30px;
-            font-weight: 600;
+        .graphic-side {
+            width: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            right: -50px;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: 50px;
+            left: -50px;
+            animation-delay: -3s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .welcome-text {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 0.2s;
+        }
+
+        .welcome-text h1 {
+            font-size: 2.5rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-text h1 span {
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        .welcome-text p {
+            color: var(--text-color);
+            opacity: 0.7;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
             position: relative;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
 
-        input {
+        .input-group:nth-child(1) { transition-delay: 0.4s; }
+        .input-group:nth-child(2) { transition-delay: 0.6s; }
+
+        .input-group input {
             width: 100%;
-            padding: 12px 40px 12px 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid transparent;
-            border-radius: 10px;
-            font-size: 16px;
-            color: white;
+            padding: 1rem 1rem 1rem 3rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-color);
+            border-radius: 8px;
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        input:focus {
+        .input-group input:focus {
             outline: none;
-            border-color: rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--primary-color);
         }
 
         .input-group i {
             position: absolute;
-            right: 12px;
+            left: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-color);
             transition: all 0.3s ease;
+            pointer-events: none;
         }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(45deg, #FF69B4, #8A2BE2);
-            color: white;
+        .input-group input:focus + i {
+            color: var(--primary-color);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 0.8s;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 0.5rem;
+        }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--secondary-color);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 1s;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
+        }
+
+        .btn-login {
+            background: var(--primary-color);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-login:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-signup {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            flex: 1;
+        }
+
+        .btn-signup:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .social-login {
+            text-align: center;
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 1.2s;
+        }
+
+        .social-login p {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icons a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--input-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .social-icons a:hover {
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        button::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: rotate(45deg);
-            transition: all 0.3s ease;
-        }
-
-        button:hover::after {
-            left: 100%;
-        }
-
-        .links {
-            margin-top: 20px;
-        }
-
-        .links a {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            opacity: 0.8;
-        }
-
-        .links a:hover {
-            opacity: 1;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
         }
 
         .loading-screen {
             position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, #FFC0CB, #FF69B4, #8A2BE2);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: 0.5s;
+            transition: opacity 0.3s, visibility 0.3s;
         }
 
         .loading-screen.active {
@@ -157,164 +347,352 @@
             visibility: visible;
         }
 
-        .loading-animation {
-            text-align: center;
-            color: white;
-        }
-
         .loading-icons {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
 
         .loading-icon {
-            display: inline-block;
-            margin: 0 0.5rem;
-            opacity: 0.2;
-            transition: opacity 0.3s ease;
+            width: 60px;
+            height: 60px;
+            color: white;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s ease;
         }
 
         .loading-icon.active {
             opacity: 1;
+            transform: scale(1);
         }
 
-        .all-rights-reserved {
-            position: fixed;
-            bottom: 10px;
-            left: 0;
-            right: 0;
-            text-align: center;
+        .loading-message {
             color: white;
-            font-size: 14px;
-            opacity: 0.7;
+            font-size: 1.2rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .loading-message.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .graphic-content {
+            color: white;
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 0.5s;
+        }
+
+        .graphic-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .graphic-content p {
+            font-size: 1.1rem;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .success-message {
+            color: var(--success-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 1rem;
+            .login-container {
+                flex-direction: column;
+                height: auto;
             }
 
-            .container {
-                padding: 30px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5rem;
+            .login-form, .graphic-side {
+                width: 100%;
             }
 
-            input, button {
-                font-size: 14px;
+            .graphic-side {
+                min-height: 300px;
+            }
+
+            .login-form {
+                padding: 2rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Magnify!</h1>
-        <form id="loginForm">
-            <div class="input-group">
-                <input type="text" id="email" placeholder="Google Email" required>
-                <i class="fas fa-user"></i>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <i data-feather="moon"></i>
+    </button>
+    <div class="login-container">
+        <div class="login-form">
+            <div>
+                <div class="logo-container">
+                    <img src="logo.png" alt="Magnify logo" class="logo">
+                    <div class="brand-name">Magnify!</div>
+                </div>
+                <div class="welcome-text">
+                    <h1>Hello, <span>welcome!</span></h1>
+                    <p>Please sign in to your account to continue</p>
+                </div>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder="Email address" required>
+                        <i data-feather="mail"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Password" required minlength="8">
+                        <i data-feather="lock"></i>
+                    </div>
+                    <div class="remember-forgot">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    <div class="buttons">
+                        <button type="submit" class="btn btn-login">Login</button>
+                        <button type="button" class="btn btn-signup">Sign up</button>
+                    </div>
+                    <div id="errorMessage" class="error-message"></div>
+                    <div id="successMessage" class="success-message"></div>
+                </form>
             </div>
-            <div class="input-group">
-                <input type="password" id="password" placeholder="Password" required>
-                <i class="fas fa-lock"></i>
+            <div class="social-login">
+                <p>Or login with</p>
+                <div class="social-icons">
+                    <a href="#" aria-label="Login with Facebook">
+                        <i data-feather="facebook"></i>
+                    </a>
+                    <a href="#" aria-label="Login with Twitter">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" aria-label="Login with Google">
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="#" aria-label="Login with LinkedIn">
+                        <i data-feather="linkedin"></i>
+                    </a>
+                    <a href="#" aria-label="Login with Instagram">
+                        <i data-feather="instagram"></i>
+                    </a>
+                </div>
             </div>
-            <button type="submit">Next</button>
-        </form>
-        <div class="links">
-            <a href="#">No account? Create one!</a>
-            <br>
-            <a href="#">Can't access your account?</a>
+        </div>
+        <div class="graphic-side">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="graphic-content">
+                <h2>Finance. Redefined.</h2>
+                <p>Let Magnify offer you the best experience!</p>
+            </div>
         </div>
     </div>
-
     <div class="loading-screen" id="loadingScreen">
-        <div class="loading-animation">
-            <div class="loading-icons">
-                <i class="loading-icon fas fa-money-bill-wave"></i>
-                <i class="loading-icon fas fa-chart-line"></i>
-                <i class="loading-icon fas fa-piggy-bank"></i>
-                <i class="loading-icon fas fa-coins"></i>
-            </div>
-            <p id="loadingText">Processing your request...</p>
+        <div class="loading-icons">
+            <i data-feather="dollar-sign" class="loading-icon"></i>
+            <i data-feather="bar-chart-2" class="loading-icon"></i>
+            <i data-feather="trending-up" class="loading-icon"></i>
         </div>
-    </div>
-
-    <div class="all-rights-reserved">
-        © 2024 Magnify! | All rights reserved.
+        <div class="loading-message" id="loadingMessage"></div>
     </div>
 
     <script>
-        // Professional entrance animation
-        function animateEntrance() {
-            const container = document.querySelector('.container');
-            
+        // Initialize Feather icons
+        feather.replace();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginContainer = document.querySelector('.login-container');
+            const logoContainer = document.querySelector('.logo-container');
+            const welcomeText = document.querySelector('.welcome-text');
+            const inputGroups = document.querySelectorAll('.input-group');
+            const rememberForgot = document.querySelector('.remember-forgot');
+            const buttons = document.querySelector('.buttons');
+            const socialLogin = document.querySelector('.social-login');
+            const graphicContent = document.querySelector('.graphic-content');
+
+            loginContainer.style.opacity = '1';
+            loginContainer.style.transform = 'translateY(0)';
+
             setTimeout(() => {
-                container.classList.add('slide-in');
-            }, 100);
-        }
+                logoContainer.style.opacity = '1';
+                logoContainer.style.transform = 'translateY(0)';
+            }, 200);
 
-        // Trigger entrance animation on page load
-        window.addEventListener('load', animateEntrance);
+            setTimeout(() => {
+                welcomeText.style.opacity = '1';
+                welcomeText.style.transform = 'translateY(0)';
+            }, 400);
 
-        // Login form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const loadingScreen = document.getElementById('loadingScreen');
-            const loadingText = document.getElementById('loadingText');
-            const loadingIcons = document.querySelectorAll('.loading-icon');
-            loadingScreen.classList.add('active');
+            inputGroups.forEach((group, index) => {
+                setTimeout(() => {
+                    group.style.opacity = '1';
+                    group.style.transform = 'translateY(0)';
+                }, 600 + (index * 200));
+            });
 
-            const loadingMessages = [
-                'Verifying credentials...',
-                'Checking account status...',
-                'Preparing your dashboard...',
-                'Almost there...'
-            ];
-
-            let messageIndex = 0;
-            let iconIndex = 0;
-
-            const messageInterval = setInterval(() => {
-                loadingText.textContent = loadingMessages[messageIndex];
-                messageIndex = (messageIndex + 1) % loadingMessages.length;
+            setTimeout(() => {
+                rememberForgot.style.opacity = '1';
+                rememberForgot.style.transform = 'translateY(0)';
             }, 1000);
 
-            const iconInterval = setInterval(() => {
-                loadingIcons.forEach(icon => icon.classList.remove('active'));
-                loadingIcons[iconIndex].classList.add('active');
-                iconIndex = (iconIndex + 1) % loadingIcons.length;
-            }, 500);
-
-            // Simulate login process
             setTimeout(() => {
-                clearInterval(messageInterval);
-                clearInterval(iconInterval);
-                loadingScreen.classList.remove('active');
-                // Redirect to Entrep.html
-                window.location.href = 'Entrep.html';
-            }, 4000);
+                buttons.style.opacity = '1';
+                buttons.style.transform = 'translateY(0)';
+            }, 1200);
+
+            setTimeout(() => {
+                socialLogin.style.opacity = '1';
+                socialLogin.style.transform = 'translateY(0)';
+            }, 1400);
+
+            setTimeout(() => {
+                graphicContent.style.opacity = '1';
+                graphicContent.style.transform = 'translateY(0)';
+            }, 1600);
         });
 
-        // Add hover effect to input groups
-        document.querySelectorAll('.input-group').forEach(group => {
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const moonIcon = feather.icons['moon'].toSvg();
+        const sunIcon = feather.icons['sun'].toSvg();
+
+        themeToggle.innerHTML = moonIcon;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            themeToggle.innerHTML = body.classList.contains('dark-mode') ? sunIcon : moonIcon;
+        });
+
+        const loginForm = document.getElementById('loginForm');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const loadingIcons = document.querySelectorAll('.loading-icon');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Validate email (must be Gmail)
+            if (!email.endsWith('@gmail.com')) {
+                errorMessage.textContent = 'Please use a Gmail address.';
+                return;
+            }
+
+            // Validate password length
+            if (password.length < 8) {
+                errorMessage.textContent = 'Password must be at least 8 characters long.';
+                return;
+            }
+
+            errorMessage.textContent = '';
+            loadingScreen.classList.add('active');
+            
+            // Simulating login process with improved animation
+            const messages = [
+                "Checking your credentials...",
+                "Preparing your Dashboard...",
+                "Analyzing market trends...",
+                "Calculating financial projections...",
+                "Magnify! authenticated"
+            ];
+
+            messages.forEach((message, index) => {
+                setTimeout(() => {
+                    loadingMessage.textContent = message;
+                    loadingMessage.classList.add('active');
+                    
+                    loadingIcons.forEach((icon, iconIndex) => {
+                        setTimeout(() => {
+                            icon.classList.add('active');
+                        }, iconIndex * 200);
+                    });
+
+                    if (index === messages.length - 1) {
+                        setTimeout(() => {
+                            loadingScreen.classList.remove('active');
+                            successMessage.textContent = 'Login successful! Redirecting...';
+                            // Simulating redirect
+                            setTimeout(() => {
+                                window.location.href = 'Entrep.html';
+                            }, 2000);
+                        }, 1000);
+                    }
+                }, index * 1500);
+            });
+        });
+
+        // Add interactivity to input fields
+        const inputGroups = document.querySelectorAll('.input-group');
+        inputGroups.forEach(group => {
             const input = group.querySelector('input');
             const icon = group.querySelector('i');
 
             input.addEventListener('focus', () => {
-                icon.style.color = 'white';
-                group.style.transform = 'scale(1.02)';
+                icon.style.color = 'var(--primary-color)';
+                group.style.boxShadow = '0 0 0 2px var(--primary-color)';
             });
 
             input.addEventListener('blur', () => {
-                icon.style.color = 'rgba(255, 255, 255, 0.7)';
-                group.style.transform = 'scale(1)';
+                icon.style.color = 'var(--text-color)';
+                group.style.boxShadow = 'none';
+            });
+        });
+
+        // Add hover effect to buttons
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.transform = 'translateY(-2px)';
+                button.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            });
+
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'translateY(0)';
+                button.style.boxShadow = 'none';
+            });
+        });
+
+        // Add hover effect to social icons
+        const socialIcons = document.querySelectorAll('.social-icons a');
+        socialIcons.forEach(icon => {
+            icon.addEventListener('mouseenter', () => {
+                icon.style.transform = 'translateY(-2px) scale(1.1)';
+                icon.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            });
+
+            icon.addEventListener('mouseleave', () => {
+                icon.style.transform = 'translateY(0) scale(1)';
+                icon.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
             });
         });
     </script>
 </body>
 </html>
-
