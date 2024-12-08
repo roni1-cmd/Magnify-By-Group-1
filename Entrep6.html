@@ -3,22 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify! Dashboard</title>
-    <link rel="icon" href="logo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Magnify Login Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #8B5CF6, #EC4899);
-            --secondary-gradient: linear-gradient(135deg, #EC4899, #8B5CF6);
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --background: #F3F4F6;
-            --card-background: #FFFFFF;
-            --sidebar-width: 240px;
-            --sidebar-width-collapsed: 60px;
-            --header-height: 80px;
+            --bg-color: #f3e8ff;
+            --text-color: #1a1a1a;
+            --primary-color: #8b5cf6;
+            --secondary-color: #d946ef;
+            --tertiary-color: #ec4899;
+            --input-bg: white;
+            --input-border: #e5e7eb;
+            --error-color: #ef4444;
+            --success-color: #10b981;
+        }
+
+        .dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #f3e8ff;
+            --primary-color: #a78bfa;
+            --secondary-color: #e879f9;
+            --tertiary-color: #f472b6;
+            --input-bg: #2d2d2d;
+            --input-border: #4a4a4a;
         }
 
         * {
@@ -29,1289 +37,661 @@
         }
 
         body {
-            background: var(--background);
-            color: var(--text-primary);
-            display: flex;
             min-height: 100vh;
-        }
-
-        .sidebar {
-            width: var(--sidebar-width);
-            background: var(--primary-gradient);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            height: 100vh;
-            transition: all 0.3s ease-in-out;
-            z-index: 1000;
-        }
-
-        .sidebar.collapsed {
-            width: var(--sidebar-width-collapsed);
-        }
-
-        .sidebar-hidden .sidebar {
-            transform: translateX(-100%);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem;
-            margin-bottom: 2rem;
-            color: white;
-        }
-
-        .logo img {
-            width: 32px;
-            height: 32px;
-        }
-
-        .logo span {
-            font-size: 1.5rem;
-            font-weight: 700;
-            white-space: nowrap;
-            opacity: 1;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .sidebar.collapsed .logo span {
-            opacity: 0;
-            width: 0;
-            overflow: hidden;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            border-radius: 0.5rem;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .nav-item:hover,
-        .nav-item.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .nav-item i {
-            font-size: 1.25rem;
-            min-width: 1.25rem;
-        }
-
-        .sidebar.collapsed .nav-item span {
-            opacity: 0;
-            width: 0;
-            overflow: hidden;
-        }
-
-        .main-content {
-            flex: 1;
-            margin-left: var(--sidebar-width);
-            padding: 2rem;
-            padding-top: calc(var(--header-height) + 2rem);
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-        .sidebar-hidden .main-content {
-            margin-left: 0;
-        }
-
-        .sidebar.collapsed + .main-content {
-            margin-left: var(--sidebar-width-collapsed);
-        }
-
-        .header {
-            position: fixed;
-            top: 0;
-            left: var(--sidebar-width);
-            right: 0;
-            height: var(--header-height);
-            background: var(--primary-gradient);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: left 0.3s ease-in-out;
-            z-index: 100;
-        }
-
-        .sidebar-hidden .header {
-            left: 0;
-        }
-
-        .sidebar.collapsed + .main-content .header {
-            left: var(--sidebar-width-collapsed);
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: var(--background);
-            border-radius: 2rem;
-            padding: 0.5rem 1rem;
-            width: 300px;
-        }
-
-        .search-bar input {
-            border: none;
-            background: none;
-            outline: none;
-            padding: 0.5rem;
-            width: 100%;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .container {
-            background: var(--card-background);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            width: 95%;
-            max-width: 1400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .metric-card {
-            background: var(--secondary-gradient);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            color: white;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .metric-card .title {
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.8;
-        }
-
-        .metric-card .value {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-card .change {
-            font-size: 0.875rem;
-        }
-
-        .metric-card .change.negative {
-            color: #FFD700;
-        }
-
-        .analytics-section {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .analytics-card {
-            background: var(--card-background);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .analytics-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .analytics-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .chart-type-selector {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .chart-type-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            transition: color 0.3s ease;
-        }
-
-        .chart-type-btn:hover,
-        .chart-type-btn.active {
-            color: var(--text-primary);
-        }
-
-        .chart-container {
-            height: 300px;
-            width: 100%;
-        }
-
-        .transaction-list {
-            margin-top: 2rem;
-        }
-
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid #E8E8E8;
-            transition: background-color 0.3s ease;
-        }
-
-        .transaction-item:last-child {
-            border-bottom: none;
-        }
-
-        .transaction-item:hover {
-            background-color: #F7F7F7;
-        }
-
-        .transaction-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .transaction-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            background: var(--input-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .login-form {
+            width: 50%;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .graphic-side {
+            width: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            right: -50px;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: 50px;
+            left: -50px;
+            animation-delay: -3s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .welcome-text {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 0.2s;
+        }
+
+        .welcome-text h1 {
+            font-size: 2.5rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-text h1 span {
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        .welcome-text p {
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .input-group:nth-child(1) { transition-delay: 0.4s; }
+        .input-group:nth-child(2) { transition-delay: 0.6s; }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .input-group input:focus + i {
+            color: var(--primary-color);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 0.8s;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 0.5rem;
+        }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--secondary-color);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 1s;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-login {
+            background: var(--primary-color);
             color: white;
+            flex: 1;
         }
 
-        .transaction-details h4 {
-            margin-bottom: 0.25rem;
+        .btn-login:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .transaction-details p {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
+        .btn-signup {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            flex: 1;
         }
 
-        .transaction-amount {
-            font-weight: 600;
+        .btn-signup:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .transaction-amount.positive {
-            color: #10B981;
+        .social-login {
+            text-align: center;
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 1.2s;
         }
 
-        .transaction-amount.negative {
-            color: #EF4444;
+        .social-login p {
+            color: var(--text-color);
+            margin-bottom: 1rem;
         }
 
-        .modal {
-            display: none;
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icons a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--input-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .social-icons a:hover {
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            align-items: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            display: flex;
+            flex-direction: column;
             justify-content: center;
-            z-index: 1001;
-        }
-
-        .modal-content {
-            background: var(--card-background);
-            border-radius: 1rem;
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-            animation: modalFadeIn 0.3s ease-out;
-        }
-
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
         }
 
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 600;
+        .loading-screen.active {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #E8E8E8;
-            border-radius: 0.5rem;
-            outline: none;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #8B5CF6;
-        }
-
-        .btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        .btn-outline {
-            background: none;
-            border: 1px solid #8B5CF6;
-            color: #8B5CF6;
-        }
-
-        .btn-outline:hover {
-            background: var(--primary-gradient);
-            color: white;
-        }
-
-        .sidebar-toggle {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1002;
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.25rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .quick-actions {
+        .loading-icons {
             display: flex;
-            justify-content: space-between;
+            gap: 2rem;
             margin-bottom: 2rem;
         }
 
-        .quick-action-card {
-            background: var(--card-background);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            flex: 1;
-            margin-right: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .loading-icon {
+            width: 60px;
+            height: 60px;
+            color: white;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s ease;
         }
 
-        .quick-action-card:last-child {
-            margin-right: 0;
+        .loading-icon.active {
+            opacity: 1;
+            transform: scale(1);
         }
 
-        .quick-action-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        .loading-message {
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
         }
 
-        .quick-action-card h3 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
+        .loading-message.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .quick-action-card p {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
+        .graphic-content {
+            color: white;
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 0.5s;
+        }
+
+        .graphic-content h2 {
+            font-size: 2.5rem;
             margin-bottom: 1rem;
         }
 
-        .popup-image {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
+        .graphic-content p {
+            font-size: 1.1rem;
+            max-width: 80%;
+            margin: 0 auto;
         }
 
-        .colored-container {
-            background: transparent;
-            border-radius: 0.5rem;
-            padding: 0.5rem;
-            margin-bottom: 0.5rem;
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
 
-        .colored-container .btn {
-            background: white;
-            color: #8B5CF6;
-        }
-
-        .colored-container .btn:hover{
-            background: #F3F4F6;
-        }
-
-        @media (max-width: 1024px) {
-            .metrics-grid,
-            .analytics-section {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .success-message {
+            color: var(--success-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
+            .login-container {
+                flex-direction: column;
+                height: auto;
             }
 
-            .sidebar-toggle {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding-top: calc(var(--header-height) + 2rem);
-            }
-
-            .header {
-                left: 0;
-            }
-
-            .metrics-grid,
-            .analytics-section {
-                grid-template-columns: 1fr;
-            }
-
-            .search-bar {
+            .login-form, .graphic-side {
                 width: 100%;
-                margin-bottom: 1rem;
             }
 
-            .header-actions {
-                flex-wrap: wrap;
+            .graphic-side {
+                min-height: 300px;
+            }
+
+            .login-form {
+                padding: 2rem;
+            }
+
+            .buttons {
+                flex-direction: column;
             }
 
             .btn {
                 width: 100%;
-                margin-bottom: 0.5rem;
             }
-
-            .quick-actions {
-                flex-direction: column;
-            }
-
-            .quick-action-card {
-                margin-right: 0;
-                margin-bottom: 1rem;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity:0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .slide-in {
-            animation: slideIn 0.5s ease-out;
         }
     </style>
 </head>
 <body>
-    <button class="sidebar-toggle" id="sidebarToggle">
-        <i class="fas fa-bars"></i>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <i data-feather="moon"></i>
     </button>
-
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="logo">
-            <img src="logo.png" alt="Magnify! Logo">
-            <span>Magnify!</span>
-        </div>
-        <nav>
-            <a href="#" class="nav-item active">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="Entrep4.html" class="nav-item">
-                <i class="fas fa-exchange-alt"></i>
-                <span>Magnify Remit-It!</span>
-            </a>
-            <a href="Entrep7.html" class="nav-item">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Calendar</span>
-            </a>
-            <a href="Entrep8.html" class="nav-item">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </a>
-            <a href="Entrep9.html" class="nav-item">
-                <i class="fas fa-dollar-sign"></i>
-                <span>Money Converter</span>
-            </a>
-            <a href="Entrep12.html" class="nav-item">
-                <i class="fas fa-chart-pie"></i>
-                <span>Budget Planner</span>
-            </a>
-            <a href="Entrep11.html" class="nav-item">
-                <i class="fas fa-book"></i>
-                <span>Resources</span>
-            </a>
-            <a href="Entrep17.html" class="nav-item">
-                <i class="fas fa-file-csv"></i>
-                <span>Magnify! Q-CSV</span>
-            </a>
-        </nav>
-    </aside>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search transactions...">
-        </div>
-        <div class="header-actions">
-            <div class="colored-container">
-                <button class="btn" onclick="openModal('addTransactionModal')">
-                    <i class="fas fa-plus"></i> Add Transaction
-                </button>
-            </div>
-            <div class="colored-container">
-                <button class="btn" onclick="openModal('mortgageCalculatorModal')">
-                    <i class="fas fa-calculator"></i> Mortgage Calculator
-                </button>
-            </div>
-            <div class="colored-container">
-                <button class="btn" onclick="openModal('taxCalculatorModal')">
-                    <i class="fas fa-calculator"></i> Tax Calculator
-                </button>
-            </div>
-            <div class="colored-container">
-                <button class="btn" onclick="resetData()">
-                    <i class="fas fa-trash"></i> Reset Data
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Quick Actions -->
-        <div class="quick-actions slide-in">
-            <div class="quick-action-card">
-                <h3>Set Budget Goal</h3>
-                <p>Define your monthly savings target for more organized tracking.</p>
-                <button class="btn" onclick="openModal('setBudgetGoalModal')">Set Goal</button>
-            </div>
-            <div class="quick-action-card">
-                <h3>Financial Health</h3>
-                <p>Get a quick overview of your finances and know your status.</p>
-                <button class="btn" onclick="checkFinancialHealth()">Check Now</button>
-            </div>
-            <div class="quick-action-card">
-                <h3>Savings Challenge</h3>
-                <p>Assess yourself through the help of savings challenge</p>
-                <button class="btn" onclick="window.location.href='Entrep18.html'">Join Now</button>
-            </div>
-            <div class="quick-action-card">
-                <h3>Magnify!</h3>
-                <p>Explore advanced features (only if you know what this means).</p>
-                <button class="btn" onclick="window.location.href='Entrep20.html'">Magnify!</button>
-            </div>
-        </div>
-
-        <!-- Metrics Grid -->
-        <div class="container fade-in">
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="title">Total Balance</div>
-                    <div class="value" id="totalBalance">₱0.00</div>
-                    <div class="change" id="balanceChange">0% change</div>
+    <div class="login-container">
+        <div class="login-form">
+            <div>
+                <div class="logo-container">
+                    <img src="/placeholder.svg?height=40&width=40" alt="Magnify logo" class="logo">
+                    <div class="brand-name">Magnify</div>
                 </div>
-                <div class="metric-card">
-                    <div class="title">Monthly Income</div>
-                    <div class="value" id="monthlyIncome">₱0.00</div>
-                    <div class="change" id="incomeChange">0% change</div>
+                <div class="welcome-text">
+                    <h1>Hello, <span>welcome!</span></h1>
+                    <p>Please sign in to your account to continue</p>
                 </div>
-                <div class="metric-card">
-                    <div class="title">Monthly Expenses</div>
-                    <div class="value" id="monthlyExpenses">₱0.00</div>
-                    <div class="change" id="expensesChange">0% change</div>
-                </div>
-                <div class="metric-card">
-                    <div class="title">Savings Rate</div>
-                    <div class="value" id="savingsRate">0%</div>
-                    <div class="change" id="savingsChange">0% change</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics Section -->
-        <div class="container fade-in">
-            <div class="analytics-section" id="analyticsSection">
-                <div class="analytics-card">
-                    <div class="analytics-header">
-                        <h3 class="analytics-title">Transaction Category</h3>
-                        <div class="chart-type-selector">
-                            <button class="chart-type-btn active" data-type="bar" data-chart="categoryChart"><i class="fas fa-chart-bar"></i></button>
-                            <button class="chart-type-btn" data-type="line" data-chart="categoryChart"><i class="fas fa-chart-line"></i></button>
-                            <button class="chart-type-btn" data-type="pie" data-chart="categoryChart"><i class="fas fa-chart-pie"></i></button>
-                        </div>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder="Email address" required>
+                        <i data-feather="mail"></i>
                     </div>
-                    <div class="chart-container">
-                        <canvas id="categoryChart"></canvas>
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Password" required minlength="8">
+                        <i data-feather="lock"></i>
                     </div>
-                </div>
-                <div class="analytics-card">
-                    <div class="analytics-header">
-                        <h3 class="analytics-title">Expense Categories</h3>
-                        <div class="chart-type-selector">
-                            <button class="chart-type-btn active" data-type="pie" data-chart="expenseCategoriesChart"><i class="fas fa-chart-pie"></i></button>
-                            <button class="chart-type-btn" data-type="bar" data-chart="expenseCategoriesChart"><i class="fas fa-chart-bar"></i></button>
-                            <button class="chart-type-btn" data-type="line" data-chart="expenseCategoriesChart"><i class="fas fa-chart-line"></i></button>
-                        </div>
+                    <div class="remember-forgot">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
                     </div>
-                    <div class="chart-container">
-                        <canvas id="expenseCategoriesChart"></canvas>
+                    <div class="buttons">
+                        <button type="submit" class="btn btn-login">Login</button>
+                        <button type="button" class="btn btn-signup">Sign up</button>
                     </div>
+                    <div id="errorMessage" class="error-message"></div>
+                    <div id="successMessage" class="success-message"></div>
+                </form>
+            </div>
+            <div class="social-login">
+                <p>Or login with</p>
+                <div class="social-icons">
+                    <a href="#" aria-label="Login with Facebook">
+                        <i data-feather="facebook"></i>
+                    </a>
+                    <a href="#" aria-label="Login with Twitter">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" aria-label="Login with Google">
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="#" aria-label="Login with LinkedIn">
+                        <i data-feather="linkedin"></i>
+                    </a>
+                    <a href="#" aria-label="Login with Instagram">
+                        <i data-feather="instagram"></i>
+                    </a>
                 </div>
             </div>
         </div>
-
-        <!-- Transaction List -->
-        <div class="container fade-in">
-            <div class="transaction-list">
-                <h3>Recent Transactions</h3>
-                <div id="transactionsList"></div>
+        <div class="graphic-side">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="graphic-content">
+                <h2>Financial Freedom Awaits</h2>
+                <p>Join Magnify and take control of your financial future today!</p>
             </div>
-        </div>
-    </main>
-
-    <!-- Add Transaction Modal -->
-    <div id="addTransactionModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Add Transaction</h3>
-                <button class="close-modal" onclick="closeModal('addTransactionModal')">&times;</button>
-            </div>
-            <form id="transactionForm">
-                <div class="form-group">
-                    <label for="transactionType">Type</label>
-                    <select id="transactionType" required onchange="updateDescriptionOptions()">
-                        <option value="income">Income</option>
-                        <option value="expense">Expense</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="transactionAmount">Amount (₱)</label>
-                    <input type="number" id="transactionAmount" required>
-                </div>
-                <div class="form-group">
-                    <label for="transactionDescription">Description</label>
-                    <select id="transactionDescription" required>
-                        <!-- Options will be dynamically populated -->
-                    </select>
-                </div>
-                <button type="submit" class="btn">Add Transaction</button>
-            </form>
         </div>
     </div>
-
-    <!-- Mortgage Calculator Modal -->
-    <div id="mortgageCalculatorModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Mortgage Calculator</h3>
-                <button class="close-modal" onclick="closeModal('mortgageCalculatorModal')">&times;</button>
-            </div>
-            <div class="form-group">
-                <label for="loanAmount">Loan Amount (₱)</label>
-                <input type="number" id="loanAmount" placeholder="Enter loan amount">
-            </div>
-            <div class="form-group">
-                <label for="interestRate">Interest Rate (%)</label>
-                <input type="number" id="interestRate" placeholder="Enter interest rate">
-            </div>
-            <div class="form-group">
-                <label for="loanTerm">Loan Term (years)</label>
-                <input type="number" id="loanTerm" placeholder="Enter loan term">
-            </div>
-            <button class="btn" onclick="calculateMortgage()">Calculate</button>
-            <p id="mortgageResult"></p>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-icons">
+            <i data-feather="dollar-sign" class="loading-icon"></i>
+            <i data-feather="bar-chart-2" class="loading-icon"></i>
+            <i data-feather="trending-up" class="loading-icon"></i>
         </div>
-    </div>
-
-    <!-- Tax Calculator Modal -->
-    <div id="taxCalculatorModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Tax Calculator</h3>
-                <button class="close-modal" onclick="closeModal('taxCalculatorModal')">&times;</button>
-            </div>
-            <div class="form-group">
-                <label for="income">Annual Income (₱)</label>
-                <input type="number" id="income" placeholder="Enter annual income">
-            </div>
-            <div class="form-group">
-                <label for="taxRate">Tax Rate (%)</label>
-                <input type="number" id="taxRate" placeholder="Enter tax rate">
-            </div>
-            <button class="btn" onclick="calculateTax()">Calculate</button>
-            <p id="taxResult"></p>
-        </div>
-    </div>
-
-    <!-- Set Budget Goal Modal -->
-    <div id="setBudgetGoalModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Set Budget Goal</h3>
-                <button class="close-modal" onclick="closeModal('setBudgetGoalModal')">&times;</button>
-            </div>
-            <div class="form-group">
-                <label for="budgetGoal">Monthly Savings Goal (₱)</label>
-                <input type="number" id="budgetGoal" placeholder="Enter your monthly savings goal">
-            </div>
-            <button class="btn" onclick="setBudgetGoal()">Set Goal</button>
-            <p id="budgetGoalResult"></p>
-        </div>
-    </div>
-
-    <!-- Financial Health Check Modal -->
-    <div id="financialHealthModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Financial Health Check</h3>
-                <button class="close-modal" onclick="closeModal('financialHealthModal')">&times;</button>
-            </div>
-            <img src="logo2.png" alt="Financial Health" class="popup-image">
-            <p id="financialHealthResult"></p>
-        </div>
-    </div>
-
-    <!-- Investment Tips Modal -->
-    <div id="investmentTipsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Investment Tips</h3>
-                <button class="close-modal" onclick="closeModal('investmentTipsModal')">&times;</button>
-            </div>
-            <img src="logo2.png" alt="Investment Tips" class="popup-image">
-            <p id="investmentTip"></p>
-        </div>
-    </div>
-
-    <!-- Transaction Details Modal -->
-    <div id="transactionDetailsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Transaction Details</h3>
-                <button class="close-modal" onclick="closeModal('transactionDetailsModal')">&times;</button>
-            </div>
-            <div id="transactionDetailsContent"></div>
-        </div>
+        <div class="loading-message" id="loadingMessage"></div>
     </div>
 
     <script>
-        // Sample transactions data
-        let transactions = [];
-        let budgetGoal = 0;
+        // Initialize Feather icons
+        feather.replace();
 
-        // Function to update transactions list
-        function updateTransactionsList() {
-            const transactionsList = document.getElementById('transactionsList');
-            transactionsList.innerHTML = '';
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginContainer = document.querySelector('.login-container');
+            const logoContainer = document.querySelector('.logo-container');
+            const welcomeText = document.querySelector('.welcome-text');
+            const inputGroups = document.querySelectorAll('.input-group');
+            const rememberForgot = document.querySelector('.remember-forgot');
+            const buttons = document.querySelector('.buttons');
+            const socialLogin = document.querySelector('.social-login');
+            const graphicContent = document.querySelector('.graphic-content');
 
-            if (transactions.length === 0) {
-                transactionsList.innerHTML = '<p>No transactions yet. Add a transaction to get started!</p>';
-            } else {
-                transactions.forEach((transaction, index) => {
-                    const transactionEl = document.createElement('div');
-                    transactionEl.className= 'transaction-item';
-                    transactionEl.innerHTML = `
-                        <div class="transaction-info">
-                            <div class="transaction-icon">
-                                <i class="fas fa-${transaction.type === 'income' ? 'arrow-down' : 'arrow-up'}"></i>
-                            </div>
-                            <div class="transaction-details">
-                                <h4>${transaction.description}</h4>
-                                <p>${transaction.date}</p>
-                            </div>
-                        </div>
-                        <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
-                            ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}
-                        </div>
-                    `;
-                    transactionEl.addEventListener('click', () => showTransactionDetails(transaction));
-                    transactionsList.appendChild(transactionEl);
-                });
-            }
+            loginContainer.style.opacity = '1';
+            loginContainer.style.transform = 'translateY(0)';
 
-            // Show analytics section if there are transactions
-            document.getElementById('analyticsSection').style.display = transactions.length > 0 ? 'grid' : 'none';
+            setTimeout(() => {
+                logoContainer.style.opacity = '1';
+                logoContainer.style.transform = 'translateY(0)';
+            }, 200);
 
-            // Update metrics and charts if there are transactions
-            if (transactions.length > 0) {
-                updateMetrics();
-                updateCharts();
-            } else {
-                resetMetrics();
-                resetCharts();
-            }
-        }
+            setTimeout(() => {
+                welcomeText.style.opacity = '1';
+                welcomeText.style.transform = 'translateY(0)';
+            }, 400);
 
-        // Function to update metrics
-        function updateMetrics() {
-            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            const balance = totalIncome - totalExpenses;
-            const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpenses) / totalIncome) * 100 : 0;
-
-            document.getElementById('totalBalance').textContent = `₱${balance.toFixed(2)}`;
-            document.getElementById('monthlyIncome').textContent = `₱${totalIncome.toFixed(2)}`;
-            document.getElementById('monthlyExpenses').textContent = `₱${totalExpenses.toFixed(2)}`;
-            document.getElementById('savingsRate').textContent = `${savingsRate.toFixed(2)}%`;
-
-            // Calculate changes (assuming last month's data is available)
-            const lastMonthBalance = 10000; // Example value
-            const lastMonthIncome = 15000; // Example value
-            const lastMonthExpenses = 8000; // Example value
-            const lastMonthSavingsRate = 46.67; // Example value
-
-            const balanceChange = ((balance - lastMonthBalance) / lastMonthBalance) * 100;
-            const incomeChange = ((totalIncome - lastMonthIncome) / lastMonthIncome) * 100;
-            const expensesChange = ((totalExpenses - lastMonthExpenses) / lastMonthExpenses) * 100;
-            const savingsRateChange = savingsRate - lastMonthSavingsRate;
-
-            document.getElementById('balanceChange').textContent = `${balanceChange.toFixed(2)}% from last month`;
-            document.getElementById('incomeChange').textContent = `${incomeChange.toFixed(2)}% from last month`;
-            document.getElementById('expensesChange').textContent = `${expensesChange.toFixed(2)}% from last month`;
-            document.getElementById('savingsChange').textContent = `${savingsRateChange.toFixed(2)}% from last month`;
-
-            // Update classes for positive/negative changes
-            document.getElementById('balanceChange').className = `change ${balanceChange >= 0 ? 'positive' : 'negative'}`;
-            document.getElementById('incomeChange').className = `change ${incomeChange >= 0 ? 'positive' : 'negative'}`;
-            document.getElementById('expensesChange').className = `change ${expensesChange <= 0 ? 'positive' : 'negative'}`;
-            document.getElementById('savingsChange').className = `change ${savingsRateChange >= 0 ? 'positive' : 'negative'}`;
-        }
-
-        // Function to reset metrics
-        function resetMetrics() {
-            document.getElementById('totalBalance').textContent = '₱0.00';
-            document.getElementById('monthlyIncome').textContent = '₱0.00';
-            document.getElementById('monthlyExpenses').textContent = '₱0.00';
-            document.getElementById('savingsRate').textContent = '0%';
-            document.getElementById('balanceChange').textContent = '0% change';
-            document.getElementById('incomeChange').textContent = '0% change';
-            document.getElementById('expensesChange').textContent = '0% change';
-            document.getElementById('savingsChange').textContent = '0% change';
-        }
-
-        // Modal functions
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        // Form submission
-        document.getElementById('transactionForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const type = document.getElementById('transactionType').value;
-            const amount = parseFloat(document.getElementById('transactionAmount').value);
-            const description = document.getElementById('transactionDescription').value;
-            
-            transactions.unshift({
-                type,
-                amount,
-                description,
-                date: new Date().toISOString().split('T')[0]
+            inputGroups.forEach((group, index) => {
+                setTimeout(() => {
+                    group.style.opacity = '1';
+                    group.style.transform = 'translateY(0)';
+                }, 600 + (index * 200));
             });
-            
-            updateTransactionsList();
-            closeModal('addTransactionModal');
-            this.reset();
+
+            setTimeout(() => {
+                rememberForgot.style.opacity = '1';
+                rememberForgot.style.transform = 'translateY(0)';
+            }, 1000);
+
+            setTimeout(() => {
+                buttons.style.opacity = '1';
+                buttons.style.transform = 'translateY(0)';
+            }, 1200);
+
+            setTimeout(() => {
+                socialLogin.style.opacity = '1';
+                socialLogin.style.transform = 'translateY(0)';
+            }, 1400);
+
+            setTimeout(() => {
+                graphicContent.style.opacity = '1';
+                graphicContent.style.transform = 'translateY(0)';
+            }, 1600);
         });
 
-        // Initialize transactions list
-        updateTransactionsList();
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const filteredTransactions = transactions.filter(transaction => 
-                transaction.description.toLowerCase().includes(searchTerm) ||
-                transaction.amount.toString().includes(searchTerm) ||
-                transaction.date.includes(searchTerm)
-            );
-            
-            const transactionsList = document.getElementById('transactionsList');
-            transactionsList.innerHTML = '';
-
-            if (filteredTransactions.length === 0) {
-                transactionsList.innerHTML = '<p>No matching transactions found.</p>';
-            } else {
-                filteredTransactions.forEach(transaction => {
-                    const transactionEl = document.createElement('div');
-                    transactionEl.className = 'transaction-item';
-                    transactionEl.innerHTML = `
-                        <div class="transaction-info">
-                            <div class="transaction-icon">
-                                <i class="fas fa-${transaction.type === 'income' ? 'arrow-down' : 'arrow-up'}"></i>
-                            </div>
-                            <div class="transaction-details">
-                                <h4>${transaction.description}</h4>
-                                <p>${transaction.date}</p>
-                            </div>
-                        </div>
-                        <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
-                            ${transaction.type === 'income' ? '+' : '-'}₱${transaction.amount.toFixed(2)}
-                        </div>
-                    `;
-                    transactionEl.addEventListener('click', () => showTransactionDetails(transaction));
-                    transactionsList.appendChild(transactionEl);
-                });
-            }
-        });
-
-        // Mortgage Calculator
-        function calculateMortgage() {
-            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
-            const interestRate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
-            const loanTerm = parseFloat(document.getElementById('loanTerm').value) * 12;
-
-            const x = Math.pow(1 + interestRate, loanTerm);
-            const monthlyPayment = (loanAmount * x * interestRate) / (x - 1);
-
-            document.getElementById('mortgageResult').textContent = `Monthly Payment: ₱${monthlyPayment.toFixed(2)}`;
-        }
-
-        // Tax Calculator
-        function calculateTax() {
-            const income = parseFloat(document.getElementById('income').value);
-            const taxRate = parseFloat(document.getElementById('taxRate').value) / 100;
-            const tax = income * taxRate;
-
-            document.getElementById('taxResult').textContent = `Estimated Annual Tax: ₱${tax.toFixed(2)}`;
-        }
-
-        // Update description options based on transaction type
-        function updateDescriptionOptions() {
-            const transactionType = document.getElementById('transactionType').value;
-            const descriptionSelect = document.getElementById('transactionDescription');
-            descriptionSelect.innerHTML = '';
-
-            const options = transactionType === 'income' 
-                ? ['Salary', 'Freelance', 'Investments', 'Rental Income', 'Other Income']
-                : ['Rent', 'Groceries', 'Utilities', 'Entertainment', 'Transportation', 'Other Expense'];
-
-            options.forEach(option => {
-                const optionEl = document.createElement('option');
-                optionEl.value = option;
-                optionEl.textContent = option;
-                descriptionSelect.appendChild(optionEl);
-            });
-        }
-
-        // Initialize description options
-        updateDescriptionOptions();
-
-        // Function to create or update chart
-        function createOrUpdateChart(chartId, type, labels, data) {
-            const ctx = document.getElementById(chartId).getContext('2d');
-            let chart = Chart.getChart(chartId);
-
-            if (chart) {
-                chart.destroy();
-            }
-
-            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(139, 92, 246, 0.8)');
-            gradient.addColorStop(1, 'rgba(236, 72, 153, 0.8)');
-
-            new Chart(ctx, {
-                type: type,
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: chartId.replace('Chart', ''),
-                        data: data,
-                        backgroundColor: type === 'pie' ? [
-                            'rgba(139, 92, 246, 0.8)',
-                            'rgba(236, 72, 153, 0.8)',
-                            'rgba(248, 113, 113, 0.8)',
-                            'rgba(52, 211, 153, 0.8)',
-                            'rgba(59, 130, 246, 0.8)',
-                            'rgba(251, 191, 36, 0.8)'
-                        ] : gradient,
-                        borderColor: 'rgba(139, 92, 246, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
-
-        // Function to update charts
-        function updateCharts() {
-            const selectedCategory = document.getElementById('transactionDescription').value;
-            const categoryData = transactions
-                .filter(t => t.description === selectedCategory)
-                .map(t => ({ amount: t.amount, date: t.date }));
-
-            const labels = categoryData.map(d => d.date);
-            const data = categoryData.map(d => d.amount);
-
-            createOrUpdateChart('categoryChart', 'bar', labels, data);
-
-            // Update the chart title
-            document.querySelector('#categoryChart').closest('.analytics-card').querySelector('.analytics-title').textContent = `${selectedCategory} Transactions`;
-
-            const expenseCategories = {};
-            transactions.filter(t => t.type === 'expense').forEach(t => {
-                expenseCategories[t.description] = (expenseCategories[t.description] || 0) + t.amount;
-            });
-
-            createOrUpdateChart('expenseCategoriesChart', 'pie', 
-                Object.keys(expenseCategories),
-                Object.values(expenseCategories)
-            );
-        }
-
-        // Function to reset charts
-        function resetCharts() {
-            createOrUpdateChart('categoryChart', 'bar', [], []);
-            createOrUpdateChart('expenseCategoriesChart', 'pie', [], []);
-        }
-
-        // Event listeners for chart type buttons
-        document.querySelectorAll('.chart-type-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const chartId = this.dataset.chart;
-                const chartType = this.dataset.type;
-                
-                if (chartId === 'categoryChart') {
-                    const selectedCategory = document.getElementById('transactionDescription').value;
-                    const categoryData = transactions
-                        .filter(t => t.description === selectedCategory)
-                        .map(t => ({ amount: t.amount, date: t.date }));
-
-                    const labels = categoryData.map(d => d.date);
-                    const data = categoryData.map(d => d.amount);
-                    createOrUpdateChart(chartId, chartType, labels, data);
-                } else if (chartId === 'expenseCategoriesChart') {
-                    const expenseCategories = {};
-                    transactions.filter(t => t.type === 'expense').forEach(t => {
-                        expenseCategories[t.description] = (expenseCategories[t.description] || 0) + t.amount;
-                    });
-                    createOrUpdateChart(chartId, chartType, 
-                        Object.keys(expenseCategories),
-                        Object.values(expenseCategories)
-                    );
-                }
-
-                // Update active button
-                this.parentNode.querySelectorAll('.chart-type-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        // Sidebar toggle functionality
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
+        const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
+        const moonIcon = feather.icons['moon'].toSvg();
+        const sunIcon = feather.icons['sun'].toSvg();
 
-        sidebarToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('collapsed');
-            body.classList.toggle('sidebar-hidden');
+        themeToggle.innerHTML = moonIcon;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            themeToggle.innerHTML = body.classList.contains('dark-mode') ? sunIcon : moonIcon;
         });
 
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(event) {
-            if (window.innerWidth <= 768 && !sidebar.contains(event.target) && event.target !== sidebarToggle) {
-                body.classList.add('sidebar-hidden');
-            }
-        });
+        const loginForm = document.getElementById('loginForm');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const loadingIcons = document.querySelectorAll('.loading-icon');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
 
-        // Responsive sidebar behavior
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                body.classList.remove('sidebar-hidden');
-            }
-        });
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-        // Set Budget Goal
-        function setBudgetGoal() {
-            const goal = parseFloat(document.getElementById('budgetGoal').value);
-            if (isNaN(goal) || goal < 0) {
-                document.getElementById('budgetGoalResult').textContent = 'Please enter a valid goal amount.';
+            // Validate email (must be Gmail)
+            if (!email.endsWith('@gmail.com')) {
+                errorMessage.textContent = 'Please use a Gmail address.';
                 return;
             }
-            budgetGoal = goal;
-            document.getElementById('budgetGoalResult').textContent = `Your monthly savings goal is set to ₱${goal.toFixed(2)}`;
-            closeModal('setBudgetGoalModal');
-        }
 
-        // Financial Health Check
-        function checkFinancialHealth() {
-            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpenses) / totalIncome) * 100 : 0;
-
-            let healthStatus = '';
-            let advice = '';
-
-            if (savingsRate >= 20) {
-                healthStatus = 'Excellent';
-                advice = 'Keep up the great work! Consider investing more for long-term growth.';
-            } else if (savingsRate >= 10) {
-                healthStatus = 'Good';
-                advice = 'You\'re on the right track. Try to increase your savings rate to 20% or more.';
-            } else if (savingsRate >=0) {
-                healthStatus = 'Fair';
-                advice = 'You\'re breaking even, but there\'s room for improvement. Look for ways to reduce expenses or increase income.';
-            } else {
-                healthStatus = 'Poor';
-                advice = 'You\'re spending more than you earn. It\'s crucial to reduce expenses and avoid debt.';
+            // Validate password length
+            if (password.length < 8) {
+                errorMessage.textContent = 'Password must be at least 8 characters long.';
+                return;
             }
 
-            document.getElementById('financialHealthResult').innerHTML = `
-                <h4>Financial Health: ${healthStatus}</h4>
-                <p>Your current savings rate is ${savingsRate.toFixed(2)}%</p>
-                <p><strong>Advice:</strong> ${advice}</p>
-            `;
-            openModal('financialHealthModal');
-        }
-
-        // Investment Tips
-        function getInvestmentTips() {
-            const tips = [
-                "Diversify your portfolio to spread risk.",
-                "Consider low-cost index funds for long-term growth.",
-                "Regularly contribute to your retirement accounts.",
-                "Keep an emergency fund separate from your investments.",
-                "Stay informed about market trends, but avoid making impulsive decisions.",
-                "Consider seeking advice from a financial advisor for personalized strategies."
+            errorMessage.textContent = '';
+            loadingScreen.classList.add('active');
+            
+            // Simulating login process with improved animation
+            const messages = [
+                "Checking your credentials...",
+                "Preparing your Dashboard...",
+                "Analyzing market trends...",
+                "Calculating financial projections...",
+                "Authentication Successful!"
             ];
-            const randomTip = tips[Math.floor(Math.random() * tips.length)];
-            document.getElementById('investmentTip').textContent = randomTip;
-            openModal('investmentTipsModal');
-        }
 
-        // Show Transaction Details
-        function showTransactionDetails(transaction) {
-            const detailsContent = document.getElementById('transactionDetailsContent');
-            detailsContent.innerHTML = `
-                <p><strong>Type:</strong> ${transaction.type}</p>
-                <p><strong>Amount:</strong> ₱${transaction.amount.toFixed(2)}</p>
-                <p><strong>Description:</strong> ${transaction.description}</p>
-                <p><strong>Date:</strong> ${transaction.date}</p>
-            `;
-            openModal('transactionDetailsModal');
-        }
+            messages.forEach((message, index) => {
+                setTimeout(() => {
+                    loadingMessage.textContent = message;
+                    loadingMessage.classList.add('active');
+                    
+                    loadingIcons.forEach((icon, iconIndex) => {
+                        setTimeout(() => {
+                            icon.classList.add('active');
+                        }, iconIndex * 200);
+                    });
 
-        // Reset Data
-        function resetData() {
-            transactions = [];
-            budgetGoal = 0;
-            updateTransactionsList();
-            resetMetrics();
-            resetCharts();
-            alert('All data has been reset.');
-        }
+                    if (index === messages.length - 1) {
+                        setTimeout(() => {
+                            loadingScreen.classList.remove('active');
+                            successMessage.textContent = 'Login successful! Redirecting...';
+                            // Simulating redirect
+                            setTimeout(() => {
+                                window.location.href = 'dashboard.html';
+                            }, 2000);
+                        }, 1000);
+                    }
+                }, index * 1500);
+            });
+        });
 
-        // Initialize the dashboard
-        updateTransactionsList();
+        // Add interactivity to input fields
+        const inputGroups = document.querySelectorAll('.input-group');
+        inputGroups.forEach(group => {
+            const input = group.querySelector('input');
+            const icon = group.querySelector('i');
+
+            input.addEventListener('focus', () => {
+                icon.style.color = 'var(--primary-color)';
+                group.style.boxShadow = '0 0 0 2px var(--primary-color)';
+            });
+
+            input.addEventListener('blur', () => {
+                icon.style.color = 'var(--text-color)';
+                group.style.boxShadow = 'none';
+            });
+        });
+
+        // Add hover effect to buttons
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.transform = 'translateY(-2px)';
+                button.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            });
+
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'translateY(0)';
+                button.style.boxShadow = 'none';
+            });
+        });
+
+        // Add hover effect to social icons
+        const socialIcons = document.querySelectorAll('.social-icons a');
+        socialIcons.forEach(icon => {
+            icon.addEventListener('mouseenter', () => {
+                icon.style.transform = 'translateY(-2px) scale(1.1)';
+                icon.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            });
+
+            icon.addEventListener('mouseleave', () => {
+                icon.style.transform = 'translateY(0) scale(1)';
+                icon.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            });
+        });
     </script>
-    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-    <script src="https://files.bpcontent.cloud/2024/11/02/01/20241102014603-MY6MW47G.js"></script>
 </body>
 </html>
-
