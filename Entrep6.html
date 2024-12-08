@@ -3,11 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnify Profile</title>
-    <link rel="icon" href="logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Magnify Login Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <style>
+        :root {
+            --bg-color: #f3e8ff;
+            --text-color: #1a1a1a;
+            --primary-color: #8b5cf6;
+            --secondary-color: #d946ef;
+            --tertiary-color: #ec4899;
+            --input-bg: white;
+            --input-border: #e5e7eb;
+            --error-color: #ef4444;
+            --success-color: #10b981;
+        }
+
+        .dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #f3e8ff;
+            --primary-color: #a78bfa;
+            --secondary-color: #e879f9;
+            --tertiary-color: #f472b6;
+            --input-bg: #2d2d2d;
+            --input-border: #4a4a4a;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -15,1041 +36,662 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        :root {
-            --primary-gradient: linear-gradient(135deg, #ec4899, #8b5cf6);
-            --secondary-gradient: linear-gradient(135deg, #f472b6, #a78bfa);
-            --sidebar-width: 80px;
-            --background-color: #f8fafc;
-            --text-color: #1e293b;
-            --card-background: #ffffff;
-            --card-border: #e2e8f0;
-        }
-
-        .dark-mode {
-            --background-color: #1e293b;
-            --text-color: #f8fafc;
-            --card-background: #334155;
-            --card-border: #475569;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideInLeft {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideInUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes scaleIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
         body {
-            background-color: var(--background-color);
-            color: var(--text-color);
             min-height: 100vh;
-            display: flex;
-            animation: fadeIn 0.5s ease-out;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .sidebar {
-            width: var(--sidebar-width);
-            background: var(--primary-gradient);
-            padding: 2rem 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            position: fixed;
-            height: 100vh;
-            z-index: 1000;
-            animation: slideInLeft 0.5s ease-out;
-        }
-
-        .sidebar-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        .sidebar-icon:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.1);
-        }
-
-        .main-content {
-            margin-left: var(--sidebar-width);
-            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             padding: 2rem;
-            animation: fadeIn 0.5s ease-out 0.3s both;
+            transition: all 0.3s ease;
         }
 
-        .header {
-            background: var(--secondary-gradient);
-            padding: 1rem 2rem;
-            color: white;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            animation: slideInRight 0.5s ease-out;
-        }
-
-        .header-content {
+        .login-container {
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            background: var(--input-bg);
+            border-radius: 20px;
+            overflow: hidden;
             display: flex;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .login-form {
+            width: 50%;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
             justify-content: space-between;
+        }
+
+        .graphic-side {
+            width: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
             align-items: center;
+            justify-content: center;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            right: -50px;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: 50px;
+            left: -50px;
+            animation-delay: -3s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
         .logo-container {
             display: flex;
             align-items: center;
             gap: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
 
         .logo {
-            width: 50px;
-            height: 50px;
-            background-color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 40px;
+            height: 40px;
         }
 
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .change-name-btn, .mode-toggle {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: opacity 0.3s, transform 0.2s;
-        }
-
-        .change-name-btn:hover, .mode-toggle:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .metric-card {
-            background: var(--card-background);
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-            animation: scaleIn 0.5s ease-out;
-        }
-
-        .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .metric-value {
+        .brand-name {
             font-size: 1.5rem;
-            font-weight: 600;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .welcome-text {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 0.2s;
+        }
+
+        .welcome-text h1 {
+            font-size: 2.5rem;
+            color: var(--text-color);
             margin-bottom: 0.5rem;
         }
 
-        .metric-label {
-            color: #64748b;
-            font-size: 0.9rem;
+        .welcome-text h1 span {
+            color: var(--secondary-color);
+            font-weight: 700;
         }
 
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        }
-
-        .transaction-history {
-            background: var(--card-background);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            animation: slideInUp 0.5s ease-out;
-        }
-
-        .transaction-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .transaction-table th,
-        .transaction-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--card-border);
-        }
-
-        .status {
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.85rem;
-        }
-
-        .status-completed {
-            background: #dbeafe;
-            color: #2563eb;
-        }
-
-        .status-reviewed {
-            background: #fce7f3;
-            color: #db2777;
-        }
-
-        .credit-card {
-            background: var(--primary-gradient);
-            border-radius: 15px;
-            padding: 1.5rem;
-            color: white;
-            margin-bottom: 2rem;
-            transition: transform 0.3s;
-            cursor: pointer;
-            animation: scaleIn 0.5s ease-out;
-        }
-
-        .credit-card:hover {
-            transform: scale(1.02);
-        }
-
-        .scheduled-payments {
-            background: var(--card-background);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 2rem;
-            animation: slideInUp 0.5s ease-out 0.2s both;
-        }
-
-        .payment-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--card-border);
-        }
-
-        .payment-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .payment-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: #e0e7ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chart-container {
-            margin-top: 2rem;
-            height: 300px;
-            background: var(--card-background);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            animation: scaleIn 0.5s ease-out 0.4s both;
-        }
-
-        .recent-payments {
-            margin-top: 2rem;
-            background: var(--card-background);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            animation: slideInUp 0.5s ease-out 0.6s both;
-        }
-
-        .recent-payments-grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .recent-payment-item {
-            background: var(--card-background);
-            border-radius: 10px;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .recent-payment-item:hover {
-            background-color: #e0e7ff;
-            transform: translateY(-2px);
-        }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 120px;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px 0;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -60px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .linked-cards {
-            background: var(--card-background);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            animation: slideInUp 0.5s ease-out 0.8s both;
-        }
-
-        .linked-card-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--card-border);
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .linked-card-item:hover {
-            background-color: #f1f5f9;
-            transform: translateY(-2px);
-        }
-
-        .linked-card-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .linked-card-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--secondary-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .right-column {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .section-header {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+        .welcome-text p {
             color: var(--text-color);
+            opacity: 0.7;
         }
 
-        .gradient-button {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .input-group:nth-child(1) { transition-delay: 0.4s; }
+        .input-group:nth-child(2) { transition-delay: 0.6s; }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-color);
             border-radius: 8px;
-            cursor: pointer;
-            transition: opacity 0.3s, transform 0.2s;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
-        .gradient-button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--primary-color);
         }
 
-        .quick-actions {
+        .input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .input-group input:focus + i {
+            color: var(--primary-color);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 0.8s;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 0.5rem;
+        }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--secondary-color);
+        }
+
+        .buttons {
             display: flex;
             gap: 1rem;
-            margin-top: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 1s;
         }
 
-        .quick-action-button {
-            flex: 1;
-            padding: 1rem;
-            border-radius: 10px;
-            background: var(--secondary-gradient);
-            color: white;
-            text-align: center;
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-login {
+            background: var(--primary-color);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-login:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-signup {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            flex: 1;
+        }
+
+        .btn-signup:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .social-login {
+            text-align: center;
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 1.2s;
+        }
+
+        .social-login p {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icons a {
+            color: var(--primary-color);
             text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--input-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .quick-action-button:hover {
-            transform: translateY(-5px);
+        .social-icons a:hover {
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        #notifications {
-            position: fixed;
+        .theme-toggle {
+            position: absolute;
             top: 20px;
             right: 20px;
-            z-index: 1000;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .notification {
-            background: var(--card-background);
-            border-left: 4px solid #4caf50;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 16px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: opacity 0.3s, transform 0.3s;
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
         }
 
-        .notification.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .notification-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .notification-message {
-            color: #666;
-        }
-
-        .modal {
-            display: none;
+        .loading-screen {
             position: fixed;
-            z-index: 1001;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .modal-content {
-            background-color: var(--card-background);
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid var(--card-border);
-            width: 300px;
-            border-radius: 10px;
-            animation: scaleIn 0.3s ease-out;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: var(--text-color);
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        #newNameInput {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid var(--card-border);
-            border-radius: 4px;
-            background-color: var(--card-background);
-            color: var(--text-color);
-        }
-
-        #saveNameBtn {
-            width: 100%;
-            padding: 10px;
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        #saveNameBtn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .mode-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .loading-screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-icons {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .loading-icon {
+            width: 60px;
+            height: 60px;
+            color: white;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s ease;
+        }
+
+        .loading-icon.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .loading-message {
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .loading-message.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .graphic-content {
+            color: white;
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transition-delay: 0.5s;
+        }
+
+        .graphic-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .graphic-content p {
+            font-size: 1.1rem;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .success-message {
+            color: var(--success-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .login-form, .graphic-side {
+                width: 100%;
+            }
+
+            .graphic-side {
+                min-height: 300px;
+            }
+
+            .login-form {
+                padding: 2rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="sidebar">
-        <div class="sidebar-icon tooltip" onclick="window.location.href='Entrep.html'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            <span class="tooltiptext">Home</span>
-        </div>
-        <div class="sidebar-icon tooltip">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-            <span class="tooltiptext">Dashboard</span>
-        </div>
-        <div class="sidebar-icon tooltip">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-            <span class="tooltiptext">Analytics</span>
-        </div>
-        <div class="sidebar-icon tooltip" onclick="window.location.href='Entrep15.html'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            <span class="tooltiptext">Membership</span>
-        </div>
-        <div class="sidebar-icon tooltip">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span class="tooltiptext">Security</span>
-        </div>
-        <div class="sidebar-icon tooltip">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            <span class="tooltiptext">Settings</span>
-        </div>
-    </nav>
-
-    <main class="main-content">
-        <header class="header">
-            <div class="header-content">
-                <div class="logo-container">
-                    <div class="logo">
-                        <img src="logo.png" alt="Magnify Logo" width="50" height="50">
-                    </div>
-                    <div>
-                        <h1>Magnify!</h1>
-                        <p>Hi <span id="userName">Magnify User</span>, Good Morning!</p>
-                    </div>
-                </div>
-                <button id="changeNameBtn" class="change-name-btn">Change Name</button>
-            </div>
-        </header>
-
-        <div class="metrics">
-            <div class="metric-card" onclick="alert('Shopping Debit & Credit Card: ₱29.85')">
-                <div class="metric-value">₱15,900.85</div>
-                <div class="metric-label">Shopping Debit & Credit Card</div>
-            </div>
-            <div class="metric-card" onclick="alert('Transfer Other Country: ₱43.75')">
-                <div class="metric-value">₱44,000.75</div>
-                <div class="metric-label">Transfer Other Country</div>
-            </div>
-            <div class="metric-card" onclick="alert('Investment & Insurance: ₱69.00')">
-                <div class="metric-value">₱6,900.00</div>
-                <div class="metric-label">Investment & Insurance</div>
-            </div>
-            <div class="metric-card" onclick="alert('Kids Education & Hobbies: ₱60.00')">
-                <div class="metric-value">₱15,400.00</div>
-                <div class="metric-label">Kids Education & Hobbies</div>
-            </div>
-        </div>
-
-        <div class="content-grid">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <i data-feather="moon"></i>
+    </button>
+    <div class="login-container">
+        <div class="login-form">
             <div>
-                <div class="transaction-history">
-                    <h2 class="section-header">Transaction History</h2>
-                    <p class="text-gray-600">Last 3 Months</p>
-                    <table class="transaction-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Service</th>
-                                <th>Date</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Sean Ferneil Ricaza</td>
-                                <td>Graphic Design</td>
-                                <td>05/25/24</td>
-                                <td>₱5,600.00</td>
-                                <td><span class="status status-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td>Shelina Mae Dela Cruz</td>
-                                <td>Photo Editing</td>
-                                <td>06/25/24</td>
-                                <td>₱2,400.50</td>
-                                <td><span class="status status-reviewed">Reviewed</span></td>
-                            </tr>
-                            <tr>
-                                <td>Ron Asnahon</td>
-                                <td>Front-end Development</td>
-                                <td>07/06/24</td>
-                                <td>₱18,000.70</td>
-                                <td><span class="status status-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td>Carl John Arpay</td>
-                                <td>Back-end Development</td>
-                                <td>10/17/24</td>
-                                <td>₱22,000.00</td>
-                                <td><span class="status status-completed">Completed</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="logo-container">
+                    <img src="logo.png" alt="Magnify logo" class="logo">
+                    <div class="brand-name">Magnify!</div>
                 </div>
-                <div class="chart-container">
-                    <canvas id="balanceChart"></canvas>
+                <div class="welcome-text">
+                    <h1>Hello, <span>welcome!</span></h1>
+                    <p>Please sign in to your account to continue</p>
                 </div>
-                <div class="recent-payments">
-                    <h2 class="section-header">Recent Payments</h2>
-                    <p class="text-gray-600">Last 30 Days</p>
-                    <div class="recent-payments-grid">
-                        <div class="recent-payment-item">
-                            <div class="payment-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
-                            </div>
-                            <div>
-                                <div>Electric Bill</div>
-                                <div class="text-gray-600">30/07/22 - Completed</div>
-                            </div>
-                            <div>₱2,000.95</div>
-                        </div>
-                        <div class="recent-payment-item">
-                            <div class="payment-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
-                            </div>
-                            <div>
-                                <div>Water Bill</div>
-                                <div class="text-gray-600">27/07/22 - Completed</div>
-                            </div>
-                            <div>₱3,900.45</div>
-                        </div>
-                        <div class="recent-payment-item">
-                            <div class="payment-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                            </div>
-                            <div>
-                                <div>Home Internet Bill</div>
-                                <div class="text-gray-600">15/07/22 - Completed</div>
-                            </div>
-                            <div>₱2,300.75</div>
-                        </div>
-                        <div class="recent-payment-item">
-                            <div class="payment-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            </div>
-                            <div>
-                                <div>Rent Payment</div>
-                                <div class="text-gray-600">01/08/22 - Completed</div>
-                            </div><div>₱2,500.00</div>
-                        </div>
-                        <div class="recent-payment-item">
-                            <div class="payment-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                            </div>
-                            <div>
-                                <div>Health Insurance</div>
-                                <div class="text-gray-600">05/08/22 - Completed</div>
-                            </div>
-                            <div>₱1,700.50</div>
-                        </div>
-                        <div class="recent-payment-item">
-                            <div class="payment-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
-                            </div>
-                            <div>
-                                <div>Mobile Phone Bill</div>
-                                <div class="text-gray-600">10/08/22 - Completed</div>
-                            </div>
-                            <div>₱2,100.50</div>
-                        </div>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder="Email address" required>
+                        <i data-feather="mail"></i>
                     </div>
-                </div>
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Password" required minlength="8">
+                        <i data-feather="lock"></i>
+                    </div>
+                    <div class="remember-forgot">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    <div class="buttons">
+                        <button type="submit" class="btn btn-login">Login</button>
+                        <button type="button" class="btn btn-signup">Sign up</button>
+                    </div>
+                    <div id="errorMessage" class="error-message"></div>
+                    <div id="successMessage" class="success-message"></div>
+                </form>
             </div>
-
-            <div class="right-column">
-                <div class="credit-card" onclick="alert('Credit Card Details: Available Funds ₱3,849.96')">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
-                        <span>LINKED CREDITS</span>
-                        <span>****1234</span>
-                    </div>
-                    <div>
-                        <div style="margin-bottom: 1rem;">AVAILABLE COMBINED FUNDS</div>
-                        <div style="font-size: 1.5rem; font-weight: 600;">₱18,000.00</div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
-                        <span>01/23</span>
-                        <span>123</span>
-                    </div>
-                </div>
-
-                <div class="scheduled-payments">
-                    <h2 class="section-header">Schedule Payments</h2>
-                    <p class="text-gray-600">January 2025</p>
-                    
-                    <div class="payment-item">
-                        <div class="payment-info">
-                            <div class="payment-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"></path></svg>
-                            </div>
-                            <div>
-                                <div>Home Cleaning</div>
-                                <div class="text-gray-600">12 hrs - Pending</div>
-                            </div>
-                        </div>
-                        <div>₱2,400.35</div>
-                    </div>
-
-                    <div class="payment-item">
-                        <div class="payment-info">
-                            <div class="payment-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                            </div>
-                            <div>
-                                <div>Kids Education</div>
-                                <div class="text-gray-600">2 Days - Pending</div>
-                            </div>
-                        </div>
-                        <div>₱15,100.80</div>
-                    </div>
-
-                    <div class="payment-item">
-                        <div class="payment-info">
-                            <div class="payment-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
-                            </div>
-                            <div>
-                                <div>Car Insurance</div>
-                                <div class="text-gray-600">3 Days - Pending</div>
-                            </div>
-                        </div>
-                        <div>₱2,100.90</div>
-                    </div>
-                </div>
-
-                <div class="linked-cards">
-                    <h2 class="section-header">Linked Credit Cards</h2>
-                    <div class="linked-card-item">
-                        <div class="linked-card-info">
-                            <div class="linked-card-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                            </div>
-                            <div>
-                                <div>Visa Gold</div>
-                                <div class="text-gray-600">****5678</div>
-                            </div>
-                        </div>
-                        <div>₱2,500.00</div>
-                    </div>
-                    <div class="linked-card-item">
-                        <div class="linked-card-info">
-                            <div class="linked-card-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                            </div>
-                            <div>
-                                <div>Mastercard Platinum</div>
-                                <div class="text-gray-600">****9012</div>
-                            </div>
-                        </div>
-                        <div>₱5,000.00</div>
-                    </div>
-                    <div class="linked-card-item">
-                        <div class="linked-card-info">
-                            <div class="linked-card-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                            </div>
-                            <div>
-                                <div>Philippine National Bank</div>
-                                <div class="text-gray-600">****3456</div>
-                            </div>
-                        </div>
-                        <div>₱7,500.00</div>
-                    </div>
-                    <div class="linked-card-item">
-                        <div class="linked-card-info">
-                            <div class="linked-card-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                            </div>
-                            <div>
-                                <div>PayPal</div>
-                                <div class="text-gray-600">****7890</div>
-                            </div>
-                        </div>
-                        <div>₱3,000.00</div>
-                    </div>
-                    <button class="gradient-button" style="width: 100%; margin-top: 1rem;">Add New Card</button>
-                </div>
-
-                <div class="quick-actions">
-                    <a href="Entrep10.html" class="quick-action-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        <div>Add Money</div>
+            <div class="social-login">
+                <p>Or login with</p>
+                <div class="social-icons">
+                    <a href="#" aria-label="Login with Facebook">
+                        <i data-feather="facebook"></i>
                     </a>
-                    <a href="Entrep10.html" class="quick-action-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-                        <div>Transfer</div>
+                    <a href="#" aria-label="Login with Twitter">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" aria-label="Login with Google">
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="#" aria-label="Login with LinkedIn">
+                        <i data-feather="linkedin"></i>
+                    </a>
+                    <a href="#" aria-label="Login with Instagram">
+                        <i data-feather="instagram"></i>
                     </a>
                 </div>
             </div>
         </div>
-    </main>
-
-    <div id="notifications"></div>
-
-    <div id="changeNameModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Change Name</h2>
-            <input type="text" id="newNameInput" placeholder="Enter new name">
-            <button id="saveNameBtn">Save</button>
+        <div class="graphic-side">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="graphic-content">
+                <h2>Finance. Redefined.</h2>
+                <p>Let Magnify offer you the best experience!</p>
+            </div>
         </div>
     </div>
-
-    <button id="modeToggle" class="mode-toggle">Toggle Dark Mode</button>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-icons">
+            <i data-feather="dollar-sign" class="loading-icon"></i>
+            <i data-feather="bar-chart-2" class="loading-icon"></i>
+            <i data-feather="trending-up" class="loading-icon"></i>
+        </div>
+        <div class="loading-message" id="loadingMessage"></div>
+    </div>
 
     <script>
-        // Balance Chart
-        const ctx = document.getElementById('balanceChart').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-                datasets: [{
-                    label: 'Balance',
-                    data: [2.5, 1.0, 4.0, 1.5, 4.5, 3.0, 1.0, 4.0, 2.5, 4.5, 1.5, 3.0],
-                    backgroundColor: '#ec4899',
-                    borderRadius: 8,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            callback: value => '₱' + value.toFixed(1) + 'K'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(context.parsed.y * 1000);
-                                }
-                                return label;
-                            }
-                        }
-                    }
-                },
-                onClick: (e, activeElements) => {
-                    if (activeElements.length > 0) {
-                        const index = activeElements[0].index;
-                        const value = chart.data.datasets[0].data[index];
-                        alert(`Balance for ${chart.data.labels[index]}: ${new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(value * 1000)}`);
-                    }
-                }
-            }
-        });
+        // Initialize Feather icons
+        feather.replace();
 
-        // Add interactivity to recent payment items
-        document.querySelectorAll('.recent-payment-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const amount = this.querySelector('div:last-child').textContent;
-                const description = this.querySelector('div:nth-child(2) div:first-child').textContent;
-                alert(`Payment: ${description}\nAmount: ${amount}`);
-            });
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginContainer = document.querySelector('.login-container');
+            const logoContainer = document.querySelector('.logo-container');
+            const welcomeText = document.querySelector('.welcome-text');
+            const inputGroups = document.querySelectorAll('.input-group');
+            const rememberForgot = document.querySelector('.remember-forgot');
+            const buttons = document.querySelector('.buttons');
+            const socialLogin = document.querySelector('.social-login');
+            const graphicContent = document.querySelector('.graphic-content');
 
-        // Add hover effect to sidebar icons
-        document.querySelectorAll('.sidebar-icon').forEach(icon => {
-            icon.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.1)';
-            });
-            icon.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
+            loginContainer.style.opacity = '1';
+            loginContainer.style.transform = 'translateY(0)';
 
-        // Add interactivity to linked credit cards
-        document.querySelectorAll('.linked-card-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const cardName = this.querySelector('.linked-card-info div div:first-child').textContent;
-                const cardNumber = this.querySelector('.linked-card-info div div:last-child').textContent;
-                const limit = this.querySelector('div:last-child').textContent;
-                alert(`Card: ${cardName}\nNumber: ${cardNumber}\nLimit: ${limit}`);
-            });
-        });
-
-        // Change name functionality
-        const modal = document.getElementById("changeNameModal");
-        const btn = document.getElementById("changeNameBtn");
-        const span = document.getElementsByClassName("close")[0];
-        const saveBtn = document.getElementById("saveNameBtn");
-        const newNameInput = document.getElementById("newNameInput");
-
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
-
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        saveBtn.onclick = function() {
-            const newName = newNameInput.value.trim();
-            if (newName) {
-                document.getElementById('userName').textContent = newName;
-                modal.style.display = "none";
-            }
-        }
-
-        // Notifications functionality
-        function showNotification(title, message) {
-            const notificationsContainer = document.getElementById('notifications');
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.innerHTML = `
-                <div class="notification-title">${title}</div>
-                <div class="notification-message">${message}</div>
-            `;
-            notificationsContainer.appendChild(notification);
             setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
+                logoContainer.style.opacity = '1';
+                logoContainer.style.transform = 'translateY(0)';
+            }, 200);
+
             setTimeout(() => {
-                notification.classList.remove('show');
+                welcomeText.style.opacity = '1';
+                welcomeText.style.transform = 'translateY(0)';
+            }, 400);
+
+            inputGroups.forEach((group, index) => {
                 setTimeout(() => {
-                    notificationsContainer.removeChild(notification);
-                }, 300);
-            }, 5000);
-        }
+                    group.style.opacity = '1';
+                    group.style.transform = 'translateY(0)';
+                }, 600 + (index * 200));
+            });
 
-        // Sample notifications
-        const notifications = [
-            { title: "New Transaction", message: "You've received ₱500.00 from John Doe." },
-            { title: "Bill Payment Reminder", message: "Your electricity bill is due in 3 days." },
-            { title: "Security Alert", message: "New login detected from an unknown device." },
-            { title: "Investment Update", message: "Your stock in XYZ has increased by 5%." },
-            { title: "Credit Score Change", message: "Your credit score has improved by 20 points." }
-        ];
+            setTimeout(() => {
+                rememberForgot.style.opacity = '1';
+                rememberForgot.style.transform = 'translateY(0)';
+            }, 1000);
 
-        let notificationIndex = 0;
-        function showRandomNotification() {
-            const notification = notifications[notificationIndex];
-            showNotification(notification.title, notification.message);
-            notificationIndex = (notificationIndex + 1) % notifications.length;
-        }
+            setTimeout(() => {
+                buttons.style.opacity = '1';
+                buttons.style.transform = 'translateY(0)';
+            }, 1200);
 
-        // Show a notification every 20 seconds
-        setInterval(showRandomNotification, 20000);
+            setTimeout(() => {
+                socialLogin.style.opacity = '1';
+                socialLogin.style.transform = 'translateY(0)';
+            }, 1400);
 
-        // Show initial notification
-        showRandomNotification();
-
-        // Dark mode toggle functionality
-        const modeToggle = document.getElementById('modeToggle');
-        const body = document.body;
-
-        modeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            if (body.classList.contains('dark-mode')) {
-                modeToggle.textContent = 'Toggle Light Mode';
-            } else {
-                modeToggle.textContent = 'Toggle Dark Mode';
-            }
-            updateChartColors();
+            setTimeout(() => {
+                graphicContent.style.opacity = '1';
+                graphicContent.style.transform = 'translateY(0)';
+            }, 1600);
         });
 
-        function updateChartColors() {
-            const isDarkMode = body.classList.contains('dark-mode');
-            chart.options.scales.x.ticks.color = isDarkMode ? '#f8fafc' : '#1e293b';
-            chart.options.scales.y.ticks.color = isDarkMode ? '#f8fafc' : '#1e293b';
-            chart.update();
-        }
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const moonIcon = feather.icons['moon'].toSvg();
+        const sunIcon = feather.icons['sun'].toSvg();
+
+        themeToggle.innerHTML = moonIcon;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            themeToggle.innerHTML = body.classList.contains('dark-mode') ? sunIcon : moonIcon;
+        });
+
+        const loginForm = document.getElementById('loginForm');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const loadingIcons = document.querySelectorAll('.loading-icon');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Validate email (must be Gmail)
+            if (!email.endsWith('@gmail.com')) {
+                errorMessage.textContent = 'Please use a Gmail address.';
+                return;
+            }
+
+            // Validate password length
+            if (password.length < 8) {
+                errorMessage.textContent = 'Password must be at least 8 characters long.';
+                return;
+            }
+
+            errorMessage.textContent = '';
+            loadingScreen.classList.add('active');
+            
+            // Simulating login process with improved animation
+            const messages = [
+                "Checking your credentials...",
+                "Preparing your Dashboard...",
+                "Analyzing market trends...",
+                "Calculating financial projections...",
+                "Magnify! authenticated"
+            ];
+
+            messages.forEach((message, index) => {
+                setTimeout(() => {
+                    loadingMessage.textContent = message;
+                    loadingMessage.classList.add('active');
+                    
+                    loadingIcons.forEach((icon, iconIndex) => {
+                        setTimeout(() => {
+                            icon.classList.add('active');
+                        }, iconIndex * 200);
+                    });
+
+                    if (index === messages.length - 1) {
+                        setTimeout(() => {
+                            loadingScreen.classList.remove('active');
+                            successMessage.textContent = 'Login successful! Redirecting...';
+                            // Simulating redirect
+                            setTimeout(() => {
+                                window.location.href = 'Entrep.html';
+                            }, 2000);
+                        }, 1000);
+                    }
+                }, index * 1500);
+            });
+        });
+
+        // Add interactivity to input fields
+        const inputGroups = document.querySelectorAll('.input-group');
+        inputGroups.forEach(group => {
+            const input = group.querySelector('input');
+            const icon = group.querySelector('i');
+
+            input.addEventListener('focus', () => {
+                icon.style.color = 'var(--primary-color)';
+                group.style.boxShadow = '0 0 0 2px var(--primary-color)';
+            });
+
+            input.addEventListener('blur', () => {
+                icon.style.color = 'var(--text-color)';
+                group.style.boxShadow = 'none';
+            });
+        });
+
+        // Add hover effect to buttons
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.transform = 'translateY(-2px)';
+                button.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            });
+
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'translateY(0)';
+                button.style.boxShadow = 'none';
+            });
+        });
+
+        // Add hover effect to social icons
+        const socialIcons = document.querySelectorAll('.social-icons a');
+        socialIcons.forEach(icon => {
+            icon.addEventListener('mouseenter', () => {
+                icon.style.transform = 'translateY(-2px) scale(1.1)';
+                icon.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            });
+
+            icon.addEventListener('mouseleave', () => {
+                icon.style.transform = 'translateY(0) scale(1)';
+                icon.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            });
+        });
     </script>
 </body>
 </html>
-
