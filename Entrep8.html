@@ -57,6 +57,11 @@
             to { transform: scale(1); opacity: 1; }
         }
 
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         body {
             background-color: var(--background-color);
             color: var(--text-color);
@@ -544,6 +549,41 @@
             right: 20px;
             z-index: 1000;
         }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .loading-screen {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-icon {
+            width: 100px;
+            height: 100px;
+            animation: spin 2s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -586,11 +626,14 @@
                         <p>Hello there, <span id="userName">Magnify User!</span> Good day!</p>
                     </div>
                 </div>
-                <button id="changeNameBtn" class="change-name-btn">Change Name</button>
+                <div>
+                    <button id="changeNameBtn" class="change-name-btn">Change Name</button>
+                    <button id="logoutBtn" class="logout-btn">Log Out</button>
+                </div>
             </div>
         </header>
 
-        <div class="metrics">
+         <div class="metrics">
             <div class="metric-card" onclick="alert('Shopping Debit & Credit Card: ₱29.85')">
                 <div class="metric-value">₱15,900.85</div>
                 <div class="metric-label">Shopping Debit & Credit Card</div>
@@ -866,6 +909,13 @@
 
     <button id="modeToggle" class="mode-toggle">Toggle Dark Mode</button>
 
+    <div id="loadingScreen" class="loading-screen">
+        <svg class="loading-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 6V12L16 14" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+
     <script>
         // Balance Chart
         const ctx = document.getElementById('balanceChart').getContext('2d');
@@ -1009,10 +1059,10 @@
 
         // Sample notifications
         const notifications = [
-            { title: "New Transaction", message: "You've received ₱500.00 from John Doe." },
+            { title: "New Transaction", message: "You've received ₱5,000.00 from Vince Gonzaga." },
             { title: "Bill Payment Reminder", message: "Your electricity bill is due in 3 days." },
             { title: "Security Alert", message: "New login detected from an unknown device." },
-            { title: "Investment Update", message: "Your stock in XYZ has increased by 5%." },
+            { title: "Investment Update", message: "Your stock in Index Funds has increased by 5%." },
             { title: "Credit Score Change", message: "Your credit score has improved by 20 points." }
         ];
 
@@ -1049,7 +1099,19 @@
             chart.options.scales.y.ticks.color = isDarkMode ? '#f8fafc' : '#1e293b';
             chart.update();
         }
+
+        // Logout functionality
+        const logoutBtn = document.getElementById('logoutBtn');
+        const loadingScreen = document.getElementById('loadingScreen');
+
+        logoutBtn.addEventListener('click', () => {
+            loadingScreen.style.display = 'flex';
+            setTimeout(() => {
+                // Here you would typically handle any logout logic, such as clearing session data
+                // For this example, we'll just redirect to the index page after a delay
+                window.location.href = 'index.html';
+            }, 2000); // Simulating a 2-second logout process
+        });
     </script>
 </body>
 </html>
-
